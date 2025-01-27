@@ -226,14 +226,14 @@ export const model = BlockModel.create()
   .sections((ctx) => {
     return [
       { type: "link", href: "/", label: "Settings" },
-      { type: "link", href: "/Report", label: "Settings" }
+      { type: "link", href: "/Report", label: "Report" }
     ];
   })
 
   .title((ctx) =>
     ctx.args.title
-      ? `STAR Read Mapping - ${ctx.args.title}`
-      : "STAR Read Mapping"
+      ? `Cell Ranger - ${ctx.args.title}`
+      : "Cell Ranger"
   )
 
   .done();
