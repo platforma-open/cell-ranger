@@ -25,10 +25,8 @@ catalog:
 
   'ag-grid-enterprise': &ag-grid ^33.0.3
   'ag-grid-vue3': *ag-grid
-  
   "vue": ^3.5.13
   "vue-tsc": ^2.2.0
-  
   "typescript": ^5.7.2
   "tsup": ~8.3.5
   "turbo": ^2.3.3

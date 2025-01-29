@@ -27,18 +27,18 @@ getSpeciesName := func(species){
 }
 
 getGenomeAsset := func(species) {
-	yeastAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae")
-	humanAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens")
-	mouseAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus")
-	ratAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus")
-	zebrafishAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio")
-	fruitFlyAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster")
-	arabidopsisAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana")
-	nematodeAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans")
-	chickenAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus")
-	cowAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus")
-	pigAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.sus_scrofa")
-	testAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets.test-species")
+	yeastAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:saccharomyces-cerevisiae")
+	humanAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:homo-sapiens")
+	mouseAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:mus-musculus")
+	ratAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:rattus-norvegicus")
+	zebrafishAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:danio-rerio")
+	fruitFlyAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:drosophila-melanogaster")
+	arabidopsisAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:arabidopsis-thaliana")
+	nematodeAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:caenorhabditis-elegans")
+	chickenAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:gallus-gallus")
+	cowAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:bos-taurus")
+	pigAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:sus-scrofa")
+	testAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:test-species")
 
 	GenomeAssetsMap := ll.toStrict({
 		"saccharomyces-cerevisiae": yeastAssets,
