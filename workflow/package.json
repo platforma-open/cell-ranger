@@ -16,6 +16,7 @@
     "@milaboratories/software-pframes-conv": "catalog:",
     "@platforma-open/milaboratories.software-small-binaries": "catalog:",
     "@platforma-open/milaboratories.software-cellranger": "catalog:",
+    "@platforma-open/milaboratories.cellranger-genome-assets": "catalog:",
     "vitest": "catalog:"
   }
 }
