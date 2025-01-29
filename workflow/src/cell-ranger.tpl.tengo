@@ -1,6 +1,7 @@
 self := import("@platforma-sdk/workflow-tengo:tpl")
 
 json := import("json")
+path := import("@platforma-sdk/workflow-tengo:path")
 
 ll := import("@platforma-sdk/workflow-tengo:ll")
 xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
@@ -28,14 +29,18 @@ self.body(func(inputs) {
 	species := inputs.species
 	fileExtension := inputs.fileExtension
 
-	// genomeAssets := genomes.getGenomeAsset(species)
+	genomeAssets := genomes.getGenomeAsset(species)
 
 	cellRanger := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
+		// cmd("find").arg(".").
+		// mkDir("genomeIndex").
+		// mkDir("fastqs").
+		addAsset(genomeAssets, "genomeIndex").
 		arg("count").
 		// arg("--id=").arg(sampleName).
-		arg("--transcriptome=").arg("/Users/aiturbide/Work/Datasets/humanData/index"). // change to genomeIndex when asset is imported
-		arg("--fastqs=")
+		arg("--transcriptome=genomeIndex").
+		arg("--fastqs=fastqs")
 	
 	filesByRIndex := {}
 	for sKey, inputFile in inputData.inputs() {
@@ -52,17 +57,17 @@ self.body(func(inputs) {
 		if is_undefined(inputFile) {
 			continue
 		}
-		fileName := "input_" + rIndex + "." + fileExtension
+		fileName := "input_S1_L001_" + rIndex + "001." + fileExtension
 
 //		ll.print("print fileName in loop", fileName)
-		cellRanger.addFile(fileName, inputFile).
-			arg(fileName)
+		cellRanger.addFile(path.join("fastqs",fileName), inputFile)
 	}
 
 	cellRanger = cellRanger.
-		arg("--sample=").arg("sample_").
-		arg("--create-bam=").arg("true").
-		arg("--nthreads=").arg("4").
+		arg("--sample=input_").
+		arg("--create-bam=true").
+		// arg("--nthreads=4").
+		arg("--id=input_").
 		saveFile("./outs/web_summary.html").
 		saveFile("./outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
 		saveFile("./outs/filtered_feature_bc_matrix/features.tsv.gz").
