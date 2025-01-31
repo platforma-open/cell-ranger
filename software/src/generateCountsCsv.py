@@ -27,13 +27,21 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
     data = []
     
     # Iterate over the non-zero elements of the sparse matrix
-    print("Processing matrix entries...")
+    print(f"Processing {matrix.nnz} nonzero entries...")
+    count_debug = 0  # Counter for how many entries are processed
+
     for i, j, value in zip(matrix.row, matrix.col, matrix.data):
-        cell_id = barcodes_list[i]  # Extract the barcode (cell) for this entry
-        gene_id = features_list[j]  # Extract the gene_id for this entry
+        if count_debug < 10:  # Print only first 10 rows for debugging
+            print(f"Row: {i}, Column: {j}, Count: {value}")
+
+        cell_id = barcodes_list[j]  # Get cell ID from columns
+        gene_id = features_list[i]  # Get gene ID from rows
         count = value  # The count (value in the matrix)
-        
+
         data.append([cell_id, gene_id, count])
+        count_debug += 1
+
+    print(f"Total rows written: {count_debug}")
     
     # Create a DataFrame for easier manipulation
     df = pd.DataFrame(data, columns=["CellId", "GeneId", "Count"])

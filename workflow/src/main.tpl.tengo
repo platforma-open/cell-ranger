@@ -51,7 +51,7 @@ wf.body(func(args) {
 	}]
 
 	cellRangerResults := llPFrames.aggregate(
-		input.data, [1], cellRangerTpl,
+		input.data, [1,2], cellRangerTpl,
 		aggregationTargets,
 		false,
 		{

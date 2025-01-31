@@ -36,43 +36,45 @@ self.body(func(inputs) {
 		// cmd("find").arg(".").
 		// mkDir("genomeIndex").
 		// mkDir("fastqs").
-		addAsset(genomeAssets, "genomeIndex").
+		// addAsset(genomeAssets, "genomeIndex").
+		addAsset(genomeAssets, "genomeIndex", "fasta/").
+		addAsset(genomeAssets, "genomeIndex", "genes/").
+		addAsset(genomeAssets, "genomeIndex", "star/").
+		addAsset(genomeAssets, "genomeIndex", "reference.json").
 		arg("count").
 		// arg("--id=").arg(sampleName).
 		arg("--transcriptome=genomeIndex").
 		arg("--fastqs=fastqs")
 	
-	filesByRIndex := {}
+
 	for sKey, inputFile in inputData.inputs() {
 		key := json.decode(sKey)
-		r := key[0]
+		if len(key) != 2 {
+			ll.panic("malformed key: %v", sKey)
+		}
+		lane := key[0]
+		r := key[1]
 		if (r[0] != 'R' && r[0] != "I") || (r[1] != '1' && r[1] != '2') || len(r) != 2 {
 			ll.panic("malformed read index: %v", r)
 		}
-		filesByRIndex[r] = inputFile
-	}
-	// TODO adapt to include line in keys
-	for rIndex in ["R1", "R2", "I1", "I2"] {
-		inputFile := filesByRIndex[rIndex]
-		if is_undefined(inputFile) {
-			continue
+		if is_undefined(int(lane)) {
+			ll.panic("malformed lane: %v", lane)
 		}
-		fileName := "input_S1_L001_" + rIndex + "001." + fileExtension
-
-//		ll.print("print fileName in loop", fileName)
+		fileName := "input_S1_L" + lane + "_" + r + "_001." + fileExtension
 		cellRanger.addFile(path.join("fastqs",fileName), inputFile)
 	}
 
+
 	cellRanger = cellRanger.
-		arg("--sample=input_").
+		// arg("--sample=input_").
 		arg("--create-bam=true").
 		// arg("--nthreads=4").
-		arg("--id=input_").
-		saveFile("./outs/web_summary.html").
-		saveFile("./outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
-		saveFile("./outs/filtered_feature_bc_matrix/features.tsv.gz").
-		saveFile("./outs/filtered_feature_bc_matrix/matrix.mtx.gz").
-		saveFile("./outs/filtered_feature_bc_matrix/possorted_genome_bam.bam").
+		arg("--id=sample").
+		saveFile("./sample/outs/web_summary.html").
+		saveFile("./sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
+		saveFile("./sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
+		saveFile("./sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
+		saveFile("./sample/outs/filtered_feature_bc_matrix/possorted_genome_bam.bam").
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
@@ -86,8 +88,7 @@ self.body(func(inputs) {
 	cellRangerCounts := cellRanger.getFile("matrix.mtx.gz")
 
 	countMatrixCsv := exec.builder().
-		cmd("python").
-		arg("generateCountsCsv.py").
+		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:counts-csv")).
 		addFile("barcodes.tsv.gz", cellRangerBarcodes).
 		addFile("features.tsv.gz", cellRangerFeatures).
 		addFile("matrix.mtx.gz", cellRangerCounts).
