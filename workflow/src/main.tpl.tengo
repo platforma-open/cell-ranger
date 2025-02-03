@@ -40,10 +40,12 @@ wf.body(func(args) {
 	}, {
 		type: "Resource",
 		name: "cellRangerReport"
-	}, {
-		type: "Resource",
-		name: "alignedBAM"
-	}, {
+	}, 
+	// {
+	// 	type: "Resource",
+	// 	name: "alignedBAM"
+	// }, 
+	{
 		type: "BinaryPartitioned",
 		name: "rawCounts",
 		path: ["countMatrixImport", "rawCounts"],
@@ -104,7 +106,7 @@ wf.body(func(args) {
 	outputs := {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
 		cellRangerReport: cellRangerResults.output("cellRangerReport"),
-		alignedBAM: cellRangerResults.output("alignedBAM"),
+	//	alignedBAM: cellRangerResults.output("alignedBAM"),
 		rawCountsPf: pframes.exportFrame(rawCountsPf)
 	}
 

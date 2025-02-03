@@ -18,7 +18,7 @@ pfCountsConv := import(":pf-counts-conv")
 self.defineOutputs(
 	"cellRangerLog",
 	"cellRangerReport",
-	"alignedBAM",
+//	"alignedBAM",
 	"countMatrixImport"
 	)
 
@@ -74,7 +74,7 @@ self.body(func(inputs) {
 		saveFile("./sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
 		saveFile("./sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
 		saveFile("./sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
-		saveFile("./sample/outs/filtered_feature_bc_matrix/possorted_genome_bam.bam").
+	//	saveFile("./sample/outs/possorted_genome_bam.bam").
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
@@ -82,7 +82,7 @@ self.body(func(inputs) {
 
 	cellRangerLog := cellRanger.getStdoutStream()
 	cellRangerReport := cellRanger.getFile("web_summary.html")
-	bamFile := cellRanger.getFile("possorted_genome_bam.bam")
+	//bamFile := cellRanger.getFile("possorted_genome_bam.bam")
 	cellRangerBarcodes := cellRanger.getFile("barcodes.tsv.gz")
 	cellRangerFeatures := cellRanger.getFile("features.tsv.gz")
 	cellRangerCounts := cellRanger.getFile("matrix.mtx.gz")
@@ -114,7 +114,7 @@ self.body(func(inputs) {
 	output := {
 		cellRangerLog: cellRangerLog,
 		cellRangerReport: file.exportFile(cellRangerReport),
-		alignedBAM: bamFile,
+	//	alignedBAM: bamFile,
 		countMatrixImport: countMatrixImport
 	}
 

@@ -115,9 +115,9 @@ export const model = BlockModel.create()
   //   )
   // )
 
-  .output("alignedBAM", (wf) =>
-    wf.outputs?.resolve("alignedBAM")?.getLastLogs(1)
-  )
+  // .output("alignedBAM", (wf) =>
+  //   wf.outputs?.resolve("alignedBAM")?.getLastLogs(1)
+  // )
 
   // .output("featureCountsProgress", (wf) => {
   //   return parseResourceMap(
@@ -135,16 +135,16 @@ export const model = BlockModel.create()
   //   )
   // )
 
-  // /**
-  //  * P-frame with rawCounts
-  //  */
-  // .output("rawCountsPf", (wf) => {
-  //   //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
-  //   const pCols = wf.outputs?.resolve("rawCountsPf")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
+  /**
+   * P-frame with rawCounts
+   */
+  .output("rawCountsPf", (wf) => {
+    //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
+    const pCols = wf.outputs?.resolve("rawCountsPf")?.getPColumns();
+    if (pCols === undefined) return undefined;
 
-  //   return wf.createPFrame(pCols);
-  // })
+    return wf.createPFrame(pCols);
+  })
 
   //   /**
   //  * P-frame with normCounts
@@ -226,7 +226,8 @@ export const model = BlockModel.create()
   .sections((ctx) => {
     return [
       { type: "link", href: "/", label: "Settings" },
-      { type: "link", href: "/Report", label: "Report" }
+      { type: "link", href: "/Report", label: "Report" },
+      { type: "link", href: "/CellQC", label: "Cell QC" }
     ];
   })
 
