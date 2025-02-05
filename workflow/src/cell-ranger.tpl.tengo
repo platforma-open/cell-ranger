@@ -70,10 +70,10 @@ self.body(func(inputs) {
 		arg("--create-bam=true").
 		// arg("--nthreads=4").
 		arg("--id=sample").
-		saveFile("./sample/outs/web_summary.html").
-		saveFile("./sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
-		saveFile("./sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
-		saveFile("./sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
+		saveFile("sample/outs/web_summary.html").
+		saveFile("sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
+		saveFile("sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
+		saveFile("sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
 	//	saveFile("./sample/outs/possorted_genome_bam.bam").
 		printErrStreamToStdout().
 		saveStdoutContent().
@@ -81,11 +81,11 @@ self.body(func(inputs) {
 		run()
 
 	cellRangerLog := cellRanger.getStdoutStream()
-	cellRangerReport := cellRanger.getFile("web_summary.html")
+	cellRangerReport := cellRanger.getFile("sample/outs/web_summary.html")
 	//bamFile := cellRanger.getFile("possorted_genome_bam.bam")
-	cellRangerBarcodes := cellRanger.getFile("barcodes.tsv.gz")
-	cellRangerFeatures := cellRanger.getFile("features.tsv.gz")
-	cellRangerCounts := cellRanger.getFile("matrix.mtx.gz")
+	cellRangerBarcodes := cellRanger.getFile("sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz")
+	cellRangerFeatures := cellRanger.getFile("sample/outs/filtered_feature_bc_matrix/features.tsv.gz")
+	cellRangerCounts := cellRanger.getFile("sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz")
 
 	countMatrixCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:counts-csv")).
