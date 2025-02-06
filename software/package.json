@@ -34,7 +34,7 @@
           },
           "cmd": [
             "python",
-            "{pkg}/main.py"
+            "{pkg}/generateCountsCsv.py"
           ]
         }
       },
@@ -52,7 +52,7 @@
           },
           "cmd": [
             "python",
-            "{pkg}/main.py"
+            "{pkg}/calculate_cellMetrics.py"
           ]
         }
       }

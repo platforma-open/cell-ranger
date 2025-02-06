@@ -146,15 +146,27 @@ export const model = BlockModel.create()
     return wf.createPFrame(pCols);
   })
 
-  //   /**
-  //  * P-frame with normCounts
-  //  */
-  //   .output("normCountsPf", (wf) => {
-  //     const pCols = wf.outputs?.resolve("normCountsPf")?.getPColumns();
-  //     if (pCols === undefined) return undefined;
-  
-  //     return wf.createPFrame(pCols);
-  //   })
+  .output("rawCountsSpec", (wf) => {
+    const pCols = wf.outputs?.resolve("rawCountsPf")?.getPColumns();
+    if (pCols === undefined) return undefined;
+    return pCols[0].spec;
+
+  })
+
+  // .output("cellMetricsPf", (wf) => {
+  //   //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
+  //   const pCols = wf.outputs?.resolve("celMetricsPf")?.getPColumns();
+  //   if (pCols === undefined) return undefined;
+
+  //   return wf.createPFrame(pCols);
+  // })
+
+  // .output("cellMetricsSpec", (wf) => {
+  //   const pCols = wf.outputs?.resolve("celMetricsPf")?.getPColumns();
+  //   if (pCols === undefined) return undefined;
+  //   return pCols[0].spec;
+
+  // })
 
   /**
    * Returns true if the block is currently in "running" state

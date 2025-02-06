@@ -49,8 +49,45 @@ wf.body(func(args) {
 		type: "BinaryPartitioned",
 		name: "rawCounts",
 		path: ["countMatrixImport", "rawCounts"],
-		partitionKeyLength: 0 // [geneId]
-	}]
+		partitionKeyLength: 0 // [cellId][geneId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "totalCounts",
+		path: ["cellMetricsImport", "totalCounts"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "nGenesByCounts",
+		path: ["cellMetricsImport", "nGenesByCounts"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "pctCountsMt",
+		path: ["cellMetricsImport", "pctCountsMt"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "complexity",
+		path: ["cellMetricsImport", "complexity"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "pctCountsInTop20Genes",
+		path: ["cellMetricsImport", "pctCountsInTop20Genes"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "outlier",
+		path: ["cellMetricsImport", "outlier"],
+		partitionKeyLength: 0 // [cellId]
+	}
+	]
 
 	cellRangerResults := llPFrames.aggregate(
 		input.data, [1,2], cellRangerTpl,
@@ -69,7 +106,9 @@ wf.body(func(args) {
 			kind: "PColumn",
 			name: "pl7.app/rna-seq/countMatrix",
 			domain: {
-				"pl7.app/blockId": blockId
+				"pl7.app/blockId": blockId,
+				"pl7.app/species": species,
+				"pl7.app/rna-seq/normalized": "false"
 			},
 			valueType: "Double",
 			axesSpec: [
@@ -101,13 +140,15 @@ wf.body(func(args) {
 	}
 
 	// Convert pf to csv
-	csvCounts := xsv.exportFrame(rawCountsPf, "csv", {})
+	// csvCounts := xsv.exportFrame(rawCountsPf, "csv", {})
+
 
 	outputs := {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
 		cellRangerReport: cellRangerResults.output("cellRangerReport"),
-	//	alignedBAM: cellRangerResults.output("alignedBAM"),
-		rawCountsPf: pframes.exportFrame(rawCountsPf)
+		// alignedBAM: cellRangerResults.output("alignedBAM"),
+		rawCountsPf: pframes.exportFrame(rawCountsPf)//,
+		// celMetricsPf: pframes.exportFrame(celMetricsPf)
 	}
 
 

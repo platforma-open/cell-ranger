@@ -34,10 +34,10 @@ getColumns := func(blockId, species) {
       ],
     "columns": [{
         "column": "Count",
-        "id": "countMatrix",
+        "id": "rawCounts",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/countMatrix",
+          "name": "pl7.app/rna-seq/rawCount",
           "valueType": "Double",
           "domain": {
             "pl7.app/blockId": blockId,
