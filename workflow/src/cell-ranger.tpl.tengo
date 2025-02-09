@@ -35,16 +35,12 @@ self.body(func(inputs) {
 
 	cellRanger := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
-		// cmd("find").arg(".").
-		// mkDir("genomeIndex").
-		// mkDir("fastqs").
 		// addAsset(genomeAssets, "genomeIndex").
 		addAsset(genomeAssets, "genomeIndex", "fasta/").
 		addAsset(genomeAssets, "genomeIndex", "genes/").
 		addAsset(genomeAssets, "genomeIndex", "star/").
 		addAsset(genomeAssets, "genomeIndex", "reference.json").
 		arg("count").
-		// arg("--id=").arg(sampleName).
 		arg("--transcriptome=genomeIndex").
 		arg("--fastqs=fastqs")
 	
@@ -107,12 +103,6 @@ self.body(func(inputs) {
 
 	countCsvParams := pfCountsConv.getColumns(blockId, species)
 	countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true })
-
-	// PFrame
-	//   rawCounts.data
-	//   rawCounts.spec
-	// after we add { dataOnly: true }
-	//   rawCounts [ containing value from rawCounts.data ]
 
 	cellMetricsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:cell-metrics")).

@@ -100,6 +100,7 @@ wf.body(func(args) {
 		}
 	)
 
+	// Temporary, fix to bring specs from aggregate
 	rawCountsPf := {
 		"rawCounts.spec":
 		{
@@ -139,16 +140,152 @@ wf.body(func(args) {
 		"rawCounts.data": cellRangerResults.output("rawCounts")
 	}
 
-	// Convert pf to csv
-	// csvCounts := xsv.exportFrame(rawCountsPf, "csv", {})
+	cellMetricsPf := {
+		"totalCounts.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/totalCounts",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Total counts",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"totalCounts.data": cellRangerResults.output("totalCounts"),
+		"nGenesByCounts.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/nGenesByCounts",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "N genes detected",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"nGenesByCounts.data": cellRangerResults.output("nGenesByCounts"),
+		"pctCountsMt.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/pctCountsMt",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Percentage mitochondrial genes",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"pctCountsMt.data": cellRangerResults.output("pctCountsMt"),
+		"complexity.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/complexity",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Complexity",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"complexity.data": cellRangerResults.output("complexity"),
+		"pctCountsInTop20Genes.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/pctCountsInTop20Genes",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Percentage counts in top 20 genes",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"pctCountsInTop20Genes.data": cellRangerResults.output("pctCountsInTop20Genes")
+	}
+
 
 
 	outputs := {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
 		cellRangerReport: cellRangerResults.output("cellRangerReport"),
 		// alignedBAM: cellRangerResults.output("alignedBAM"),
-		rawCountsPf: pframes.exportFrame(rawCountsPf)//,
-		// celMetricsPf: pframes.exportFrame(celMetricsPf)
+		rawCountsPf: pframes.exportFrame(rawCountsPf),
+		cellMetricsPf: pframes.exportFrame(cellMetricsPf)
 	}
 
 
@@ -196,78 +333,7 @@ wf.body(func(args) {
 					]
 			}),
 			data: cellRangerResults.output("rawCounts")
-	 	}//,
-	// normCount : {
-	// 		spec: trace.inject({
-	// 			kind: "PColumn",
-	// 			name: "pl7.app/rna-seq/countMatrix",
-	// 			domain: {
-	// 				"pl7.app/blockId": blockId,
-	// 				"pl7.app/species": species,
-	// 				"pl7.app/rna-seq/normalized": "true"
-	// 			},
-	// 			valueType: "Double",
-	// 			annotations: {
-	// 				"pl7.app/label": "Normalized gene expression",
-	// 				"pl7.app/table/hValue": "true"
-	// 			},
-	// 			axesSpec: [
-	// 				inputSpec.axesSpec[0],
-	// 				{
-	// 					"name": "pl7.app/rna-seq/cellId",
-	// 					"type": "String",
-	// 					"domain": {
-	// 						"pl7.app/species": species
-	// 						},
-	// 						"annotations": {
-	// 							"pl7.app/label": "Cell Barcode"
-	// 							}
-	// 				},
-	// 				{
-	// 					"name": "pl7.app/rna-seq/geneId",
-	// 					"type": "String",
-	// 					"domain": {
-	// 						"pl7.app/species": species
-	// 					},
-	// 					"annotations": {
-	// 						"pl7.app/label": "Ensembl Id"
-	// 					}
-	// 				}
-	// 				]
-	// 		}),
-	// 		data: rawCountsPf["normcounts.data"] // Change to normCountsPf when declared
-	// 	},
-	// geneSymbols: {
-	// 	spec: trace.inject({
-	// 			kind: "PColumn",
-	// 			name: "pl7.app/rna-seq/geneSymbols",
-	// 			domain: {
-	// 				"pl7.app/blockId": blockId,
-	// 				"pl7.app/species": species
-	// 			},
-	// 			valueType: "String",
-	// 			annotations: {
-	// 				"pl7.app/label": "Gene Symbol"
-	// 			},
-	// 			axesSpec: [
-	// 				inputSpec.axesSpec[0],
-	// 				{
-	// 					"name": "pl7.app/rna-seq/geneId",
-	// 					"type": "String",
-	// 					"domain": {
-	// 						"pl7.app/blockId": blockId,
-	// 						"pl7.app/species": species
-	// 					},
-	// 					"annotations": {
-	// 						"pl7.app/label": "Ensembl Id"//,
-	// 						// "pl7.app/table/orderPriority": "10"
-	// 					}
-	// 				}
-	// 				]
-	// 		}),
-	// 		data: rawCountsPf["genesymbol.data"] // Change to normCountsPf when declared
-	// }//,
-		//alignedBAM: starResults.output("alignedBAM")
+	 	}
 	}
 
 	return {

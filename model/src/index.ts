@@ -10,6 +10,10 @@ import {
 } from "@platforma-sdk/model";
 
 import { type GraphMakerState } from "@milaboratories/graph-maker";
+
+export type UiState = {
+  graphState: GraphMakerState;
+};
 /**
  * Block arguments coming from the user interface
  */
@@ -44,16 +48,12 @@ export const model = BlockModel.create()
     species: "homo-sapiens"
   })
 
-  // .withUiState<UiState>({
-  //   pcaGraphState: {
-  //     template: "dots",
-  //     title: "Principal Components Analysis",
-  //   },
-  //   sDistGraphState: {
-  //     template: "heatmap",
-  //     title: "Sample Distances"
-  //   },
-  // })
+  .withUiState<UiState>({
+    graphState: {
+      template: 'box',
+      title: 'Cell QC metrics'
+    }
+  })
 
   /**
    * Find possible options for the fastq input
@@ -153,20 +153,20 @@ export const model = BlockModel.create()
 
   })
 
-  // .output("cellMetricsPf", (wf) => {
-  //   //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
-  //   const pCols = wf.outputs?.resolve("celMetricsPf")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
+  .output("cellMetricsPf", (wf) => {
+    //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
+    const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
+    if (pCols === undefined) return undefined;
 
-  //   return wf.createPFrame(pCols);
-  // })
+    return wf.createPFrame(pCols);
+  })
 
-  // .output("cellMetricsSpec", (wf) => {
-  //   const pCols = wf.outputs?.resolve("celMetricsPf")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
-  //   return pCols[0].spec;
+  .output("cellMetricsSpec", (wf) => {
+    const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
+    if (pCols === undefined) return undefined;
+    return pCols[0].spec;
 
-  // })
+  })
 
   /**
    * Returns true if the block is currently in "running" state

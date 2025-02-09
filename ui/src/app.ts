@@ -2,7 +2,7 @@ import { model } from "@platforma-open/milaboratories.cell-ranger.model";
 import { defineApp } from "@platforma-sdk/ui-vue";
 import Settings from "./pages/MainPage.vue";
 import Report from "./pages/Report.vue";
-import CellQC from "./pages/Report.vue";
+import CellQC from "./pages/CellQC.vue";
 
 export const sdkPlugin = defineApp(model, (app) => {
   return {
