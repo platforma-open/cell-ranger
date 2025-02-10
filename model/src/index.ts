@@ -50,8 +50,13 @@ export const model = BlockModel.create()
 
   .withUiState<UiState>({
     graphState: {
-      template: 'box',
-      title: 'Cell QC metrics'
+      template: 'violin',
+      title: 'Cell QC metrics',
+      layersSettings: {
+        violin: {
+          fillColor: '#99E099'
+        }
+      }
     }
   })
 
