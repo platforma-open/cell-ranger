@@ -1,0 +1,343 @@
+// Cell Ranger preprocessing workflow
+
+wf := import("@platforma-sdk/workflow-tengo:workflow")
+
+ll := import("@platforma-sdk/workflow-tengo:ll")
+xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
+exec := import("@platforma-sdk/workflow-tengo:exec")
+file := import("@platforma-sdk/workflow-tengo:file")
+pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
+render := import("@platforma-sdk/workflow-tengo:render")
+assets := import("@platforma-sdk/workflow-tengo:assets")
+pframes := import("@platforma-sdk/workflow-tengo:pframes")
+llPFrames := import("@platforma-sdk/workflow-tengo:pframes.ll")
+
+//genomes := import(":genomes")
+pfCountsConv := import(":pf-counts-conv")
+
+cellRangerTpl := assets.importTemplate(":cell-ranger")
+
+wf.prepare(func(args){
+	return{
+		resolvedInput: wf.resolve(args.ref, { errIfMissing: true })
+	}
+})
+
+
+wf.body(func(args) {
+
+	blockId := wf.blockId().getDataAsJson()
+	input := args.resolvedInput
+	inputSpec := input.spec
+
+	species := args.species
+	
+	fileExtension := inputSpec.domain["pl7.app/fileExtension"]
+
+	aggregationTargets := [{
+		type: "Resource",
+		name: "cellRangerLog"
+	}, {
+		type: "Resource",
+		name: "cellRangerReport"
+	}, 
+	// {
+	// 	type: "Resource",
+	// 	name: "alignedBAM"
+	// }, 
+	{
+		type: "BinaryPartitioned",
+		name: "rawCounts",
+		path: ["countMatrixImport", "rawCounts"],
+		partitionKeyLength: 0 // [cellId][geneId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "totalCounts",
+		path: ["cellMetricsImport", "totalCounts"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "nGenesByCounts",
+		path: ["cellMetricsImport", "nGenesByCounts"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "pctCountsMt",
+		path: ["cellMetricsImport", "pctCountsMt"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "complexity",
+		path: ["cellMetricsImport", "complexity"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "pctCountsInTop20Genes",
+		path: ["cellMetricsImport", "pctCountsInTop20Genes"],
+		partitionKeyLength: 0 // [cellId]
+	}, 
+	{
+		type: "BinaryPartitioned",
+		name: "outlier",
+		path: ["cellMetricsImport", "outlier"],
+		partitionKeyLength: 0 // [cellId]
+	}
+	]
+
+	cellRangerResults := llPFrames.aggregate(
+		input.data, [1,2], cellRangerTpl,
+		aggregationTargets,
+		false,
+		{
+			blockId: blockId,
+			species: species,
+			fileExtension: fileExtension
+		}
+	)
+
+	// Temporary, fix to bring specs from aggregate
+	rawCountsPf := {
+		"rawCounts.spec":
+		{
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/countMatrix",
+			domain: {
+				"pl7.app/blockId": blockId,
+				"pl7.app/species": species,
+				"pl7.app/rna-seq/normalized": "false"
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/species": species
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode"
+					}
+				},
+				{
+					"name": "pl7.app/rna-seq/geneId",
+					"type": "String",
+					"domain": {
+						"pl7.app/species": species
+					},
+					"annotations": {
+						"pl7.app/label": "Ensembl Id"
+					}
+				}
+				],
+			annotations: {"pl7.app/label": "Raw gene expression"}
+		},
+		"rawCounts.data": cellRangerResults.output("rawCounts")
+	}
+
+	cellMetricsPf := {
+		"totalCounts.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/totalCounts",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Total counts",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"totalCounts.data": cellRangerResults.output("totalCounts"),
+		"nGenesByCounts.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/nGenesByCounts",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "N genes detected",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"nGenesByCounts.data": cellRangerResults.output("nGenesByCounts"),
+		"pctCountsMt.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/pctCountsMt",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Percentage mitochondrial genes",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"pctCountsMt.data": cellRangerResults.output("pctCountsMt"),
+		"complexity.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/complexity",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Complexity",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"complexity.data": cellRangerResults.output("complexity"),
+		"pctCountsInTop20Genes.spec": {
+			kind: "PColumn",
+			name: "pl7.app/rna-seq/pctCountsInTop20Genes",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Double",
+			axesSpec: [
+				inputSpec.axesSpec[0],
+				{
+					"name": "pl7.app/rna-seq/cellId",
+					"type": "String",
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
+					"annotations": {
+						"pl7.app/label": "Cell Barcode",
+						"pl7.app/table/visibility": "optional"
+					}
+				}
+				],
+			annotations: {
+				"pl7.app/label": "Percentage counts in top 20 genes",
+				"pl7.app/table/hValue": "true"
+				}
+		},
+		"pctCountsInTop20Genes.data": cellRangerResults.output("pctCountsInTop20Genes")
+	}
+
+
+
+	outputs := {
+		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
+		cellRangerReport: cellRangerResults.output("cellRangerReport"),
+		// alignedBAM: cellRangerResults.output("alignedBAM"),
+		rawCountsPf: pframes.exportFrame(rawCountsPf),
+		cellMetricsPf: pframes.exportFrame(cellMetricsPf)
+	}
+
+
+	trace := pSpec.makeTrace(inputSpec,
+		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger - "}// + genomes.getSpeciesName(species)}
+	)
+
+	// Count matrix export defined with sample from inputSpec + previous specs
+	exports := {
+		rawCount : {
+			spec: trace.inject({
+				kind: "PColumn",
+				name: "pl7.app/rna-seq/countMatrix",
+				domain: {
+					"pl7.app/blockId": blockId,
+					"pl7.app/species": species,
+					"pl7.app/rna-seq/normalized": "false"
+				},
+				valueType: "Double",
+				annotations: {
+					"pl7.app/label": "Raw gene expression"
+				},
+				axesSpec: [
+					inputSpec.axesSpec[0],
+					{
+						"name": "pl7.app/rna-seq/cellId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+							},
+							"annotations": {
+								"pl7.app/label": "Cell Barcode"
+								}
+					},
+					{
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id"
+						}
+					}
+					]
+			}),
+			data: cellRangerResults.output("rawCounts")
+	 	}
+	}
+
+	return {
+		outputs: outputs,
+		exports: exports
+	}
+})

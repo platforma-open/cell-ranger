@@ -1,0 +1,43 @@
+{
+  "name": "@platforma-open/milaboratories.cell-ranger",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rm -rf block-pack/* && block-tools pack"
+  },
+  "files": [
+    "index.d.ts",
+    "index.js"
+  ],
+  "dependencies": {
+    "@platforma-open/milaboratories.cell-ranger.workflow": "workspace:*",
+    "@platforma-open/milaboratories.cell-ranger.model": "workspace:*",
+    "@platforma-open/milaboratories.cell-ranger.ui": "workspace:*"
+  },
+  "block": {
+    "components": {
+      "workflow": "@platforma-open/milaboratories.cell-ranger.workflow/dist/tengo/tpl/main.plj.gz",
+      "model": "@platforma-open/milaboratories.cell-ranger.model/dist/model.json",
+      "ui": "@platforma-open/milaboratories.cell-ranger.ui/dist"
+    },
+    "meta": {
+      "title": "Cell Ranger",
+      "logo": "file:../logos/block-logo.png",
+      "url": "https://github.com/milaboratory/platforma-cell-ranger",
+      "docs": "https://github.com/milaboratory/platforma-cell-ranger/docs",
+      "support": "mailto:support@milaboratories.com",
+      "description": "Preprocessing of scRNA-seq fastq files with Cell Ranger to generate count matrices.",
+      "longDescription": "file:../docs/description.md",
+      "changelog": "file:../CHANGELOG.md",
+      "tags": ["RNA-seq", "single-cell"],
+      "organization": {
+        "name": "MiLaboratories Inc",
+        "url": "https://milaboratories.com/",
+        "logo": "file:../logos/milaboratories.png"
+      }
+    }
+  },
+  "devDependencies": {
+    "@platforma-sdk/block-tools": "catalog:"
+  },
+  "packageManager": "pnpm@9.12.0"
+}
