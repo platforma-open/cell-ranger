@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cell-ranger.workflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Block Workflow",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "pnpm": {
     "overrides": {
-        "@platforma-sdk/workflow-tengo": "file:/Users/aiturbide/Work/platforma/sdk/workflow-tengo/package.tgz"
+      "@platforma-sdk/workflow-tengo": "file:/Users/aiturbide/Work/platforma/sdk/workflow-tengo/package.tgz"
     }
   }
 }

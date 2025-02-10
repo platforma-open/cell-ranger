@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cell-ranger",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "build": "rm -rf block-pack/* && block-tools pack"
   },
@@ -28,7 +28,10 @@
       "description": "Preprocessing of scRNA-seq fastq files with Cell Ranger to generate count matrices.",
       "longDescription": "file:../docs/description.md",
       "changelog": "file:../CHANGELOG.md",
-      "tags": ["RNA-seq", "single-cell"],
+      "tags": [
+        "RNA-seq",
+        "single-cell"
+      ],
       "organization": {
         "name": "MiLaboratories Inc",
         "url": "https://milaboratories.com/",
