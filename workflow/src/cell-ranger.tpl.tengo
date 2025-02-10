@@ -106,8 +106,12 @@ self.body(func(inputs) {
 
 	cellMetricsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:cell-metrics")).
-		addFile("rawCounts.csv", rawCounts).
-		arg("--path").arg("rawCounts.csv").
+		addFile("barcodes.tsv.gz", cellRangerBarcodes).
+		addFile("features.tsv.gz", cellRangerFeatures).
+		addFile("matrix.mtx.gz", cellRangerCounts).
+		arg("--matrix").arg("matrix.mtx.gz").
+		arg("--barcodes").arg("barcodes.tsv.gz").
+		arg("--features").arg("features.tsv.gz").		
 		arg("--species").arg(species).
 		arg("--output").arg(".").
 		saveFile("cell_metrics.csv").
