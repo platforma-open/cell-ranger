@@ -34,14 +34,6 @@ export type BlockArgs = {
   title?: string;
 };
 
-/**
- * UI state
- */
-// export type UiState = {
-//   pcaGraphState: GraphMakerState;
-//   sDistGraphState: GraphMakerState;
-// };
-
 export const model = BlockModel.create()
 
   .withArgs<BlockArgs>({
@@ -112,39 +104,10 @@ export const model = BlockModel.create()
     );
   })
 
-  // .output("starQc", (wf) =>
-  //   parseResourceMap(
-  //     wf.outputs?.resolve("starQc"),
-  //     (acc) => acc.getFileContentAsString(),
-  //     false
-  //   )
-  // )
-
-  // .output("alignedBAM", (wf) =>
-  //   wf.outputs?.resolve("alignedBAM")?.getLastLogs(1)
-  // )
-
-  // .output("featureCountsProgress", (wf) => {
-  //   return parseResourceMap(
-  //     wf.outputs?.resolve("featureCountsProgress"),
-  //     (acc) => acc.getLogHandle(),
-  //     false
-  //   );
-  // })
-
-  // .output("featureCountsQc", (wf) =>
-  //   parseResourceMap(
-  //     wf.outputs?.resolve("featureCountsQc"),
-  //     (acc) => acc.getFileContentAsString(),
-  //     false
-  //   )
-  // )
-
   /**
    * P-frame with rawCounts
    */
   .output("rawCountsPf", (wf) => {
-    //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
     const pCols = wf.outputs?.resolve("rawCountsPf")?.getPColumns();
     if (pCols === undefined) return undefined;
 
@@ -159,7 +122,6 @@ export const model = BlockModel.create()
   })
 
   .output("cellMetricsPf", (wf) => {
-    //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
     const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
     if (pCols === undefined) return undefined;
 
@@ -173,77 +135,22 @@ export const model = BlockModel.create()
 
   })
 
+  .output("webSummary", (wf) => {
+    return parseResourceMap(
+      wf.outputs?.resolve("cellRangerReport"),
+      (acc) => acc.getFileHandle(),
+      false
+    );
+  })
+
   /**
    * Returns true if the block is currently in "running" state
    */
   .output("isRunning", (ctx) => ctx.outputs?.getIsReadyOrError() === false)
 
-  // .output("pcaPf", (wf) => {
-  //   //return wf.outputs?.resolve("pf")?.resolve("rawCounts.data")?.listInputFields()
-  //   const pCols = wf.outputs?.resolve("pcaComponents")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
-
-  //   //return wf.createPFrame(pCols);
-  //   // enriching with upstream data
-  //   const valueTypes = [
-  //     "Int",
-  //     "Long",
-  //     "Float",
-  //     "Double",
-  //     "String",
-  //     "Bytes",
-  //   ] as ValueType[];
-  //   const upstream = wf.resultPool
-  //     .getData()
-  //     .entries.map((v) => v.obj)
-  //     .filter(isPColumn)
-  //     .filter((column) =>
-  //       valueTypes.find((valueType) => (valueType === column.spec.valueType) && (
-  //                                         column.id.includes("metadata"))
-  //                                       )
-  //     );
-
-  //   return wf.createPFrame([...pCols, ...upstream]);
-  // })
-
-  // .output("sampleDistancesSpec", (wf) => {
-  //   const pCols = wf.outputs?.resolve("sampleDistances")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
-  //   return pCols[0].spec;
-
-  // })
-
-  // .output("sampleDistancesPf", (wf) => {
-  //   const pCols = wf.outputs?.resolve("sampleDistances")?.getPColumns();
-  //   if (pCols === undefined) return undefined;
-
-  //   //return wf.createPFrame(pCols);
-  //   // enriching with upstream data
-  //   const valueTypes = [
-  //     "Int",
-  //     "Long",
-  //     "Float",
-  //     "Double",
-  //     "String",
-  //     "Bytes",
-  //   ] as ValueType[];
-  //   const upstream = wf.resultPool
-  //     .getData()
-  //     .entries.map((v) => v.obj)
-  //     .filter(isPColumn)
-  //     .filter((column) =>
-  //       valueTypes.find((valueType) => (valueType === column.spec.valueType) && (
-  //                                         column.id.includes("metadata"))
-  //                                       )
-  //     );
-      
-  //   return createPFrameForGraphs(wf, [...pCols, ...upstream]);
-  // })
-
   .sections((ctx) => {
     return [
       { type: "link", href: "/", label: "Settings" },
-      { type: "link", href: "/Report", label: "Report" },
       { type: "link", href: "/CellQC", label: "Cell QC" }
     ];
   })

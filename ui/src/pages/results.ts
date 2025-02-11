@@ -2,22 +2,6 @@ import { AnyLogHandle } from "@platforma-sdk/model";
 import { computed } from "vue";
 import { useApp } from "../app";
 
-// export type StarQC = {
-//   uniquelyMapped: number;
-//   numberOfInputReads: number;
-//   mappedMultipleLoci: number;
-//   mappedTooManyLoci: number;
-//   unmappedTooShort: number;
-//   unmappedOther: number;
-// };
-
-// export type FeatureCountsQC = {
-//   assigned: number;
-//   unassignedMappingQuality: number;
-//   unassignedNoFeatures: number;
-//   unassignedAmbiguity: number;
-// };
-
 export type ResultEntry = {
   sampleLabel: string;
   cellRangerProgress?: AnyLogHandle;

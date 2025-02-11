@@ -31,26 +31,26 @@ const parsed = computed<Parsed>(() => {
   }
 
   console.log(raw);
-  if (raw.indexOf('.....') < 0) {
+  if (raw.indexOf('SC_RNA_COUNTER_CS.') < 0) {
     return res;
   }
 
-  const parts = raw.split('.....');
+  const parts = raw.split('SC_RNA_COUNTER_CS.');
 
   res.time = parts[0].trim();
   res.stage = parts[1].trim();
 
   switch (res.stage) {
-    case 'loading genome':
-      res.percentage = '0';
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.WRITE_BARCODE_INDEX.fork0.split':
+      res.percentage = '20';
       break;
-    case 'started mapping':
-      res.percentage = '33';
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0.chnk0.main':
+      res.percentage = '50';
       break;
-    case 'started sorting BAM':
-      res.percentage = '66';
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER.WRITE_POS_BAM.fork0.join':
+      res.percentage = '75';
       break;
-    case 'finished successfully':
+    case 'SC_MULTI_CORE.MULTI_REPORTER.CHOOSE_CLOUPE.fork0.chnk0.main':
       res.percentage = '100';
       break;
   }
