@@ -18,17 +18,18 @@ import { PlRef } from '@platforma-sdk/model';
 import { computed, reactive, shallowRef } from "vue";
 import { useApp } from "../app";
 import ProgressCell from './components/ProgressCell.vue';
+import ReportPanel from './Report.vue'
 import { resultMap } from './results';
 
 const app = useApp();
 
 const data = reactive<{
   settingsOpen: boolean,
-  // sampleReportOpen: boolean,
+  sampleReportOpen: boolean,
   selectedSample: string | undefined
 }>({
   settingsOpen: app.model.args.ref === undefined,
-  // sampleReportOpen: false,
+  sampleReportOpen: false,
   selectedSample: undefined,
 })
 
@@ -107,7 +108,7 @@ const gridOptions: GridOptions = {
   getRowId: (row) => row.data.sampleId,
   onRowDoubleClicked: (e) => {
     data.selectedSample = e.data?.sampleId
-    // data.sampleReportOpen = data.selectedSample !== undefined;
+    data.sampleReportOpen = data.selectedSample !== undefined;
   },
   components: {
     // AlignmentStatsCell,
@@ -144,24 +145,25 @@ function setInput(inputRef?: PlRef) {
       </PlBtnGhost>
     </template>
 
-    <AgGridVue :theme="AgGridTheme" :style="{ height: '100%' }" @grid-ready="onGridReady" :rowData="results"
-      :columnDefs="columnDefs" :grid-options="gridOptions" :loadingOverlayComponentParams="{ notReady: true }"
+    <AgGridVue :theme="AgGridTheme" :style="{ height: '100%' }"
+      @grid-ready="onGridReady"
+      :rowData="results"
+      :columnDefs="columnDefs"
+      :grid-options="gridOptions" :loadingOverlayComponentParams="{ notReady: true }"
       :defaultColDef="defaultColDef" :loadingOverlayComponent=PlAgOverlayLoading
       :noRowsOverlayComponent=PlAgOverlayNoRows />
-
   </PlBlockPage>
 
   <PlSlideModal v-model="data.settingsOpen">
     <template #title>Settings</template>
     <PlDropdownRef :options="app.model.outputs.dataOptions" v-model="app.model.args.ref" @update:model-value="setInput"
       label="Select dataset" clearable />
-
     <PlDropdown :options="speciesOptions" v-model="app.model.args.species" label="Select species" />
   </PlSlideModal>
 
-  <!-- <PlSlideModal v-model="data.sampleReportOpen" width="80%">
+  <PlSlideModal v-model="data.sampleReportOpen" width="95%">
     <template #title>Results for {{ (data.selectedSample ? app.model.outputs.labels?.[data.selectedSample] :
       undefined) ?? "..." }}</template>
     <ReportPanel v-model="data.selectedSample" />
-  </PlSlideModal> -->
+  </PlSlideModal>
 </template>
