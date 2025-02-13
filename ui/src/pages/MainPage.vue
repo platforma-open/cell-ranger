@@ -18,6 +18,7 @@ import { PlRef } from '@platforma-sdk/model';
 import { computed, reactive, shallowRef } from "vue";
 import { useApp } from "../app";
 import ProgressCell from './components/ProgressCell.vue';
+import ReportPanel from './Report.vue'
 import { resultMap } from './results';
 
 const app = useApp();
