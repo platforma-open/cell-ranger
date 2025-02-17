@@ -2,6 +2,7 @@
 import { AgGridVue } from 'ag-grid-vue3';
 import {
   AgGridTheme,
+  makeRowNumberColDef,
   PlAgOverlayLoading,
   PlAgOverlayNoRows,
   PlAgTextAndButtonCell,
@@ -13,8 +14,10 @@ import {
   PlSlideModal
 } from "@platforma-sdk/ui-vue";
 
-import { ColDef, GridApi, GridOptions, GridReadyEvent, ModuleRegistry, ClientSideRowModelModule } from 'ag-grid-enterprise';
-import { PlRef } from '@platforma-sdk/model';
+import type { ColDef, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-enterprise';
+import { ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-enterprise';
+import { plRefsEqual } from '@platforma-sdk/model';
+import type { PlRef } from '@platforma-sdk/model';
 import { computed, reactive, shallowRef } from "vue";
 import { useApp } from "../app";
 import ProgressCell from './components/ProgressCell.vue';
@@ -51,15 +54,15 @@ const speciesOptions = [
 
 
 /** Rows for ag-table */
-const results = computed<any[] | undefined>(() => {
+const results = computed(() => {
 
   if (resultMap.value === undefined) return undefined;
   const rows = []
   for (const id in resultMap.value) {
     rows.push({
-      "sampleId": id,
-      "sampleLabel": resultMap.value[id].sampleLabel,
-      "cellRanger": resultMap.value[id].cellRangerProgressLine
+      sampleId: id,
+      sampleLabel: resultMap.value[id].sampleLabel,
+      cellRanger: resultMap.value[id].cellRangerProgressLine
     });
   }
 
@@ -68,7 +71,7 @@ const results = computed<any[] | undefined>(() => {
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
-const gridApi = shallowRef<GridApi<any>>();
+const gridApi = shallowRef<GridApi>();
 const onGridReady = (params: GridReadyEvent) => {
   gridApi.value = params.api;
 };
@@ -80,6 +83,7 @@ const defaultColDef: ColDef = {
 };
 
 const columnDefs: ColDef[] = [
+  makeRowNumberColDef(),
   {
     colId: 'label',
     field: 'sampleLabel',
@@ -117,11 +121,6 @@ const gridOptions: GridOptions = {
     ProgressCell
   }
 };
-
-/* @deprecated Migrate to SDK method when will be published */
-function plRefsEqual(ref1: PlRef, ref2: PlRef) {
-  return ref1.blockId === ref2.blockId && ref1.name === ref2.name;
-}
 
 function setInput(inputRef?: PlRef) {
   app.model.args.ref = inputRef;

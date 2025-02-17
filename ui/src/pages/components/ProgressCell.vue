@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ICellRendererParams } from 'ag-grid-enterprise';
+import type { ICellRendererParams } from 'ag-grid-enterprise';
 import { computed, unref } from 'vue';
-import { PlAgCellProgress, PlProgressCellProps } from '@platforma-sdk/ui-vue';
+import type { PlProgressCellProps } from '@platforma-sdk/ui-vue';
+import { PlAgCellProgress } from '@platforma-sdk/ui-vue';
 
 const props = defineProps<{
   params: ICellRendererParams;
@@ -41,16 +42,16 @@ const parsed = computed<Parsed>(() => {
   res.stage = parts[1].trim();
 
   switch (res.stage) {
-    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.WRITE_BARCODE_INDEX.fork0.split':
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.WRITE_BARCODE_INDEX':
       res.percentage = '20';
       break;
-    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0.chnk0.main':
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT':
       res.percentage = '50';
       break;
-    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER.WRITE_POS_BAM.fork0.join':
+    case 'SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER.WRITE_POS_BAM':
       res.percentage = '75';
       break;
-    case 'SC_MULTI_CORE.MULTI_REPORTER.CHOOSE_CLOUPE.fork0.chnk0.main':
+    case 'SC_MULTI_CORE.MULTI_REPORTER.CHOOSE_CLOUPE':
       res.percentage = '100';
       break;
   }

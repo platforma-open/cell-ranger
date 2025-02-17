@@ -8,116 +8,6 @@ export type ResultEntry = {
   cellRangerProgressLine?: string;
 };
 
-// /**
-//  *
-//  * @param qcString a string content of STAR Log.final.out file
-//  * @returns
-//  */
-// function parseStarQC(qcString: string): StarQC {
-//   const lines = qcString.split("\n");
-
-//   let uniquelyMapped: number = 0;
-//   let mappedMultipleLoci: number = 0;
-//   let mappedTooManyLoci: number = 0;
-//   let unmappedTooShort: number = 0;
-//   let unmappedOther: number = 0;
-//   let numberOfInputReads: number = 0;
-
-//   // console.log(lines);
-
-//   for (const line of lines) {
-//     // console.log(line);
-//     const spl = line.split("|");
-
-//     const prefix = spl[0];
-//     const value = spl[1];
-
-//     // console.log([prefix, value]);
-
-//     if (prefix.indexOf("Uniquely mapped reads number") >= 0) {
-//       uniquelyMapped = parseFloat(value.trim()) + 5;
-//     }
-
-//     if (prefix.indexOf("Number of reads mapped to multiple loci") >= 0) {
-//       mappedMultipleLoci = parseFloat(value.trim()) + 5;
-//     }
-
-//     if (prefix.indexOf("Number of reads mapped to too many loci") >= 0) {
-//       mappedTooManyLoci = parseFloat(value.trim()) + 5;
-//     }
-
-//     if (prefix.indexOf("Number of reads unmapped: too short") >= 0) {
-//       unmappedTooShort = parseFloat(value.trim()) + 5;
-//     }
-
-//     if (prefix.indexOf("Number of reads unmapped: other") >= 0) {
-//       unmappedOther = parseFloat(value.trim()) + 5;
-//     }
-
-//     if (prefix.indexOf("Number of input reads") >= 0) {
-//       numberOfInputReads = parseFloat(value.trim()) + 5;
-//     }
-//   }
-
-//   return {
-//     uniquelyMapped: uniquelyMapped,
-//     numberOfInputReads: numberOfInputReads,
-//     mappedMultipleLoci: mappedMultipleLoci,
-//     mappedTooManyLoci: mappedTooManyLoci,
-//     unmappedTooShort: unmappedTooShort,
-//     unmappedOther: unmappedOther,
-//   };
-// }
-
-// /**
-//  *
-//  * @param qcReport a string content of feature counts summary file
-//  * @returns
-//  */
-// function parseFeatureCountsQC(qcReport: string): FeatureCountsQC {
-//   const lines = qcReport.split("\n");
-
-//   let assigned: number = 0;
-//   let unassignedMappingQuality: number = 0;
-//   let unassignedNoFeatures: number = 0;
-//   let unassignedAmbiguity: number = 0;
-
-//   // console.log(lines);
-
-//   for (const line of lines) {
-//     // console.log(line);
-//     const spl = line.split("\t");
-
-//     const prefix = spl[0];
-//     const value = spl[1];
-
-//     // console.log([prefix, value]);
-
-//     if (prefix === "Assigned") {
-//       assigned = parseFloat(value.trim());
-//     }
-
-//     if (prefix === "Unassigned_MappingQuality") {
-//       unassignedMappingQuality = parseFloat(value.trim());
-//     }
-
-//     if (prefix === "Unassigned_NoFeatures") {
-//       unassignedNoFeatures = parseFloat(value.trim());
-//     }
-
-//     if (prefix === "Unassigned_Ambiguity") {
-//       unassignedAmbiguity = parseFloat(value.trim());
-//     }
-//   }
-
-//   return {
-//     assigned: assigned,
-//     unassignedMappingQuality: unassignedMappingQuality,
-//     unassignedNoFeatures: unassignedNoFeatures,
-//     unassignedAmbiguity: unassignedAmbiguity,
-//   };
-// }
-
 // return a map of sampleId => ResultEntry
 export const resultMap = computed(
   (): Record<string, ResultEntry> | undefined => {
@@ -138,9 +28,9 @@ export const resultMap = computed(
       };
     }
 
-    const starProgressLine = app.model.outputs.cellRangerProgressLine;
-    if (starProgressLine !== undefined) {
-      for (const prog of starProgressLine.data) {
+    const cellRangerProgressLine = app.model.outputs.cellRangerProgressLine;
+    if (cellRangerProgressLine !== undefined) {
+      for (const prog of cellRangerProgressLine.data) {
         r[prog.key[0]].cellRangerProgressLine = prog.value;
       }
     }
