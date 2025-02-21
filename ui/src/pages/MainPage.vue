@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import { AgGridVue } from 'ag-grid-vue3';
 import {
-  AgGridTheme,
-  makeRowNumberColDef,
-  PlAgOverlayLoading,
-  PlAgOverlayNoRows,
   PlAgTextAndButtonCell,
   PlBlockPage,
   PlBtnGhost,
   PlDropdown,
   PlDropdownRef,
   PlMaskIcon24,
-  PlSlideModal
+  PlSlideModal,
+  useAgGridOptions
 } from "@platforma-sdk/ui-vue";
 
-import type { ColDef, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-enterprise';
-import { ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-enterprise';
 import { plRefsEqual } from '@platforma-sdk/model';
 import type { PlRef } from '@platforma-sdk/model';
-import { computed, reactive, shallowRef } from "vue";
+import { computed, reactive } from "vue";
 import { useApp } from "../app";
-import ProgressCell from './components/ProgressCell.vue';
 import ReportPanel from './Report.vue'
 import { resultMap } from './results';
+import { parseProgress } from '../parseProgress';
+import { speciesOptions } from '../species';
 
 const app = useApp();
 
@@ -36,26 +32,14 @@ const data = reactive<{
   selectedSample: undefined,
 })
 
-
-const speciesOptions = [
-  { text: "Homo sapiens (GRCh38)", value: "homo-sapiens" },
-  { text: "Mus musculus (GRCm39)", value: "mus-musculus" },
-  { text: "Saccharomyces cerevisiae (R64-1-1)", value: "saccharomyces-cerevisiae" },
-  { text: "Rattus norvegicus (mRatBN7.2)", value: "rattus-norvegicus" },
-  { text: "Danio rerio (GRCz11)", value: "danio-rerio" },
-  { text: "Drosophila Melanogaster (BDGP6.46)", value: "drosophila-melanogaster" },
-  { text: "Arabidopsis Thaliana (TAIR10)", value: "arabidopsis-thaliana" },
-  { text: "Caenorhabditis Elegans (WBcel235)", value: "caenorhabditis-elegans" },
-  { text: "Gallus Gallus (GRCg7b)", value: "gallus-gallus" },
-  { text: "Bos Taurus (ARS-UCD1.3)", value: "bos-taurus" },
-  { text: "Sus Scrofa (Sscrofa11.1)", value: "sus-scrofa" },
-  { text: "Test genome (v1)", value: "test-species" },
-];
-
+type Row = {
+  sampleId: string;
+  sampleLabel: string;
+  cellRanger: string | undefined;
+};
 
 /** Rows for ag-table */
-const results = computed(() => {
-
+const results = computed<Row[] | undefined>(() => {
   if (resultMap.value === undefined) return undefined;
   const rows = []
   for (const id in resultMap.value) {
@@ -69,58 +53,44 @@ const results = computed(() => {
   return rows;
 });
 
-ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
-const gridApi = shallowRef<GridApi>();
-const onGridReady = (params: GridReadyEvent) => {
-  gridApi.value = params.api;
-};
-
-const defaultColDef: ColDef = {
-  suppressHeaderMenuButton: true,
-  lockPinned: true,
-  sortable: false
-};
-
-const columnDefs: ColDef[] = [
-  makeRowNumberColDef(),
-  {
-    colId: 'label',
-    field: 'sampleLabel',
-    headerName: 'Sample',
-    pinned: 'left',
-    lockPinned: true,
-    sortable: true,
-    cellRenderer: PlAgTextAndButtonCell,
-    cellRendererParams: {
-      invokeRowsOnDoubleClick: true
-    }
-  },
-  {
-    colId: 'cellRanger',
-    field: 'cellRanger',
-    cellRenderer: ProgressCell,
-    headerName: 'Cell Ranger Progress',
-    cellStyle: {
-      '--ag-cell-horizontal-padding': '0px',
-      '--ag-cell-vertical-padding': '0px'
+const { gridOptions } = useAgGridOptions<Row>(({ column }) => {
+  return {
+    rowData: results.value,
+    rowNumbersColumn: true,
+    defaultColDef: {
+      suppressHeaderMenuButton: true,
+      lockPinned: true,
+      sortable: false
     },
-  }
-];
-
-const gridOptions: GridOptions = {
-  getRowId: (row) => row.data.sampleId,
-  onRowDoubleClicked: (e) => {
-    data.selectedSample = e.data?.sampleId
-    data.sampleReportOpen = data.selectedSample !== undefined;
-  },
-  components: {
-    // AlignmentStatsCell,
-    // FeatureCountsStatsCell,
-    PlAgTextAndButtonCell,
-    ProgressCell
-  }
-};
+    columnDefs: [
+      {
+        colId: 'label',
+        field: 'sampleLabel',
+        headerName: 'Sample',
+        pinned: 'left',
+        lockPinned: true,
+        sortable: true,
+        cellRenderer: PlAgTextAndButtonCell,
+        cellRendererParams: {
+          invokeRowsOnDoubleClick: true
+        }
+      },
+      column<string | undefined>({
+        colId: 'cellRanger',
+        field: 'cellRanger',
+        headerName: 'Cell Ranger Progress',
+        flex: 1,
+        cellStyle: {
+          '--ag-cell-horizontal-padding': '0px',
+          '--ag-cell-vertical-padding': '0px'
+        },
+        progress(cellRangerProgressLine) {
+          return parseProgress(cellRangerProgressLine);
+        },
+      })
+    ]
+  };
+});
 
 function setInput(inputRef?: PlRef) {
   app.model.args.ref = inputRef;
@@ -129,7 +99,6 @@ function setInput(inputRef?: PlRef) {
   else
     app.model.args.title = undefined;
 }
-
 </script>
 
 <template>
@@ -144,13 +113,10 @@ function setInput(inputRef?: PlRef) {
       </PlBtnGhost>
     </template>
 
-    <AgGridVue :theme="AgGridTheme" :style="{ height: '100%' }"
-      @grid-ready="onGridReady"
-      :rowData="results"
-      :columnDefs="columnDefs"
-      :grid-options="gridOptions" :loadingOverlayComponentParams="{ notReady: true }"
-      :defaultColDef="defaultColDef" :loadingOverlayComponent=PlAgOverlayLoading
-      :noRowsOverlayComponent=PlAgOverlayNoRows />
+    <AgGridVue
+      :style="{ height: '100%' }"
+      v-bind="gridOptions as {}"
+    />
   </PlBlockPage>
 
   <PlSlideModal v-model="data.settingsOpen">

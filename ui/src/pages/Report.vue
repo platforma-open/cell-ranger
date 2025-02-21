@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useApp } from "../app";
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { ReactiveFileContent } from "@platforma-sdk/ui-vue";
 const app = useApp();
 const sampleId = defineModel<string | undefined>()
