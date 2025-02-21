@@ -96,12 +96,25 @@ export const model = BlockModel.create()
   /**
    * Last line from cell ranger output
    */
-  .output("cellRangerProgressLine", (wf) => {
-    return parseResourceMap(
-      wf.outputs?.resolve("cellRangerProgress"),
-      (acc) => acc.getLastLogs(1),
-      false
-    );
+  // .output("cellRangerProgressLine", (wf) => {
+  //   return parseResourceMap(
+  //     wf.outputs?.resolve("cellRangerProgress"),
+  //     (acc) => acc.getLastLogs(1),
+  //     false
+  //   );
+  // })
+
+  /**
+   * Last line from cell ranger output
+   */
+  .output('cellRangerProgressLine', (ctx) => {
+    return ctx.outputs !== undefined
+      ? parseResourceMap(
+          ctx.outputs?.resolve('cellRangerProgress'),
+          (acc) => acc.getProgressLogWithInfo(''),
+          false,
+        )
+      : undefined;
   })
 
   /**

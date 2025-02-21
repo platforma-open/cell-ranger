@@ -1,11 +1,11 @@
-import { AnyLogHandle } from "@platforma-sdk/model";
+import { AnyLogHandle, ProgressLogWithInfo } from "@platforma-sdk/model";
 import { computed } from "vue";
 import { useApp } from "../app";
 
 export type ResultEntry = {
   sampleLabel: string;
   cellRangerProgress?: AnyLogHandle;
-  cellRangerProgressLine?: string;
+  cellRangerProgressLine?: ProgressLogWithInfo;
 };
 
 // return a map of sampleId => ResultEntry

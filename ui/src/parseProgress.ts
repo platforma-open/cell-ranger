@@ -1,4 +1,5 @@
 import { ColDefProgress } from "@platforma-sdk/ui-vue";
+import { ProgressLogWithInfo } from "@platforma-sdk/model";
 
 const logLineRegex = /^(?<date>\d{4}-\d{2}-\d{2})\s+(?<time>\d{2}:\d{2}:\d{2})\s+\[(?<tag>[^\]]+)\]\s+\((?<status>[^)]+)\)\s+(?<identifier>.*)$/;
 
@@ -14,25 +15,31 @@ function match(raw: string) {
   return raw.match(logLineRegex)?.groups as Group | undefined;
 }
 
-export const parseProgress  = (raw: string | undefined): ColDefProgress => {
-  raw = raw?.trim();
-
+export const parseProgress  = (progressLine: ProgressLogWithInfo | undefined): ColDefProgress => {
   const res: ColDefProgress = {
     status: 'not_started',
     percent: undefined, 
-    text: raw, // this text is in the left part of cell (main text)
+    text: '', // this text is in the left part of cell (main text)
     suffix: ''
   };
+
+  if (!progressLine) {
+    return res;
+  }
+
+  if (!progressLine.live) {
+    res.status = 'done';
+    res.text = 'Complete';
+    return res;
+  }
+
+  const raw = progressLine.progressLine?.trim();
 
   if (!raw) {
     return res;
   }
 
-  if (raw.startsWith('Saving pipestance info to')) {
-    res.status = 'done';
-    res.text = 'Complete';
-    return res;
-  }
+  res.text = raw;
 
   res.status = 'running'; // Shows "infinite" progress if percent is not known
 

@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { AgGridVue } from 'ag-grid-vue3';
 import {
   PlAgTextAndButtonCell,
@@ -12,7 +15,7 @@ import {
 } from "@platforma-sdk/ui-vue";
 
 import { plRefsEqual } from '@platforma-sdk/model';
-import type { PlRef } from '@platforma-sdk/model';
+import type { PlRef, ProgressLogWithInfo } from '@platforma-sdk/model';
 import { computed, reactive } from "vue";
 import { useApp } from "../app";
 import ReportPanel from './Report.vue'
@@ -35,7 +38,7 @@ const data = reactive<{
 type Row = {
   sampleId: string;
   sampleLabel: string;
-  cellRanger: string | undefined;
+  cellRanger: ProgressLogWithInfo | undefined;
 };
 
 /** Rows for ag-table */
@@ -75,7 +78,7 @@ const { gridOptions } = useAgGridOptions<Row>(({ column }) => {
           invokeRowsOnDoubleClick: true
         }
       },
-      column<string | undefined>({
+      column<ProgressLogWithInfo | undefined>({
         colId: 'cellRanger',
         field: 'cellRanger',
         headerName: 'Cell Ranger Progress',
@@ -113,10 +116,7 @@ function setInput(inputRef?: PlRef) {
       </PlBtnGhost>
     </template>
 
-    <AgGridVue
-      :style="{ height: '100%' }"
-      v-bind="gridOptions as {}"
-    />
+    <AgGridVue :style="{ height: '100%' }" v-bind="gridOptions as {}" />
   </PlBlockPage>
 
   <PlSlideModal v-model="data.settingsOpen">
