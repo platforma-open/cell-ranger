@@ -21,6 +21,7 @@ export const parseProgress  = (raw: string | undefined): ColDefProgress => {
     status: 'not_started',
     percent: undefined, 
     text: raw, // this text is in the left part of cell (main text)
+    suffix: ''
   };
 
   if (!raw) {
