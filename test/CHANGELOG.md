@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.test
 
+## 1.2.0
+
+### Minor Changes
+
+- 84ac6c6: UI update
+
 ## 1.1.0
 
 ### Minor Changes
