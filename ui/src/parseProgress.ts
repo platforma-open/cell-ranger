@@ -49,8 +49,8 @@ export const parseProgress  = (progressLine: ProgressLogWithInfo | undefined): C
     return res;
   }
 
-  res.text = groups.tag + ' ' + groups.status;
-  res.text = `[${groups.tag}] (${groups.status})`;
+  res.text = groups.time + ' ' + groups.status + ' ' + groups.identifier;
+  res.text = `[${groups.time}] (${groups.status}) ${groups.identifier}`;
 
   // Could we simply show "infinite" progress if the percentage is unknown?
   // switch (groups.identifier) {
