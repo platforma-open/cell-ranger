@@ -1,6 +1,6 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
 
-getColumns := func(blockId, species) {
+getColumns := func(species) {
   return {
     "axes": [
       {
@@ -8,9 +8,7 @@ getColumns := func(blockId, species) {
         "spec": {
 						"name": "pl7.app/rna-seq/cellId",
 						"type": "String",
-						"domain": {
-							"pl7.app/blockId": blockId
-						},
+						"domain": {},
 						"annotations": {
 							"pl7.app/label": "Cell barcode",
               "pl7.app/table/visibility": "optional"
@@ -25,9 +23,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricTotalCounts",
           "valueType": "Double",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "Total counts",
             "pl7.app/table/hValue": "true"
@@ -41,9 +37,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricNGenesByCounts",
           "valueType": "Double",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "N genes detected",
             "pl7.app/table/hValue": "true"
@@ -57,9 +51,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricPctCountsMt",
           "valueType": "Double",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "Percentage mitochondrial genes",
             "pl7.app/table/hValue": "true"
@@ -73,9 +65,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricComplexity",
           "valueType": "Double",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "Gene expression complexity",
             "pl7.app/table/hValue": "true"
@@ -89,9 +79,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricPctCountsInTop20Genes",
           "valueType": "Double",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "Percentage counts in top 20 genes",
             "pl7.app/table/hValue": "true"
@@ -105,9 +93,7 @@ getColumns := func(blockId, species) {
         "spec": {
           "name": "pl7.app/rna-seq/cellMetricOutlier",
           "valueType": "String",
-          "domain": {
-            "pl7.app/blockId": blockId
-          },
+          "domain": {},
           "annotations": {
             "pl7.app/label": "Outlier (MAD)",
             "pl7.app/table/hValue": "true"

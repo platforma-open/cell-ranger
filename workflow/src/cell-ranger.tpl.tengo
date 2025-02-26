@@ -27,11 +27,12 @@ self.defineOutputs(
 
 self.body(func(inputs) {
 	inputData := inputs[pConstants.VALUE_FIELD_NAME]
-	blockId := inputs.blockId
 	species := inputs.species
 	fileExtension := inputs.fileExtension
 
 	genomeAssets := genomes.getGenomeAsset(species)
+
+	inputDataMeta := inputData.getDataAsJson()
 
 	cellRanger := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
@@ -43,26 +44,39 @@ self.body(func(inputs) {
 		arg("count").
 		arg("--transcriptome=genomeIndex").
 		arg("--fastqs=fastqs")
-	
 
-	for sKey, inputFile in inputData.inputs() {
-		key := json.decode(sKey)
-		if len(key) != 2 {
-			ll.panic("malformed key: %v", sKey)
+	if inputDataMeta.keyLength == 1 {
+		for sKey, inputFile in inputData.inputs() {
+			key := json.decode(sKey)
+			if len(key) != 1 {
+				ll.panic("malformed key: %v", sKey)
+			}
+			r := key[0]
+			if (r[0] != 'R' && r[0] != "I") || (r[1] != '1' && r[1] != '2') || len(r) != 2 {
+				ll.panic("malformed read index: %v", r)
+			}
+			fileName := "input_S1_L001" + "_" + r + "_001." + fileExtension
+			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
 		}
-		lane := key[0]
-		r := key[1]
-		if (r[0] != 'R' && r[0] != "I") || (r[1] != '1' && r[1] != '2') || len(r) != 2 {
-			ll.panic("malformed read index: %v", r)
+	} else if inputDataMeta.keyLength == 2 {
+		for sKey, inputFile in inputData.inputs() {
+			key := json.decode(sKey)
+			if len(key) != 2 {
+				ll.panic("malformed key: %v", sKey)
+			}
+			lane := key[0]
+			r := key[1]
+			if (r[0] != 'R' && r[0] != "I") || (r[1] != '1' && r[1] != '2') || len(r) != 2 {
+				ll.panic("malformed read index: %v", r)
+			}
+			if is_undefined(int(lane)) {
+				ll.panic("malformed lane: %v", lane)
+			}
+			fileName := "input_S1_L" + lane + "_" + r + "_001." + fileExtension
+			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
 		}
-		if is_undefined(int(lane)) {
-			ll.panic("malformed lane: %v", lane)
-		}
-		fileName := "input_S1_L" + lane + "_" + r + "_001." + fileExtension
-		cellRanger.addFile(path.join("fastqs",fileName), inputFile)
 	}
-
-
+	
 	cellRanger = cellRanger.
 		// arg("--sample=input_").
 		arg("--create-bam=true").
@@ -101,7 +115,7 @@ self.body(func(inputs) {
 
 	rawCounts := countMatrixCsv.getFile("rawCounts.csv")
 
-	countCsvParams := pfCountsConv.getColumns(blockId, species)
+	countCsvParams := pfCountsConv.getColumns(species)
 	countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true })
 
 	cellMetricsCsv := exec.builder().
@@ -120,7 +134,7 @@ self.body(func(inputs) {
 		cache(24 * 60 * 60 * 1000).
 		run()
 
-	metricsCsvParams := pfMetricsConv.getColumns(blockId, species)
+	metricsCsvParams := pfMetricsConv.getColumns(species)
 	cellMetricsImport := xsv.importFile(cellMetricsCsv.getFile("cell_metrics.csv"), "csv", metricsCsvParams, { dataOnly: true })
 
 	output := {

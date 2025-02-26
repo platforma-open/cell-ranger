@@ -1,6 +1,6 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
 
-getColumns := func(blockId, species) {
+getColumns := func(species) {
   return {
     "axes": [
       {
@@ -8,9 +8,7 @@ getColumns := func(blockId, species) {
         "spec": {
 						"name": "pl7.app/rna-seq/cellId",
 						"type": "String",
-						"domain": {
-							"pl7.app/blockId": blockId
-						},
+						"domain": {},
 						"annotations": {
 							"pl7.app/label": "Cell barcode",
               "pl7.app/table/visibility": "optional"
@@ -22,7 +20,6 @@ getColumns := func(blockId, species) {
 						"name": "pl7.app/rna-seq/geneId",
 						"type": "String",
 						"domain": {
-							"pl7.app/blockId": blockId,
 							"pl7.app/species": species
 						},
 						"annotations": {
@@ -40,7 +37,6 @@ getColumns := func(blockId, species) {
           "name": "pl7.app/rna-seq/rawCount",
           "valueType": "Double",
           "domain": {
-            "pl7.app/blockId": blockId,
             "pl7.app/rna-seq/normalized": "false"
           },
           "annotations": {
