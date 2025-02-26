@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.3.0
+
+### Minor Changes
+
+- 98d0ab8: Extended sample input file types
+
 ## 1.2.0
 
 ### Minor Changes
