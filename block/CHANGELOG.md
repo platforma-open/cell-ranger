@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.2
+
+### Patch Changes
+
+- 9e25155: Fixed stabilizing workflow
+
 ## 1.2.1
 
 ### Patch Changes
