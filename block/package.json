@@ -13,7 +13,8 @@
   "dependencies": {
     "@platforma-open/milaboratories.cell-ranger.workflow": "workspace:*",
     "@platforma-open/milaboratories.cell-ranger.model": "workspace:*",
-    "@platforma-open/milaboratories.cell-ranger.ui": "workspace:*"
+    "@platforma-open/milaboratories.cell-ranger.ui": "workspace:*",
+    "@platforma-sdk/block-tools": "catalog:"
   },
   "block": {
     "components": {
