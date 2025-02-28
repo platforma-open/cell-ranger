@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.3
+
+### Patch Changes
+
+- 4860fc0: Enable block publication and dependency fixes.
+
+  - added publish script to block module package.json.
+  - dependency upgrade and fixes.
+
 ## 1.2.2
 
 ### Patch Changes
