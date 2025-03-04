@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.4
+
+### Patch Changes
+
+- f61c629: Updated block metadata
+
 ## 1.2.3
 
 ### Patch Changes
