@@ -33,12 +33,13 @@
       "changelog": "file:../CHANGELOG.md",
       "tags": [
         "RNA-seq",
-        "single-cell"
+        "single-cell",
+        "upstream"
       ],
       "organization": {
         "name": "MiLaboratories Inc",
         "url": "https://milaboratories.com/",
-        "logo": "file:../logos/milaboratories.png"
+        "logo": "file:../logos/organization-logo.png"
       }
     }
   },
