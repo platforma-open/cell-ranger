@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { GraphMaker, GraphMakerProps } from "@milaboratories/graph-maker";
+import type { GraphMakerProps } from '@milaboratories/graph-maker';
+import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
-import { computed, ref } from "vue";
-import { useApp } from "../app";
-import { PColumnIdAndSpec } from "@platforma-sdk/model";
+import { ref } from 'vue';
+import { useApp } from '../app';
+import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 const app = useApp();
 
@@ -37,7 +38,8 @@ const defaultOptions = ref(getDefaultOptions(app.model.outputs.cellMetricsPfDefa
 </script>
 
 <template>
-  <GraphMaker chartType="discrete" :p-frame="app.model.outputs.cellMetricsPf"
-    v-model="app.model.ui.graphState" :defaultOptions="defaultOptions" 
+  <GraphMaker
+    v-model="app.model.ui.graphState" chartType="discrete"
+    :p-frame="app.model.outputs.cellMetricsPf" :defaultOptions="defaultOptions"
   />
 </template>
