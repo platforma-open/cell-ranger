@@ -5,6 +5,7 @@ import {
   isPColumn,
   isPColumnSpec,
   parseResourceMap,
+  PColumnIdAndSpec,
   type PlRef,
   type ValueType,
 } from "@platforma-sdk/model";
@@ -138,7 +139,37 @@ export const model = BlockModel.create()
     const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
     if (pCols === undefined) return undefined;
 
-    return wf.createPFrame(pCols);
+    // Get sample ID to label converter
+    const upstream = wf.resultPool
+      .getData()
+      .entries.map((v) => v.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === "pl7.app/label")
+
+
+    return createPFrameForGraphs(wf, [...pCols, ...upstream]);
+  })
+
+  // Pcolumns for plot defaults
+  .output("cellMetricsPfDefaults", (wf) => {
+    let pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
+    if (pCols === undefined) return undefined;
+
+    // Add sample labels
+    const upstream = wf.resultPool
+      .getData()
+      .entries.map((v) => v.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === "pl7.app/label")
+
+    pCols = [...pCols, ...upstream];
+    return pCols.map(
+      (c) =>
+        ({
+          columnId: c.id,
+          spec: c.spec,
+        } satisfies PColumnIdAndSpec),
+    );
   })
 
   .output("cellMetricsSpec", (wf) => {
