@@ -1,6 +1,6 @@
-import { AnyLogHandle, ProgressLogWithInfo } from "@platforma-sdk/model";
-import { computed } from "vue";
-import { useApp } from "../app";
+import type { AnyLogHandle, ProgressLogWithInfo } from '@platforma-sdk/model';
+import { computed } from 'vue';
+import { useApp } from '../app';
 
 export type ResultEntry = {
   sampleLabel: string;
@@ -34,7 +34,7 @@ export const resultMap = computed(
         r[prog.key[0]].cellRangerProgressLine = prog.value;
       }
     }
-    
+
     return r;
-  }
+  },
 );

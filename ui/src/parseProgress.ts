@@ -1,26 +1,26 @@
-import { ColDefProgress } from "@platforma-sdk/ui-vue";
-import { ProgressLogWithInfo } from "@platforma-sdk/model";
+import type { ColDefProgress } from '@platforma-sdk/ui-vue';
+import type { ProgressLogWithInfo } from '@platforma-sdk/model';
 
 const logLineRegex = /^(?<date>\d{4}-\d{2}-\d{2})\s+(?<time>\d{2}:\d{2}:\d{2})\s+\[(?<tag>[^\]]+)\]\s+\((?<status>[^)]+)\)\s+(?<identifier>.*)$/;
 
-type Group ={
-  date: string,
-  time: string,
-  tag: string,
-  status: string,
-  identifier: string
-}
+type Group = {
+  date: string;
+  time: string;
+  tag: string;
+  status: string;
+  identifier: string;
+};
 
 function match(raw: string) {
   return raw.match(logLineRegex)?.groups as Group | undefined;
 }
 
-export const parseProgress  = (progressLine: ProgressLogWithInfo | undefined): ColDefProgress => {
+export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): ColDefProgress => {
   const res: ColDefProgress = {
     status: 'not_started',
-    percent: undefined, 
+    percent: undefined,
     text: '', // this text is in the left part of cell (main text)
-    suffix: ''
+    suffix: '',
   };
 
   if (!progressLine) {
