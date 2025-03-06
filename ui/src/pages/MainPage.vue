@@ -11,14 +11,14 @@ import {
   PlDropdownRef,
   PlMaskIcon24,
   PlSlideModal,
-  useAgGridOptions
-} from "@platforma-sdk/ui-vue";
+  useAgGridOptions,
+} from '@platforma-sdk/ui-vue';
 
 import { plRefsEqual } from '@platforma-sdk/model';
 import type { PlRef, ProgressLogWithInfo } from '@platforma-sdk/model';
-import { computed, reactive } from "vue";
-import { useApp } from "../app";
-import ReportPanel from './Report.vue'
+import { computed, reactive } from 'vue';
+import { useApp } from '../app';
+import ReportPanel from './Report.vue';
 import { resultMap } from './results';
 import { parseProgress } from '../parseProgress';
 import { speciesOptions } from '../species';
@@ -26,14 +26,14 @@ import { speciesOptions } from '../species';
 const app = useApp();
 
 const data = reactive<{
-  settingsOpen: boolean,
-  sampleReportOpen: boolean,
-  selectedSample: string | undefined
+  settingsOpen: boolean;
+  sampleReportOpen: boolean;
+  selectedSample: string | undefined;
 }>({
   settingsOpen: app.model.args.ref === undefined,
   sampleReportOpen: false,
   selectedSample: undefined,
-})
+});
 
 type Row = {
   sampleId: string;
@@ -44,12 +44,12 @@ type Row = {
 /** Rows for ag-table */
 const results = computed<Row[] | undefined>(() => {
   if (resultMap.value === undefined) return undefined;
-  const rows = []
+  const rows = [];
   for (const id in resultMap.value) {
     rows.push({
       sampleId: id,
       sampleLabel: resultMap.value[id].sampleLabel,
-      cellRanger: resultMap.value[id].cellRangerProgressLine
+      cellRanger: resultMap.value[id].cellRangerProgressLine,
     });
   }
 
@@ -63,7 +63,7 @@ const { gridOptions } = useAgGridOptions<Row>(({ column }) => {
     defaultColDef: {
       suppressHeaderMenuButton: true,
       lockPinned: true,
-      sortable: false
+      sortable: false,
     },
     columnDefs: [
       {
@@ -75,8 +75,8 @@ const { gridOptions } = useAgGridOptions<Row>(({ column }) => {
         sortable: true,
         cellRenderer: PlAgTextAndButtonCell,
         cellRendererParams: {
-          invokeRowsOnDoubleClick: true
-        }
+          invokeRowsOnDoubleClick: true,
+        },
       },
       column<ProgressLogWithInfo | undefined>({
         colId: 'cellRanger',
@@ -85,20 +85,20 @@ const { gridOptions } = useAgGridOptions<Row>(({ column }) => {
         flex: 1,
         cellStyle: {
           '--ag-cell-horizontal-padding': '0px',
-          '--ag-cell-vertical-padding': '0px'
+          '--ag-cell-vertical-padding': '0px',
         },
         progress(cellRangerProgressLine) {
           return parseProgress(cellRangerProgressLine);
         },
-      })
-    ]
+      }),
+    ],
   };
 });
 
 function setInput(inputRef?: PlRef) {
   app.model.args.ref = inputRef;
   if (inputRef)
-    app.model.args.title = app.model.outputs.dataOptions?.find(o => plRefsEqual(o.ref, inputRef))?.label
+    app.model.args.title = app.model.outputs.dataOptions?.find((o) => plRefsEqual(o.ref, inputRef))?.label;
   else
     app.model.args.title = undefined;
 }
@@ -121,14 +121,18 @@ function setInput(inputRef?: PlRef) {
 
   <PlSlideModal v-model="data.settingsOpen">
     <template #title>Settings</template>
-    <PlDropdownRef :options="app.model.outputs.dataOptions" v-model="app.model.args.ref" @update:model-value="setInput"
-      label="Select dataset" clearable />
-    <PlDropdown :options="speciesOptions" v-model="app.model.args.species" label="Select species" />
+    <PlDropdownRef
+      v-model="app.model.args.ref" :options="app.model.outputs.dataOptions" label="Select dataset"
+      clearable @update:model-value="setInput"
+    />
+    <PlDropdown v-model="app.model.args.species" :options="speciesOptions" label="Select species" />
   </PlSlideModal>
 
   <PlSlideModal v-model="data.sampleReportOpen" width="95%">
-    <template #title>Results for {{ (data.selectedSample ? app.model.outputs.labels?.[data.selectedSample] :
-      undefined) ?? "..." }}</template>
+    <template #title>
+      Results for {{ (data.selectedSample ? app.model.outputs.labels?.[data.selectedSample] :
+        undefined) ?? "..." }}
+    </template>
     <ReportPanel v-model="data.selectedSample" />
   </PlSlideModal>
 </template>
