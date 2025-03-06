@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.3.0
+
+### Minor Changes
+
+- 484d0eb: Fix labels, add default plot settings and run Eslint
+
 ## 1.2.0
 
 ### Minor Changes
