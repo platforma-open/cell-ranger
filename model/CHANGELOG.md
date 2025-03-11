@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.4.0
+
+### Minor Changes
+
+- af71755: Include metadata in plot
+
 ## 1.3.0
 
 ### Minor Changes

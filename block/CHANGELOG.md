@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.6
+
+### Patch Changes
+
+- Updated dependencies [af71755]
+  - @platforma-open/milaboratories.cell-ranger.model@1.4.0
+  - @platforma-open/milaboratories.cell-ranger.ui@1.3.1
+
 ## 1.2.5
 
 ### Patch Changes
