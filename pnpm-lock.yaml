@@ -16,14 +16,14 @@ catalogs:
       specifier: ^1.6.11
       version: 1.6.11
     '@milaboratories/software-pframes-conv':
-      specifier: ^2.1.12
-      version: 2.1.12
+      specifier: ^2.1.16
+      version: 2.1.16
     '@platforma-open/milaboratories.cellranger-genome-assets':
       specifier: ^1.0.3
       version: 1.0.3
     '@platforma-open/milaboratories.runenv-python-3':
-      specifier: ^1.1.5
-      version: 1.1.5
+      specifier: ^1.1.7
+      version: 1.1.7
     '@platforma-open/milaboratories.software-cellranger':
       specifier: ^1.0.2
       version: 1.0.2
@@ -140,7 +140,7 @@ importers:
     devDependencies:
       '@platforma-open/milaboratories.runenv-python-3':
         specifier: 'catalog:'
-        version: 1.1.5
+        version: 1.1.7
       '@platforma-sdk/package-builder':
         specifier: 'catalog:'
         version: 2.15.2
@@ -212,7 +212,7 @@ importers:
     devDependencies:
       '@milaboratories/software-pframes-conv':
         specifier: 'catalog:'
-        version: 2.1.12
+        version: 2.1.16
       '@platforma-open/milaboratories.cellranger-genome-assets':
         specifier: 'catalog:'
         version: 1.0.3
@@ -1146,6 +1146,9 @@ packages:
   '@milaboratories/software-pframes-conv@2.1.12':
     resolution: {integrity: sha512-KKqRLDqGVhsCRwvANiRBBcCzur6QVzVCzVW4EiiL69+S2crbihwyfZAgxZsTXka5ch5uuPO+ZsIwgjZJk3xyJQ==}
 
+  '@milaboratories/software-pframes-conv@2.1.16':
+    resolution: {integrity: sha512-/Ck2N+3BkDFDegHFG+kuoSAMS4gqWrx9gzfc91A7LmDxgwxrwDKu87D3gFgi/6yUqrz+liVmP5sztfY3YijA+A==}
+
   '@milaboratories/tengo-tester@1.5.2':
     resolution: {integrity: sha512-8YMMntd+oTALxdlQXcreHWs0dVp1dUJhlBb0DpKGfh+YfB5KF/uZuVBKvCmmzDhYUMpxViT2JayDPg9tO4o6FA==}
     os: [darwin, linux, win32]
@@ -1219,8 +1222,8 @@ packages:
   '@platforma-open/milaboratories.cellranger-genome-assets@1.0.3':
     resolution: {integrity: sha512-36mzXWJW3umGHrmzwu0Tl8q0Hq0jCUU8cg4fgXmBHgyJL7822Z2RBRQ9yawydwOOh7hUJMg+R0XXa9UplmP7dw==}
 
-  '@platforma-open/milaboratories.runenv-python-3@1.1.5':
-    resolution: {integrity: sha512-YFB6zC0cJCHVZw91ysLu0E9UDViPTCVWYmjWtxt1dsvud/zhjge4/iKv7gWIrltfmY6LahXeTehG2/bXnxEoUQ==}
+  '@platforma-open/milaboratories.runenv-python-3@1.1.7':
+    resolution: {integrity: sha512-b3hWUFMQOG0O3JExLXyRhXQ5t/XQu3dNrcGyQ/RfllIX9RPYLA5yYRG6x2uc7m9LYqOD/GjMWUQ1TCTbRaBxnQ==}
 
   '@platforma-open/milaboratories.software-cellranger@1.0.2':
     resolution: {integrity: sha512-Objqppf3eiZCwihheZrJzOXGkSMjvgM5/ulhcicFxTA7g6vElcZC6tFtzPJM39jm9s6fBrLPdAlnJwEA1cfouw==}
@@ -6488,6 +6491,8 @@ snapshots:
 
   '@milaboratories/software-pframes-conv@2.1.12': {}
 
+  '@milaboratories/software-pframes-conv@2.1.16': {}
+
   '@milaboratories/tengo-tester@1.5.2': {}
 
   '@milaboratories/ts-helpers-oclif@1.1.13':
@@ -6581,7 +6586,7 @@ snapshots:
       '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa': 1.0.2
       '@platforma-open/milaboratories.cellranger-genome-assets.test-species': 1.0.2
 
-  '@platforma-open/milaboratories.runenv-python-3@1.1.5': {}
+  '@platforma-open/milaboratories.runenv-python-3@1.1.7': {}
 
   '@platforma-open/milaboratories.software-cellranger@1.0.2': {}
 
