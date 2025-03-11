@@ -1,5 +1,6 @@
 import type {
-  PColumnIdAndSpec } from '@platforma-sdk/model';
+  PColumnIdAndSpec,
+  ValueType } from '@platforma-sdk/model';
 import {
   BlockModel,
   createPFrameForGraphs,
@@ -138,12 +139,22 @@ export const model = BlockModel.create()
     const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
     if (pCols === undefined) return undefined;
 
-    // Get sample ID to label converter
+    const valueTypes = [
+      'Int',
+      'Long',
+      'Float',
+      'Double',
+      'String',
+      'Bytes',
+    ] as ValueType[];
     const upstream = wf.resultPool
       .getData()
       .entries.map((v) => v.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/label');
+      .filter((column) =>
+        valueTypes.find((valueType) => (valueType === column.spec.valueType),
+        ),
+      );
 
     return createPFrameForGraphs(wf, [...pCols, ...upstream]);
   })
