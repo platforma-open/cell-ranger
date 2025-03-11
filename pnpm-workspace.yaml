@@ -15,14 +15,14 @@ catalog:
   "@platforma-sdk/tengo-builder": ^1.17.8
   "@platforma-sdk/package-builder": ^2.15.2
   "@milaboratories/graph-maker": ^1.1.49
-  "@milaboratories/software-pframes-conv": ^2.1.12
+  "@milaboratories/software-pframes-conv": ^2.1.16
   '@platforma-sdk/eslint-config': ^1.0.1
   
   "@platforma-open/milaboratories.software-small-binaries": ^1.15.13
   "@platforma-open/milaboratories.software-cellranger": ^1.0.2
   "@platforma-open/milaboratories.cellranger-genome-assets": ^1.0.3
 
-  "@platforma-open/milaboratories.runenv-python-3": ^1.1.5
+  "@platforma-open/milaboratories.runenv-python-3": ^1.1.7
 
   '@milaboratories/helpers': ^1.6.11
 
