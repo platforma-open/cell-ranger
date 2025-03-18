@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.7
+
+### Patch Changes
+
+- 5539e4c: Updated tags and ranking
+
 ## 1.2.6
 
 ### Patch Changes
