@@ -46,11 +46,11 @@ export const model = BlockModel.create()
     graphState: {
       template: 'violin',
       title: 'Cell QC metrics',
-      layersSettings: {
-        violin: {
-          fillColor: '#99E099',
-        },
-      },
+      // layersSettings: {
+      //   violin: {
+      //     fillColor: '#99E099',
+      //   },
+      // },
     },
   })
 
@@ -94,17 +94,6 @@ export const model = BlockModel.create()
       false,
     );
   })
-
-/**
-   * Last line from cell ranger output
-   */
-// .output("cellRangerProgressLine", (wf) => {
-//   return parseResourceMap(
-//     wf.outputs?.resolve("cellRangerProgress"),
-//     (acc) => acc.getLastLogs(1),
-//     false
-//   );
-// })
 
   /**
    * Last line from cell ranger output
