@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.5.0
+
+### Minor Changes
+
+- dff439d: Added quality metrics export to be used by downstream blocks
+
 ## 1.4.0
 
 ### Minor Changes
