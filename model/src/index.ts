@@ -1,9 +1,8 @@
 import type {
   PColumnIdAndSpec,
-  ValueType } from '@platforma-sdk/model';
+} from '@platforma-sdk/model';
 import {
   BlockModel,
-  createPFrameForGraphs,
   type InferOutputsType,
   isPColumn,
   isPColumnSpec,
@@ -46,11 +45,11 @@ export const model = BlockModel.create()
     graphState: {
       template: 'violin',
       title: 'Cell QC metrics',
-      layersSettings: {
-        violin: {
-          fillColor: '#99E099',
-        },
-      },
+      // layersSettings: {
+      //   violin: {
+      //     fillColor: '#99E099',
+      //   },
+      // },
     },
   })
 
@@ -95,17 +94,6 @@ export const model = BlockModel.create()
     );
   })
 
-/**
-   * Last line from cell ranger output
-   */
-// .output("cellRangerProgressLine", (wf) => {
-//   return parseResourceMap(
-//     wf.outputs?.resolve("cellRangerProgress"),
-//     (acc) => acc.getLastLogs(1),
-//     false
-//   );
-// })
-
   /**
    * Last line from cell ranger output
    */
@@ -135,28 +123,35 @@ export const model = BlockModel.create()
     return pCols[0].spec;
   })
 
+// .output('cellMetricsPf', (wf) => {
+//   const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
+//   if (pCols === undefined) return undefined;
+
+//   const valueTypes = [
+//     'Int',
+//     'Long',
+//     'Float',
+//     'Double',
+//     'String',
+//     'Bytes',
+//   ] as ValueType[];
+//   const upstream = wf.resultPool
+//     .getData()
+//     .entries.map((v) => v.obj)
+//     .filter(isPColumn)
+//     .filter((column) =>
+//       valueTypes.find((valueType) => (valueType === column.spec.valueType),
+//       ),
+//     );
+
+//   return createPFrameForGraphs(wf, [...pCols, ...upstream]);
+// })
+
   .output('cellMetricsPf', (wf) => {
     const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
     if (pCols === undefined) return undefined;
 
-    const valueTypes = [
-      'Int',
-      'Long',
-      'Float',
-      'Double',
-      'String',
-      'Bytes',
-    ] as ValueType[];
-    const upstream = wf.resultPool
-      .getData()
-      .entries.map((v) => v.obj)
-      .filter(isPColumn)
-      .filter((column) =>
-        valueTypes.find((valueType) => (valueType === column.spec.valueType),
-        ),
-      );
-
-    return createPFrameForGraphs(wf, [...pCols, ...upstream]);
+    return wf.createPFrame(pCols);
   })
 
   // Pcolumns for plot defaults
