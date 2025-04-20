@@ -13,6 +13,7 @@ pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
 
 genomes := import(":genomes")
 pfCountsConv := import(":pf-counts-conv")
+pfNormCountsConv := import(":pf-norm-counts-conv")
 pfMetricsConv := import(":pf-metrics-conv")
 
 
@@ -21,6 +22,7 @@ self.defineOutputs(
 	"cellRangerReport",
 	// "alignedBAM",
 	"countMatrixImport",
+	"normCountMatrixImport",
 	"cellMetricsImport"
 	)
 
@@ -108,6 +110,7 @@ self.body(func(inputs) {
 		arg("--features").arg("features.tsv.gz").
 		arg("--output").arg("rawCounts.csv").
 		saveFile("rawCounts.csv").
+		saveFile("rawCounts_normalized.csv").
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
@@ -118,6 +121,10 @@ self.body(func(inputs) {
 	countCsvParams := pfCountsConv.getColumns(species)
 	countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true })
 
+	normCounts := countMatrixCsv.getFile("rawCounts_normalized.csv")
+	normCountCsvParams := pfNormCountsConv.getColumns(species)
+	normCountMatrixImport := xsv.importFile(normCounts, "csv", normCountCsvParams, { dataOnly: true })
+	
 	cellMetricsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:cell-metrics")).
 		addFile("barcodes.tsv.gz", cellRangerBarcodes).
@@ -142,6 +149,7 @@ self.body(func(inputs) {
 		cellRangerReport: file.exportFile(cellRangerReport),
 		// alignedBAM: bamFile,
 		countMatrixImport: countMatrixImport,
+		normCountMatrixImport: normCountMatrixImport,
 		cellMetricsImport: cellMetricsImport
 	}
 
