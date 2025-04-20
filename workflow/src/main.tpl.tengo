@@ -53,6 +53,12 @@ wf.body(func(args) {
 	}, 
 	{
 		type: "BinaryPartitioned",
+		name: "normCounts",
+		path: ["normCountMatrixImport", "normCounts"],
+		partitionKeyLength: 0 // [cellId][geneId]
+	}, 
+	{
+		type: "BinaryPartitioned",
 		name: "totalCounts",
 		path: ["cellMetricsImport", "totalCounts"],
 		partitionKeyLength: 0 // [cellId]
@@ -337,6 +343,45 @@ wf.body(func(args) {
 			}),
 			data: cellRangerResults.output("rawCounts")
 	 	},
+		normCount : {
+			spec: trace.inject({
+				kind: "PColumn",
+				name: "pl7.app/rna-seq/countMatrix",
+				domain: {
+					"pl7.app/blockId": blockId,
+					"pl7.app/species": species,
+					"pl7.app/rna-seq/normalized": "true"
+				},
+				valueType: "Double",
+				annotations: {
+					"pl7.app/label": "Normalized gene expression"
+				},
+				axesSpec: [
+					inputSpec.axesSpec[0],
+					{
+						"name": "pl7.app/rna-seq/cellId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+							},
+							"annotations": {
+								"pl7.app/label": "Cell Barcode"
+								}
+					},
+					{
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id"
+						}
+					}
+					]
+			}),
+			data: cellRangerResults.output("normCounts")
+		},
 		totalCounts: {
 			spec: cellMetricsPf["totalCounts.spec"],	
 			data: cellMetricsPf["totalCounts.data"]
