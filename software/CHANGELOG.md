@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.4.0
+
+### Minor Changes
+
+- bc56d73: Added normalized counts as export for downsteram blocks.
+
 ## 1.3.0
 
 ### Minor Changes

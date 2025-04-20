@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.5.0
+
+### Minor Changes
+
+- bc56d73: Added normalized counts as export for downsteram blocks.
+
+### Patch Changes
+
+- Updated dependencies [bc56d73]
+  - @platforma-open/milaboratories.cellranger.software@1.4.0
+
 ## 1.4.0
 
 ### Minor Changes
