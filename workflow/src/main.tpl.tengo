@@ -12,8 +12,11 @@ assets := import("@platforma-sdk/workflow-tengo:assets")
 pframes := import("@platforma-sdk/workflow-tengo:pframes")
 llPFrames := import("@platforma-sdk/workflow-tengo:pframes.ll")
 
+geneMap := import(":gene-map")
+
 //genomes := import(":genomes")
 pfCountsConv := import(":pf-counts-conv")
+pfSymbolsConv := import(":pf-symbols-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 
@@ -37,14 +40,15 @@ wf.body(func(args) {
 	aggregationTargets := [{
 		type: "Resource",
 		name: "cellRangerLog"
-	}, {
-		type: "Resource",
-		name: "cellRangerReport"
-	}, 
+	},
 	// {
 	// 	type: "Resource",
 	// 	name: "alignedBAM"
 	// }, 
+	{
+		type: "Resource",
+		name: "cellRangerReport"
+	},
 	{
 		type: "BinaryPartitioned",
 		name: "rawCounts",
@@ -287,7 +291,26 @@ wf.body(func(args) {
 		"pctCountsInTop20Genes.data": cellRangerResults.output("pctCountsInTop20Genes")
 	}
 
+	geneAsset := geneMap.getGeneAsset(species)
+	geneAssetName := geneMap.getAssetName(species)
 
+	csvCounts := xsv.exportFrame(rawCountsPf, "csv", {})
+
+	geneSymbols := exec.builder().
+		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:map-genes")).
+		addAsset(geneAsset, ".", string(geneAssetName)).
+		addFile("rawCounts.csv", csvCounts).
+		arg("--raw_counts").arg("rawCounts.csv").
+		arg("--annotation").arg(string(geneAssetName)).
+		arg("--output").arg("geneSymbols.csv").
+		saveFile("geneSymbols.csv").
+		printErrStreamToStdout().
+		saveStdoutContent().
+		cache(24 * 60 * 60 * 1000).
+		run()
+
+	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
+	geneSymbolsPf := xsv.importFile(geneSymbols.getFile("geneSymbols.csv"), "csv", geneSymbolsImportParams)
 
 	outputs := {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
@@ -381,6 +404,10 @@ wf.body(func(args) {
 					]
 			}),
 			data: cellRangerResults.output("normCounts")
+		},
+		geneSymbols: {
+			spec: geneSymbolsPf["geneSymbol.spec"],
+			data: geneSymbolsPf["geneSymbol.data"]
 		},
 		totalCounts: {
 			spec: cellMetricsPf["totalCounts.spec"],	
