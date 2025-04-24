@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.6.0
+
+### Minor Changes
+
+- 63f3367: Added gene symbols as export.
+
 ## 1.4.0
 
 ### Minor Changes

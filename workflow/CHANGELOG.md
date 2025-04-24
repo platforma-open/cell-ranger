@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.6.0
+
+### Minor Changes
+
+- 63f3367: Added gene symbols as export.
+
+### Patch Changes
+
+- Updated dependencies [63f3367]
+  - @platforma-open/milaboratories.cellranger.software@1.6.0
+
 ## 1.5.0
 
 ### Minor Changes
