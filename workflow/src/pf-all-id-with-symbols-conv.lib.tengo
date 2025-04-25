@@ -1,0 +1,58 @@
+ll := import("@platforma-sdk/workflow-tengo:ll")
+
+getColumns := func(inputSpec, species) {
+  return {
+    "axes": [
+      {
+        "column": "Sample",
+        "spec": inputSpec.axesSpec[0] 
+      }, {
+        "column": "Cell Barcode",
+        "spec": {
+						"name": "pl7.app/rna-seq/cellId",
+						"type": "String",
+						"domain": {},
+						"annotations": {
+							"pl7.app/label": "Cell barcode",
+              "pl7.app/table/visibility": "optional"
+						}
+					}
+      }, {
+        "column": "Ensembl Id",
+        "spec": {
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id",
+              "pl7.app/table/visibility": "optional"
+						}
+					}
+      }  
+      ],
+    "columns": [{
+        "column": "Gene symbol",
+        "id": "geneSymbol",
+        "allowNA": true,
+        "spec": {
+          "name": "pl7.app/rna-seq/geneSymbols",
+          "valueType": "String",
+          "domain": {
+            "pl7.app/species": species
+          },
+          "annotations": {
+            "pl7.app/label": "Gene Symbol"
+          }
+        }
+      }
+      ],
+    "storageFormat": "Binary",
+    "partitionKeyLength": 0
+  }
+}
+
+export ll.toStrict({
+	getColumns: getColumns
+})

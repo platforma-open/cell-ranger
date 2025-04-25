@@ -17,6 +17,7 @@ geneMap := import(":gene-map")
 //genomes := import(":genomes")
 pfCountsConv := import(":pf-counts-conv")
 pfSymbolsConv := import(":pf-symbols-conv")
+pfAllIdWithSymbolsConv := import(":pf-all-id-with-symbols-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 
@@ -302,15 +303,19 @@ wf.body(func(args) {
 		addFile("rawCounts.csv", csvCounts).
 		arg("--raw_counts").arg("rawCounts.csv").
 		arg("--annotation").arg(string(geneAssetName)).
-		arg("--output").arg("geneSymbols.csv").
-		saveFile("geneSymbols.csv").
+		arg("--output").arg("gene_mapping.csv").
+		saveFile("gene_mapping.csv").
+		saveFile("gene_mapping_with_symbols.csv").
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
 		run()
 
-	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
-	geneSymbolsPf := xsv.importFile(geneSymbols.getFile("geneSymbols.csv"), "csv", geneSymbolsImportParams)
+	// geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
+	// geneSymbolsPf := xsv.importFile(geneSymbols.getFile("gene_mapping.csv"), "csv", geneSymbolsImportParams)
+
+	allIdWithGeneSymbolsImportParams := pfAllIdWithSymbolsConv.getColumns(inputSpec, species)
+	allIdWithGeneSymbolsPf := xsv.importFile(geneSymbols.getFile("gene_mapping_with_symbols.csv"), "csv", allIdWithGeneSymbolsImportParams)
 
 	outputs := {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
@@ -405,9 +410,13 @@ wf.body(func(args) {
 			}),
 			data: cellRangerResults.output("normCounts")
 		},
-		geneSymbols: {
-			spec: geneSymbolsPf["geneSymbol.spec"],
-			data: geneSymbolsPf["geneSymbol.data"]
+		// geneSymbols: {
+		// 	spec: geneSymbolsPf["geneSymbol.spec"],
+		// 	data: geneSymbolsPf["geneSymbol.data"]
+		// },
+		allIdWithGeneSymbols: {
+			spec: allIdWithGeneSymbolsPf["geneSymbol.spec"],
+			data: allIdWithGeneSymbolsPf["geneSymbol.data"]
 		},
 		totalCounts: {
 			spec: cellMetricsPf["totalCounts.spec"],	

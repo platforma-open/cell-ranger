@@ -40,6 +40,17 @@ def map_ensembl_to_gene_symbol(raw_counts_path, annotation_path, output_path):
     mapped_df.to_csv(output_path, index=False)
     print("Done.")
 
+    # Merge mapped gene symbols back to the raw count data
+    print("Merging gene symbols into raw data...")
+    raw_with_symbols_df = raw_df.merge(mapped_df, on="Ensembl Id", how="left")
+
+    # Select and save the required columns
+    subset_df = raw_with_symbols_df[["Sample", "Cell Barcode", "Ensembl Id", "Gene symbol"]]
+    enriched_output_path = output_path.replace(".csv", "_with_symbols.csv")
+
+    print(f"Saving enriched output to {enriched_output_path}...")
+    subset_df.to_csv(enriched_output_path, index=False)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Map Ensembl IDs in single-cell RNA-seq count data to gene symbols.")
     parser.add_argument("--raw_counts", required=True, help="Path to raw count CSV file")
