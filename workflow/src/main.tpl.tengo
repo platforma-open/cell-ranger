@@ -359,7 +359,9 @@ wf.body(func(args) {
 							"pl7.app/species": species
 						},
 						"annotations": {
-							"pl7.app/label": "Ensembl Id"
+							"pl7.app/label": "Ensembl Id",
+							"pl7.app/graph/axis/highCardinality": "true"
+
 						}
 					}
 					]
@@ -398,7 +400,9 @@ wf.body(func(args) {
 							"pl7.app/species": species
 						},
 						"annotations": {
-							"pl7.app/label": "Ensembl Id"
+							"pl7.app/label": "Ensembl Id",
+							"pl7.app/graph/axis/highCardinality": "true"
+
 						}
 					}
 					]
