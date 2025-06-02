@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.7.0
+
+### Minor Changes
+
+- fa7a0b5: Make gene symbol available as label
+
 ## 1.6.0
 
 ### Minor Changes
