@@ -23,7 +23,7 @@ getColumns := func(species) {
         "id": "geneSymbol",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/geneSymbols",
+          "name": "pl7.app/label",
           "valueType": "String",
           "domain": {
             "pl7.app/species": species
