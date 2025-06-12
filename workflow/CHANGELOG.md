@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.7.1
+
+### Patch Changes
+
+- 9e6ad49: chore: update deps
+
 ## 1.7.0
 
 ### Minor Changes
