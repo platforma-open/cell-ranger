@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.7.0
+
+### Minor Changes
+
+- 066d350: allow launch venv on Windows
+
 ## 1.6.0
 
 ### Minor Changes
