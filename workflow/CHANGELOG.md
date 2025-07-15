@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.7.3
+
+### Patch Changes
+
+- 6a5189a: Updated platforma-sdk
+- Updated dependencies [6a5189a]
+  - @platforma-open/milaboratories.cellranger.software@1.7.1
+
 ## 1.7.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.7.1
+
+### Patch Changes
+
+- 6a5189a: Updated platforma-sdk
+
 ## 1.7.0
 
 ### Minor Changes

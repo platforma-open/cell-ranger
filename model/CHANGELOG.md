@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.6.1
+
+### Patch Changes
+
+- 6a5189a: Updated platforma-sdk
+
 ## 1.6.0
 
 ### Minor Changes

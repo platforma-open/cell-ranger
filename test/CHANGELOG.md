@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.test
 
+## 1.2.1
+
+### Patch Changes
+
+- 6a5189a: Updated platforma-sdk
+
 ## 1.2.0
 
 ### Minor Changes

@@ -1,5 +1,15 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.15
+
+### Patch Changes
+
+- 6a5189a: Updated platforma-sdk
+- Updated dependencies [6a5189a]
+  - @platforma-open/milaboratories.cell-ranger.model@1.6.1
+  - @platforma-open/milaboratories.cell-ranger.ui@1.3.5
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.7.3
+
 ## 1.2.14
 
 ### Patch Changes
