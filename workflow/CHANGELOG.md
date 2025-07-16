@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.8.0
+
+### Minor Changes
+
+- d932a1c: Updated PColumn specifications for downstream multiomic analysis.
+
 ## 1.7.3
 
 ### Patch Changes
