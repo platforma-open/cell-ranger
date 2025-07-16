@@ -11,6 +11,7 @@ render := import("@platforma-sdk/workflow-tengo:render")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 pframes := import("@platforma-sdk/workflow-tengo:pframes")
 llPFrames := import("@platforma-sdk/workflow-tengo:pframes.ll")
+json := import("json")
 
 geneMap := import(":gene-map")
 
@@ -119,7 +120,8 @@ wf.body(func(args) {
 		false,
 		{
 			species: species,
-			fileExtension: fileExtension
+			fileExtension: fileExtension,
+			blockId: blockId
 		}
 	)
 
@@ -138,12 +140,14 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
 					"domain": {
+						"pl7.app/blockId": blockId,
 						"pl7.app/species": species
 					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode"
 					}
 				},
@@ -174,10 +178,13 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {},
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode",
 						"pl7.app/table/visibility": "optional"
 					}
@@ -199,10 +206,13 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {},
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode",
 						"pl7.app/table/visibility": "optional"
 					}
@@ -224,10 +234,13 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {},
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode",
 						"pl7.app/table/visibility": "optional"
 					}
@@ -249,10 +262,13 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {},
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode",
 						"pl7.app/table/visibility": "optional"
 					}
@@ -274,10 +290,13 @@ wf.body(func(args) {
 			axesSpec: [
 				inputSpec.axesSpec[0],
 				{
-					"name": "pl7.app/rna-seq/cellId",
+					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {},
+					"domain": {
+						"pl7.app/blockId": blockId
+					},
 					"annotations": {
+						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 						"pl7.app/label": "Cell Barcode",
 						"pl7.app/table/visibility": "optional"
 					}
@@ -343,12 +362,14 @@ wf.body(func(args) {
 				axesSpec: [
 					inputSpec.axesSpec[0],
 					{
-						"name": "pl7.app/rna-seq/cellId",
+						"name": "pl7.app/sc/cellId",
 						"type": "String",
 						"domain": {
+							"pl7.app/blockId": blockId,
 							"pl7.app/species": species
 							},
 							"annotations": {
+								"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 								"pl7.app/label": "Cell Barcode"
 								}
 					},
@@ -384,12 +405,14 @@ wf.body(func(args) {
 				axesSpec: [
 					inputSpec.axesSpec[0],
 					{
-						"name": "pl7.app/rna-seq/cellId",
+						"name": "pl7.app/sc/cellId",
 						"type": "String",
 						"domain": {
+							"pl7.app/blockId": blockId,
 							"pl7.app/species": species
 							},
 							"annotations": {
+								"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 								"pl7.app/label": "Cell Barcode"
 								}
 					},

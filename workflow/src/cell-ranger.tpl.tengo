@@ -31,6 +31,7 @@ self.body(func(inputs) {
 	inputData := inputs[pConstants.VALUE_FIELD_NAME]
 	species := inputs.species
 	fileExtension := inputs.fileExtension
+	blockId := inputs.blockId
 
 	genomeAssets := genomes.getGenomeAsset(species)
 
@@ -118,11 +119,11 @@ self.body(func(inputs) {
 
 	rawCounts := countMatrixCsv.getFile("rawCounts.csv")
 
-	countCsvParams := pfCountsConv.getColumns(species)
+	countCsvParams := pfCountsConv.getColumns(blockId, species)
 	countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true })
 
 	normCounts := countMatrixCsv.getFile("rawCounts_normalized.csv")
-	normCountCsvParams := pfNormCountsConv.getColumns(species)
+	normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
 	normCountMatrixImport := xsv.importFile(normCounts, "csv", normCountCsvParams, { dataOnly: true })
 	
 	cellMetricsCsv := exec.builder().
@@ -141,7 +142,7 @@ self.body(func(inputs) {
 		cache(24 * 60 * 60 * 1000).
 		run()
 
-	metricsCsvParams := pfMetricsConv.getColumns(species)
+	metricsCsvParams := pfMetricsConv.getColumns(blockId, species)
 	cellMetricsImport := xsv.importFile(cellMetricsCsv.getFile("cell_metrics.csv"), "csv", metricsCsvParams, { dataOnly: true })
 
 	output := {

@@ -1,15 +1,19 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
+json := import("json")
 
-getColumns := func(species) {
+getColumns := func(blockId, species) {
   return {
     "axes": [
       {
         "column": "CellId",
         "spec": {
-						"name": "pl7.app/rna-seq/cellId",
+						"name": "pl7.app/sc/cellId",
 						"type": "String",
-						"domain": {},
+						"domain": {
+              "pl7.app/blockId": blockId
+            },
 						"annotations": {
+              "pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
 							"pl7.app/label": "Cell barcode",
               "pl7.app/table/visibility": "optional"
 						}
