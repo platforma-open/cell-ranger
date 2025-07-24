@@ -341,7 +341,7 @@ wf.body(func(args) {
 
 
 	trace := pSpec.makeTrace(inputSpec,
-		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger - "}// + genomes.getSpeciesName(species)}
+		{type: "milaboratories.cell-ranger", id: blockId, importance: 80, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
 	)
 
 	// Count matrix export defined with sample from inputSpec + previous specs
