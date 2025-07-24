@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.9.0
+
+### Minor Changes
+
+- 7b1a445: Update trace importance
+
 ## 1.8.0
 
 ### Minor Changes
