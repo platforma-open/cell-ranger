@@ -142,13 +142,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId,
-						"pl7.app/species": species
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				},
 				{
@@ -180,13 +179,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode",
-						"pl7.app/table/visibility": "optional"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				}
 				],
@@ -208,13 +206,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode",
-						"pl7.app/table/visibility": "optional"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				}
 				],
@@ -236,13 +233,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode",
-						"pl7.app/table/visibility": "optional"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				}
 				],
@@ -264,13 +260,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode",
-						"pl7.app/table/visibility": "optional"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				}
 				],
@@ -292,13 +287,12 @@ wf.body(func(args) {
 				{
 					"name": "pl7.app/sc/cellId",
 					"type": "String",
-					"domain": {
-						"pl7.app/blockId": blockId
-					},
 					"annotations": {
+						"pl7.app/label": "Cell ID",
 						"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-						"pl7.app/label": "Cell Barcode",
-						"pl7.app/table/visibility": "optional"
+						"pl7.app/table/fontFamily": "monospace",
+						"pl7.app/table/orderPriority": "110000",
+						"pl7.app/table/visibility": "default"
 					}
 				}
 				],
@@ -364,14 +358,13 @@ wf.body(func(args) {
 					{
 						"name": "pl7.app/sc/cellId",
 						"type": "String",
-						"domain": {
-							"pl7.app/blockId": blockId,
-							"pl7.app/species": species
-							},
-							"annotations": {
-								"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-								"pl7.app/label": "Cell Barcode"
-								}
+						"annotations": {
+							"pl7.app/label": "Cell ID",
+							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
+							"pl7.app/table/fontFamily": "monospace",
+							"pl7.app/table/orderPriority": "110000",
+							"pl7.app/table/visibility": "default"
+						}
 					},
 					{
 						"name": "pl7.app/rna-seq/geneId",
@@ -407,14 +400,13 @@ wf.body(func(args) {
 					{
 						"name": "pl7.app/sc/cellId",
 						"type": "String",
-						"domain": {
-							"pl7.app/blockId": blockId,
-							"pl7.app/species": species
-							},
-							"annotations": {
-								"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-								"pl7.app/label": "Cell Barcode"
-								}
+						"annotations": {
+							"pl7.app/label": "Cell ID",
+							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
+							"pl7.app/table/fontFamily": "monospace",
+							"pl7.app/table/orderPriority": "110000",
+							"pl7.app/table/visibility": "default"
+						}
 					},
 					{
 						"name": "pl7.app/rna-seq/geneId",

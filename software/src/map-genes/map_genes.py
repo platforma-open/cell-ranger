@@ -1,15 +1,24 @@
 import pandas as pd
 import argparse
 
+
 def map_ensembl_to_gene_symbol(raw_counts_path, annotation_path, output_path):
     # Load the raw count data
     print("Loading raw count data...")
     raw_df = pd.read_csv(raw_counts_path)
 
-    # Validate required columns in raw count data
-    expected_columns = {"Sample", "Cell Barcode", "Ensembl Id", "Raw gene expression"}
-    if not expected_columns.issubset(raw_df.columns):
-        raise ValueError(f"Raw count data must contain columns: {expected_columns}")
+    # Validate required columns in raw count data (support both legacy and new headers)
+    base_required = {"Sample", "Ensembl Id", "Raw gene expression"}
+    cell_headers = {"Cell Barcode", "Cell ID"}
+    missing_base = base_required - set(raw_df.columns)
+    has_cell_header = any(h in raw_df.columns for h in cell_headers)
+    if missing_base or not has_cell_header:
+        expected_desc = f"{sorted(base_required)} and one of {sorted(cell_headers)}"
+        raise ValueError(f"Raw count data must contain columns: {expected_desc}")
+
+    # Normalize column name for downstream logic (keep legacy name internally)
+    if "Cell ID" in raw_df.columns and "Cell Barcode" not in raw_df.columns:
+        raw_df = raw_df.rename(columns={"Cell ID": "Cell Barcode"})
 
     # Extract unique Ensembl IDs
     unique_ensembl_ids = raw_df["Ensembl Id"].unique()
@@ -39,6 +48,7 @@ def map_ensembl_to_gene_symbol(raw_counts_path, annotation_path, output_path):
     print(f"Saving output to {output_path}...")
     mapped_df.to_csv(output_path, index=False)
     print("Done.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Map Ensembl IDs in single-cell RNA-seq count data to gene symbols.")
