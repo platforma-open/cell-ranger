@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.9.1
+
+### Patch Changes
+
+- 8d8ba6e: Updated specifications of Cell ID axis to support multiomic data enrichment
+- Updated dependencies [8d8ba6e]
+  - @platforma-open/milaboratories.cellranger.software@1.7.2
+
 ## 1.9.0
 
 ### Minor Changes

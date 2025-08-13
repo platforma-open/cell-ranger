@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.7.2
+
+### Patch Changes
+
+- 8d8ba6e: Updated specifications of Cell ID axis to support multiomic data enrichment
+
 ## 1.7.1
 
 ### Patch Changes
