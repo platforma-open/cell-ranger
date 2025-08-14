@@ -10,6 +10,12 @@ def read_gzip_tsv(file_path):
     with gzip.open(file_path, 'rt') as f:
         return pd.read_csv(f, sep='\t', header=None)
 
+def clean_barcode_suffix(barcode):
+    """Remove '-' and following numbers from cell barcode."""
+    if '-' in barcode:
+        return barcode.split('-')[0]
+    return barcode
+
 def process_input_files(matrix_path, barcodes_path, features_path, output_csv_path):
     # Load the input files
     print("Loading matrix.mtx.gz...")
@@ -21,7 +27,8 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
     print("Loading features.tsv.gz...")
     features = read_gzip_tsv(features_path)
     
-    barcodes_list = barcodes[0].tolist()
+    barcodes_list = [clean_barcode_suffix(barcode) for barcode in barcodes[0].tolist()]
+    print(f"Cleaned barcode suffixes. Example: {barcodes[0].tolist()[0]} -> {barcodes_list[0]}")
     features_list = features[0].tolist()
 
     data = []
