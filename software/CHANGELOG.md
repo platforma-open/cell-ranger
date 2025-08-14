@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.8.0
+
+### Minor Changes
+
+- 85764d2: Removed suffixes from cell barcodes to support multiomics
+
 ## 1.7.2
 
 ### Patch Changes
