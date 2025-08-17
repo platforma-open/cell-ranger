@@ -24,6 +24,7 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vue-tsc": "catalog:",
+    "@vue/tsconfig": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:"
   }
 }
