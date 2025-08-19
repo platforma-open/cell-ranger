@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { AgGridVue } from 'ag-grid-vue3';
 import {
+  AgGridTheme,
+  PlAgOverlayLoading,
+  PlAgOverlayNoRows,
   PlAgTextAndButtonCell,
   PlBlockPage,
   PlBtnGhost,
@@ -8,21 +10,19 @@ import {
   PlSlideModal,
   createAgGridColDef,
   makeRowNumberColDef,
-  AgGridTheme,
-  PlAgOverlayLoading,
-  PlAgOverlayNoRows,
 } from '@platforma-sdk/ui-vue';
+import { AgGridVue } from 'ag-grid-vue3';
 
 import type { ProgressLogWithInfo } from '@platforma-sdk/model';
-import { computed, reactive, shallowRef, watch } from 'vue';
-import { useApp } from '../app';
-import ReportPanel from './Report.vue';
-import { resultMap } from './results';
-import { parseProgress } from '../parseProgress';
-import SettingsPanel from './SettingsPanel.vue';
-import type { ColDef, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-enterprise';
 import { autoSizeRowNumberColumn } from '@platforma-sdk/ui-vue';
 import { whenever } from '@vueuse/core';
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, ValueGetterParams } from 'ag-grid-enterprise';
+import { computed, reactive, shallowRef, watch } from 'vue';
+import { useApp } from '../app';
+import { parseProgress } from '../parseProgress';
+import ReportPanel from './Report.vue';
+import { resultMap } from './results';
+import SettingsPanel from './SettingsPanel.vue';
 
 const app = useApp();
 
@@ -59,6 +59,7 @@ type Row = {
   sampleId: string;
   sampleLabel: string;
   cellRanger: ProgressLogWithInfo | undefined;
+  summary?: Record<string, string>;
 };
 
 /** Rows for ag-table */
@@ -71,6 +72,7 @@ const results = computed<Row[] | undefined>(() => {
       sampleId: id,
       sampleLabel: resultMap.value[id].sampleLabel,
       cellRanger: resultMap.value[id].cellRangerProgressLine,
+      summary: resultMap.value[id].summary,
     });
   }
 
@@ -89,37 +91,65 @@ const defaultColumnDef: ColDef = {
   sortable: false,
 };
 
-const columnDefs: ColDef<Row>[] = [
-  makeRowNumberColDef(),
-  createAgGridColDef<Row, string>({
-    colId: 'label',
-    field: 'sampleLabel',
-    headerName: 'Sample',
-    pinned: 'left',
-    lockPinned: true,
-    sortable: true,
-    cellRenderer: PlAgTextAndButtonCell,
-    cellRendererParams: {
-      invokeRowsOnDoubleClick: true,
-    },
-  }),
-  createAgGridColDef<Row, ProgressLogWithInfo | undefined>({
-    colId: 'cellRanger',
-    field: 'cellRanger',
-    headerName: 'Cell Ranger Progress',
-    flex: 1,
-    cellStyle: {
-      '--ag-cell-horizontal-padding': '0px',
-      '--ag-cell-vertical-padding': '0px',
-    },
-    progress(cellRangerProgressLine) {
-      return parseProgress(cellRangerProgressLine);
-    },
-  }),
-] as any;
+const columnDefs = computed<ColDef<Row>[]>(() => {
+  const cols: ColDef<Row>[] = [
+    makeRowNumberColDef(),
+    createAgGridColDef<Row, string>({
+      colId: 'label',
+      field: 'sampleLabel',
+      headerName: 'Sample',
+      pinned: 'left',
+      lockPinned: true,
+      sortable: true,
+      cellRenderer: PlAgTextAndButtonCell,
+      cellRendererParams: {
+        invokeRowsOnDoubleClick: true,
+      },
+    }),
+    createAgGridColDef<Row, ProgressLogWithInfo | undefined>({
+      colId: 'cellRanger',
+      field: 'cellRanger',
+      headerName: 'Cell Ranger Progress',
+      minWidth: 150,
+      cellStyle: {
+        '--ag-cell-horizontal-padding': '0px',
+        '--ag-cell-vertical-padding': '0px',
+      },
+      progress(cellRangerProgressLine) {
+        return parseProgress(cellRangerProgressLine);
+      },
+    }),
+  ];
+
+  // Add only specified summary CSV columns in the required order
+  const desiredSummaryHeaders: string[] = [
+    'Estimated Number of Cells',
+    'Mean Reads per Cell',
+    'Median Genes per Cell',
+    'Sequencing Saturation',
+    'Valid Barcodes',
+    'Fraction Reads in Cells',
+    'Q30 Bases in Barcode',
+    'Q30 Bases in RNA Read',
+    'Q30 Bases in UMI',
+  ];
+
+  for (const header of desiredSummaryHeaders) {
+    cols.push(
+      createAgGridColDef<Row, string>({
+        colId: `summary:${header}`,
+        headerName: header,
+        width: 180,
+        valueGetter: (p: ValueGetterParams<Row, string>) => p.data?.summary?.[header] ?? '',
+      }),
+    );
+  }
+
+  return cols;
+});
 
 const gridOptions: GridOptions<Row> = {
-  getRowId: row => row.data.sampleId,
+  getRowId: (row) => row.data.sampleId,
   onRowDoubleClicked: (e) => {
     data.selectedSample = e.data?.sampleId;
     data.sampleReportOpen = data.selectedSample !== undefined;
