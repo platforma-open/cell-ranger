@@ -172,6 +172,11 @@ export const model = BlockModel.create()
     );
   })
 
+  .output('summaryContent', (wf) => {
+    const content = wf.outputs?.resolve('summaryContent')?.getDataAsJson() as object;
+    return content;
+  })
+
   /**
    * Returns true if the block is currently in "running" state
    */

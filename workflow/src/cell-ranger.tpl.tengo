@@ -23,7 +23,8 @@ self.defineOutputs(
 	// "alignedBAM",
 	"countMatrixImport",
 	"normCountMatrixImport",
-	"cellMetricsImport"
+	"cellMetricsImport",
+	"summaryContent"
 	)
 
 
@@ -89,7 +90,7 @@ self.body(func(inputs) {
 		saveFile("sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
 		saveFile("sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
 		saveFile("./sample/outs/possorted_genome_bam.bam").
-		saveFile("./sample/outs/metrics_summary.csv").
+		saveFileContent("./sample/outs/metrics_summary.csv").
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
@@ -152,7 +153,8 @@ self.body(func(inputs) {
 		// alignedBAM: bamFile,
 		countMatrixImport: countMatrixImport,
 		normCountMatrixImport: normCountMatrixImport,
-		cellMetricsImport: cellMetricsImport
+		cellMetricsImport: cellMetricsImport,
+		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv")
 	}
 
 	return output
