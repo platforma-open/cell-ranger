@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.9.0
+
+### Minor Changes
+
+- 91bbb18: Fix dependency version
+
 ## 1.8.0
 
 ### Minor Changes

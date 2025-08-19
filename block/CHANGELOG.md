@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.20
+
+### Patch Changes
+
+- @platforma-open/milaboratories.cell-ranger.workflow@1.9.3
+
 ## 1.2.19
 
 ### Patch Changes
