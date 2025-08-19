@@ -1,5 +1,17 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.10.0
+
+### Minor Changes
+
+- 846a308: Update to new python env
+
+## 1.9.0
+
+### Minor Changes
+
+- 91bbb18: Fix dependency version
+
 ## 1.8.0
 
 ### Minor Changes
