@@ -173,8 +173,11 @@ export const model = BlockModel.create()
   })
 
   .output('summaryContent', (wf) => {
-    const content = wf.outputs?.resolve('summaryContent')?.getDataAsJson() as object;
-    return content;
+    return parseResourceMap(
+      wf.outputs?.resolve('summaryContent'),
+      (acc) => acc.getDataAsString(),
+      false,
+    );
   })
 
   /**
