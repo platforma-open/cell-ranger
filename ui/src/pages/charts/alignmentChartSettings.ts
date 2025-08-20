@@ -1,8 +1,9 @@
 import {
   Gradient,
+  type PlChartStackedBarSettings,
 } from '@platforma-sdk/ui-vue';
 
-export function getMappingChartSettings(summary: Record<string, string> | undefined) {
+export function getMappingChartSettings(summary: Record<string, string> | undefined): PlChartStackedBarSettings {
   const parsePercent = (s: string | undefined): number => {
     if (!s) return 0;
     const v = parseFloat(s.replace('%', '').trim());
@@ -28,15 +29,13 @@ export function getMappingChartSettings(summary: Record<string, string> | undefi
   ];
 
   // const total = segments.reduce((s, x) => s + x.value, 0) || 1;
-  const total = 100;
+  // const total = 100;
 
   return {
     title: 'Alignments',
     data: segments.map((s) => ({
-      label: s.label,
-      value: s.value,
-      color: s.color,
-      description: [s.label, 'Fraction:' + Math.round((s.value * 100) / total) + '%'].join('\n'),
+      ...s,
+      // description: [s.label, 'Fraction:' + Math.round((s.value * 100) / total) + '%'].join('\n'),
     })),
   };
 }

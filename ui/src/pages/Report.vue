@@ -61,7 +61,7 @@ const logHandle = computed(() => {
   <PlBtnGroup v-model="data.currentTab" :options="tabOptions" />
 
   <div v-if="data.currentTab === 'visual'" style="padding: 12px 0;">
-    <PlChartStackedBar :settings="alignmentValue" />
+    <PlChartStackedBar v-if="alignmentValue" :settings="alignmentValue" />
   </div>
 
   <div v-else-if="data.currentTab === 'log'">
