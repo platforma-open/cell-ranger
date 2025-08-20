@@ -18,18 +18,17 @@ export function getMappingChartSettings(summary: Record<string, string> | undefi
   const unmapped = Math.max(0, 100 - mappedToGenome);
   const mappedNotConfident = Math.max(0, mappedToGenome - mappedConfident);
 
-  const viridis = Gradient('viridis');
   const magma = Gradient('magma');
-
   const segments = [
-    { label: 'Unmapped', value: unmapped, color: magma.getNthOf(1, 9) },
+    { label: 'Confidently Intergenic', value: confIntergenic, color: '#42884E' },
+    { label: 'Confidently Intronic', value: confIntronic, color: '#6BD67D' },
+    { label: 'Confidently Exonic', value: confExonic, color: '#A6E6B1' },
     { label: 'Mapped (not confident)', value: mappedNotConfident, color: magma.getNthOf(3, 9) },
-    { label: 'Confidently Intergenic', value: confIntergenic, color: viridis.getNthOf(2, 5) },
-    { label: 'Confidently Intronic', value: confIntronic, color: viridis.getNthOf(3, 5) },
-    { label: 'Confidently Exonic', value: confExonic, color: viridis.getNthOf(4, 5) },
+    { label: 'Unmapped', value: unmapped, color: magma.getNthOf(5, 9) },
   ];
 
-  const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  // const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  const total = 100;
 
   return {
     title: 'Alignments',

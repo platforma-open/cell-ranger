@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { PlRef } from '@platforma-sdk/model';
+import { plRefsEqual } from '@platforma-sdk/model';
 import { PlDropdown, PlDropdownRef } from '@platforma-sdk/ui-vue';
 import { useApp } from '../app';
 import { speciesOptions } from '../species';
-import type { PlRef } from '@platforma-sdk/model';
-import { plRefsEqual } from '@platforma-sdk/model';
 
 const app = useApp();
 
@@ -29,4 +29,4 @@ function setInput(inputRef?: PlRef) {
     :options="speciesOptions"
     label="Select species"
   />
-</template> 
+</template>

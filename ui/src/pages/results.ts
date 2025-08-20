@@ -37,6 +37,7 @@ export const resultMap = computed(
     }
 
     // Parse and attach summary CSV content if available
+    // @TODO: Use a typescript CSV functionality to deal with numbers with comma (like ... 32, "1,234"...)
     const summaryContent = app.model.outputs.summaryContent;
     if (summaryContent !== undefined) {
       const parseCsvLine = (line: string): string[] => {
