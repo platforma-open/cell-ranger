@@ -8,12 +8,12 @@ import { resultMap } from './results';
 const app = useApp();
 const sampleId = defineModel<string | undefined>();
 
-type TabId = 'visual' | 'log' | 'html';
-const data = reactive<{ currentTab: TabId }>({ currentTab: 'html' });
+type TabId = 'log' | 'visual' | 'html';
+const data = reactive<{ currentTab: TabId }>({ currentTab: 'log' });
 
 const tabOptions = [
-  { value: 'visual', text: 'Visual Report' },
   { value: 'log', text: 'Log' },
+  { value: 'visual', text: 'Visual Report' },
   { value: 'html', text: 'CellRanger HTML Report' },
 ];
 
@@ -60,12 +60,12 @@ const logHandle = computed(() => {
 <template>
   <PlBtnGroup v-model="data.currentTab" :options="tabOptions" />
 
-  <div v-if="data.currentTab === 'visual'" style="padding: 12px 0;">
-    <PlChartStackedBar v-if="alignmentValue" :settings="alignmentValue" />
+  <div v-if="data.currentTab === 'log'">
+    <PlLogView :log-handle="logHandle" label="CellRanger Log"/>
   </div>
 
-  <div v-else-if="data.currentTab === 'log'">
-    <PlLogView :log-handle="logHandle" />
+  <div v-else-if="data.currentTab === 'visual'" style="padding: 12px 0;">
+    <PlChartStackedBar v-if="alignmentValue" :settings="alignmentValue" />
   </div>
 
   <div v-else>
