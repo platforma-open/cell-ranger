@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   AgGridTheme,
+  PlAgChartStackedBarCell,
   PlAgOverlayLoading,
   PlAgOverlayNoRows,
   PlAgTextAndButtonCell,
@@ -20,6 +21,7 @@ import type { ColDef, GridApi, GridOptions, GridReadyEvent, ValueGetterParams } 
 import { computed, reactive, shallowRef, watch } from 'vue';
 import { useApp } from '../app';
 import { parseProgress } from '../parseProgress';
+import { getMappingChartSettings } from './charts/alignmentChartSettings';
 import ReportPanel from './Report.vue';
 import { resultMap } from './results';
 import SettingsPanel from './SettingsPanel.vue';
@@ -110,13 +112,30 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
       colId: 'cellRanger',
       field: 'cellRanger',
       headerName: 'Cell Ranger Progress',
-      minWidth: 150,
+      flex: 1,
+      minWidth: 200,
       cellStyle: {
         '--ag-cell-horizontal-padding': '0px',
         '--ag-cell-vertical-padding': '0px',
       },
       progress(cellRangerProgressLine) {
         return parseProgress(cellRangerProgressLine);
+      },
+    }),
+    createAgGridColDef<Row, string>({
+      colId: 'alignmentStats',
+      headerName: 'Alignments',
+      flex: 1,
+      minWidth: 200,
+      cellStyle: {
+        '--ag-cell-horizontal-padding': '12px',
+      },
+      cellRendererSelector: (cellData) => {
+        const value = getMappingChartSettings(cellData.data?.summary);
+        return {
+          component: PlAgChartStackedBarCell,
+          params: { value },
+        };
       },
     }),
   ];
@@ -139,7 +158,7 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
       createAgGridColDef<Row, string>({
         colId: `summary:${header}`,
         headerName: header,
-        width: 180,
+        flex: 1,
         valueGetter: (p: ValueGetterParams<Row, string>) => p.data?.summary?.[header] ?? '',
       }),
     );
