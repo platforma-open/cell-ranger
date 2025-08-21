@@ -64,7 +64,7 @@ const logHandle = computed(() => {
     <PlLogView :log-handle="logHandle" label="CellRanger Log"/>
   </div>
 
-  <div v-else-if="data.currentTab === 'visual'" style="padding: 12px 0;">
+  <div v-else-if="data.currentTab === 'visual'" style="padding: 12px 0; display: flex;">
     <PlChartStackedBar v-if="alignmentValue" :settings="alignmentValue" />
   </div>
 
