@@ -2,16 +2,14 @@
 import type { GraphMakerProps } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
+import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 import { ref } from 'vue';
 import { useApp } from '../app';
-import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 const app = useApp();
 
 function getDefaultOptions(cellMetricsPfDefaults?: PColumnIdAndSpec[]) {
-  if (!cellMetricsPfDefaults) {
-    return undefined;
-  }
+  if (cellMetricsPfDefaults === undefined) return undefined;
 
   function getIndex(name: string, pcols: PColumnIdAndSpec[]): number {
     return pcols.findIndex((p) => p.spec.name === name);

@@ -97,6 +97,10 @@ wf.body(func(args) {
 		name: "outlier",
 		path: ["cellMetricsImport", "outlier"],
 		partitionKeyLength: 0 // [cellId]
+	},
+	{
+		type: "Resource",
+		name: "summaryContent"
 	}
 	]
 
@@ -330,9 +334,9 @@ wf.body(func(args) {
 		cellRangerReport: cellRangerResults.output("cellRangerReport"),
 		// alignedBAM: cellRangerResults.output("alignedBAM"),
 		rawCountsPf: pframes.exportFrame(rawCountsPf),
-		cellMetricsPf: pframes.exportFrame(cellMetricsPf)
+		cellMetricsPf: pframes.exportFrame(cellMetricsPf),
+		summaryContent: cellRangerResults.output("summaryContent")
 	}
-
 
 	trace := pSpec.makeTrace(inputSpec,
 		{type: "milaboratories.cell-ranger", id: blockId, importance: 80, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
