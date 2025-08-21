@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.10.0
+
+### Minor Changes
+
+- 28c7c3c: qc metrics in table
+
 ## 1.9.4
 
 ### Patch Changes

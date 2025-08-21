@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.7.0
+
+### Minor Changes
+
+- 28c7c3c: qc metrics in table
+
 ## 1.6.1
 
 ### Patch Changes

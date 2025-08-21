@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.4.0
+
+### Minor Changes
+
+- 28c7c3c: qc metrics in table
+
+### Patch Changes
+
+- Updated dependencies [28c7c3c]
+  - @platforma-open/milaboratories.cell-ranger.model@1.7.0
+
 ## 1.3.5
 
 ### Patch Changes
