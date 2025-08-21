@@ -21,9 +21,9 @@ export function getMappingChartSettings(summary: Record<string, string> | undefi
 
   const magma = Gradient('magma');
   const segments = [
-    { label: 'Confidently Intergenic', value: confIntergenic, color: '#42884E' },
+    { label: 'Confidently Exonic', value: confExonic, color: '#42884E' },
     { label: 'Confidently Intronic', value: confIntronic, color: '#6BD67D' },
-    { label: 'Confidently Exonic', value: confExonic, color: '#A6E6B1' },
+    { label: 'Confidently Intergenic', value: confIntergenic, color: '#A6E6B1' },
     { label: 'Mapped (not confident)', value: mappedNotConfident, color: magma.getNthOf(3, 9) },
     { label: 'Unmapped', value: unmapped, color: magma.getNthOf(5, 9) },
   ];
