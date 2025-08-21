@@ -158,7 +158,8 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
       createAgGridColDef<Row, string>({
         colId: `summary:${header}`,
         headerName: header,
-        flex: 1,
+        minWidth: 100,
+        maxWidth: 200,
         valueGetter: (p: ValueGetterParams<Row, string>) => p.data?.summary?.[header] ?? '',
       }),
     );
@@ -192,19 +193,20 @@ const gridOptions: GridOptions<Row> = {
         </template>
       </PlBtnGhost>
     </template>
-
-    <AgGridVue
-      :theme="AgGridTheme"
-      :style="{ height: '100%' }"
-      :rowData="results"
-      :defaultColDef="defaultColumnDef"
-      :columnDefs="columnDefs"
-      :grid-options="gridOptions as any"
-      :loadingOverlayComponentParams="{ notReady: true }"
-      :loadingOverlayComponent="PlAgOverlayLoading"
-      :noRowsOverlayComponent="PlAgOverlayNoRows"
-      @grid-ready="onGridReady"
-    />
+    <div :style="{ flex: 1 }">
+      <AgGridVue
+        :theme="AgGridTheme"
+        :style="{ height: '100%' }"
+        :rowData="results"
+        :defaultColDef="defaultColumnDef"
+        :columnDefs="columnDefs"
+        :grid-options="gridOptions as any"
+        :loadingOverlayComponentParams="{ notReady: true }"
+        :loadingOverlayComponent="PlAgOverlayLoading"
+        :noRowsOverlayComponent="PlAgOverlayNoRows"
+        @grid-ready="onGridReady"
+      />
+    </div>
   </PlBlockPage>
 
   <PlSlideModal
