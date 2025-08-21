@@ -1,14 +1,14 @@
 import {
   Gradient,
-  type PlChartStackedBarSettings,
 } from '@platforma-sdk/ui-vue';
 
-export function getMappingChartSettings(summary: Record<string, string> | undefined): PlChartStackedBarSettings {
+export function getMappingChartSettings(summary: Record<string, string> | undefined) {
   const parsePercent = (s: string | undefined): number => {
     if (!s) return 0;
     const v = parseFloat(s.replace('%', '').trim());
     return isNaN(v) ? 0 : v;
   };
+  if (summary === undefined) return undefined;
 
   const mappedToGenome = parsePercent(summary?.['Reads Mapped to Genome']);
   const mappedConfident = parsePercent(summary?.['Reads Mapped Confidently to Genome']);
