@@ -1,5 +1,12 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.2.23
+
+### Patch Changes
+
+- Updated dependencies [1294595]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.11.0
+
 ## 1.2.22
 
 ### Patch Changes

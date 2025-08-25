@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.11.0
+
+### Minor Changes
+
+- 1294595: Add batch support
+
 ## 1.10.0
 
 ### Minor Changes
