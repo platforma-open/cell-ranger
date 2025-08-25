@@ -40,8 +40,8 @@ self.body(func(inputs) {
 
 	cellRanger := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
-		mem("64GiB").
-		cpu(1).
+		mem("64GB").
+		cpu(16).
 		// addAsset(genomeAssets, "genomeIndex").
 		addAsset(genomeAssets, "genomeIndex", "fasta/").
 		addAsset(genomeAssets, "genomeIndex", "genes/").
@@ -87,6 +87,8 @@ self.body(func(inputs) {
 		// arg("--sample=input_").
 		arg("--create-bam=true").
 		arg("--id=sample").
+		argWithVar("--localcores={system.cpu}").
+		argWithVar("--localmem={system.ram.gb}").
 		saveFile("sample/outs/web_summary.html").
 		saveFile("sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
 		saveFile("sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
