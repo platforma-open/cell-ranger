@@ -19,11 +19,11 @@ catalogs:
       specifier: ^2.2.2
       version: 2.2.2
     '@platforma-open/milaboratories.cellranger-genome-assets':
-      specifier: ^1.0.3
-      version: 1.0.3
+      specifier: ^1.1.0
+      version: 1.1.0
     '@platforma-open/milaboratories.gene-annotations-assets':
-      specifier: ^1.0.0
-      version: 1.0.0
+      specifier: ^1.1.0
+      version: 1.1.0
     '@platforma-open/milaboratories.runenv-python-3':
       specifier: ^1.3.0
       version: 1.3.0
@@ -228,10 +228,10 @@ importers:
         version: 2.2.2
       '@platforma-open/milaboratories.cellranger-genome-assets':
         specifier: 'catalog:'
-        version: 1.0.3
+        version: 1.1.0
       '@platforma-open/milaboratories.gene-annotations-assets':
         specifier: 'catalog:'
-        version: 1.0.0
+        version: 1.1.0
       '@platforma-open/milaboratories.software-cellranger':
         specifier: 'catalog:'
         version: 1.0.2
@@ -1356,80 +1356,80 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana@1.0.2':
-    resolution: {integrity: sha512-ZjE12DzsqnkYgaeiRwgKtXvZ7MA4ZZg5oEf9sXqsNhW37NGowB26TIDrSNmkGaJDFttHFNhfiChDVRmrSVBAlQ==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana@1.1.0':
+    resolution: {integrity: sha512-0TBbc2e8UUjflf4sylTnjTHw3acUWAS5RHQnZrwhILvUHafXUWtGf19+KDPULkFoXkIsmrZq5gcdLisr/kHxcg==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus@1.0.2':
-    resolution: {integrity: sha512-9Xm0vETTvM87pe3gk5Cu/oCPA861Jo9A2ifDwOtRfIfqGZHi/yr7IBckqjkdqA7Qn4RrxpbiGcMdmkHCwPanIg==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus@1.1.0':
+    resolution: {integrity: sha512-q+Uu8V3kH9Xr0rQbN7JVlo/fbIEsa7iR/nzN/GzmyXnnPM753stAzLQRtjQfOeRtinNqVUK2doghHO3zO/4JDg==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans@1.0.2':
-    resolution: {integrity: sha512-LsRq48ugaqmL3bL+wQRBYaOBBPi+KAfWF909nbJkaoly1hH29oUFIIHJC1irzlUi60DiG/pgIQZITAS/11YyRQ==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans@1.1.0':
+    resolution: {integrity: sha512-pOErGn8Xd5URC877baBuIkHqnJ0DdBpLXwY6LpHU3ZzNZxzNUBQmcO0m/duK/3QdpTvJW4eNSNRmgh+eMRIhLw==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio@1.0.2':
-    resolution: {integrity: sha512-Zj6GuRM/roSWTltUTksfEf0LJCh51tfG1YOArdQOFffXx5nQNc0HR46v6sc6GW/AVW7S3Rya9LK3J/L04i8Sjg==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio@1.1.0':
+    resolution: {integrity: sha512-vfazgDWrZb8haeNuUHnO6TA6CEG+fOQsZmvMjp+3ADXedRtQurq2bp0IjlwaenSS+cb0zarAvZzvoYiF8NfsAw==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster@1.0.2':
-    resolution: {integrity: sha512-JYf9psSoLQ6GU+hEAScl/ZO9YMfam6RQayuLNMQeLrOJjPTE0IT8k5fPAtpiYJPVJdajI4FodAfg8K2/LMCKOw==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster@1.1.0':
+    resolution: {integrity: sha512-hVOtCwQrmRisU6ugU3ifZKuwPBQnMayCEZZOhI60i9HJHnKxiO0zCmt3AGt8YHPdhd8GePR2PRyqHNBzt+5rfw==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus@1.0.2':
-    resolution: {integrity: sha512-gvUYzixNMgZNRwHoD9Dea431vPWUNp7PbIcx+2sy5v3K5g1ga8C/P0WnG2OquqP0il0Bn+SkXmG6nJKGt4s/OQ==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus@1.1.0':
+    resolution: {integrity: sha512-TO9Knx9nxxg2jWyat6D8J9XNggPDj86iG/3IrHWUHEy3jLKB7Dbe8zFhJkTXsDCmfzFSax8547lKYIo0O9MS0Q==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens@1.0.2':
-    resolution: {integrity: sha512-l20oAH59q5UJDxTP554C1D2NGetLV0BW3af8VSOlajzmm7OQEuT0W5Q1Tc22AGmNYt3t5tmGr+0DqjRyOlRBdQ==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens@1.1.0':
+    resolution: {integrity: sha512-UNOe4luWY3oHKVAvK/pEfC5jIjgEoavOKNAafXb2VsZLLzbxpGE8VbIEBqfJn4k1X/p1eYnpJ06mCd0PWf0Vbw==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus@1.0.2':
-    resolution: {integrity: sha512-PAB27HYrqgAMlmxOvVYsqKWypjr35PWgQKJwWmol0OMfMYchRYZwLirM6ETSzKdBriAvzqeipt2jBCYP9YjHIQ==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus@1.1.0':
+    resolution: {integrity: sha512-ZLs+vjwnmdpdELWG5m6tffHa/lNQjtYUZjgjH3OPONOuP3x+fsw4d+4KYt9WFNMuWqgWmdCMGmWGiOe3gDz1Vg==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus@1.0.2':
-    resolution: {integrity: sha512-QId8o6stTP0qgE1M+K1A/LhHmjG9/s9IBqvlHzJSSmA1llnMfR4UMWIIMuE+oYx0rOytejohsAFsY/3knFkO4Q==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus@1.1.0':
+    resolution: {integrity: sha512-+rIq3Fz0iylwZ5YGtXeGoiKV0LF+LbNVaQgG62JjA0AN04Rm9C6giWjrBgpOjn5Y8bORuBq/HEHjXr5PaGn+0g==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae@1.0.2':
-    resolution: {integrity: sha512-uN4wljpfy7ELBP4mv4Url1CjSEkIlGCJdlX/VznAYeSQVILsAypHloQLhBdzqxaqecb1h9WDScQmhDZ+Xndndg==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae@1.1.0':
+    resolution: {integrity: sha512-kc1QceAnuET9KePI6fegsaqOkfEOBUMDK+GgAAcz+QI84j7uI7M2FfGpWXmPF2VVPEuKAOlw8IHY443p4lHyew==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa@1.0.2':
-    resolution: {integrity: sha512-BTJLRgkBFJR7nAALw9KEgholpM8L4HVidhE+ZXB9dQnP1r3fEknZtww/j7lHm0pupWd7XIX/1xuTIn3KGZdCnw==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa@1.1.0':
+    resolution: {integrity: sha512-Jtgm7ZMyHbV64zLPlia2Uzl8Y73Urwy0lOHm91NdtbqTWFQyMAAPaczritk0JyPyjsAZ5BVY8R+ICNTVzrb4pg==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.test-species@1.0.2':
-    resolution: {integrity: sha512-i7vUarn08oHPI6Ja7I8/9jSUkTbg7NjX74RJvVGbMt36CO5ieypLxqz6a/PDaiMMaToXjuRo7tmRGvKUv7Qerg==}
+  '@platforma-open/milaboratories.cellranger-genome-assets.test-species@1.1.0':
+    resolution: {integrity: sha512-7JapEJC8o4L93qoh9LXCUqXHagqoN5qRZ/uHkUaEeMhJ3UZiL4/8dSgy+BjP8ILy4uCrEer1thq/U9pM9wWrhA==}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets@1.0.3':
-    resolution: {integrity: sha512-36mzXWJW3umGHrmzwu0Tl8q0Hq0jCUU8cg4fgXmBHgyJL7822Z2RBRQ9yawydwOOh7hUJMg+R0XXa9UplmP7dw==}
+  '@platforma-open/milaboratories.cellranger-genome-assets@1.1.0':
+    resolution: {integrity: sha512-WK+HlklLkPo6Re1OJAb100TS5h1NHtj+fKpoj5dN8h1M60CLMZSJ79WFFjRJiiChTfML13b5j1FaY9I5fHUiYw==}
 
-  '@platforma-open/milaboratories.gene-annotations-assets@1.0.0':
-    resolution: {integrity: sha512-VWcrVkaLxC//TVIm6fCsYGPuk6wTlWueFiCul+fPFEkHKC5Lwy5CMmvSsfh03948KLJBzA2vJg+Zl7DUuCsIBA==}
+  '@platforma-open/milaboratories.gene-annotations-assets@1.1.0':
+    resolution: {integrity: sha512-mtVVuVCoOZzKW8BqjzIR/w/U0NasddE/vSERcfef9BvVyToOkEb9b5TX8e4Jl5rlPag6C2uiwgwiwgzb4dvjsg==}
 
-  '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana@1.0.0':
-    resolution: {integrity: sha512-RDX+HDmOvGOj4ewuJxRvl9CjtTk8i2UAbAd6+klLjeoXeNb39hJStKB/92cCJTu4gdZVDFT7C4ShKqMZUHtb2A==}
+  '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana@1.1.0':
+    resolution: {integrity: sha512-rHD9xxLghUDEMcN8n1qDWq48k3woCC0iddZIL0FGGr8evvWXi+D1LxkY7CWX0/wZ5oasuT9WxBZmICwxBxTDtQ==}
 
-  '@platforma-open/milaboratories.gene-annotations.bos-taurus@1.0.0':
-    resolution: {integrity: sha512-CXNQ7O+I8sJfd6T0zy+2xD7DMiB6eUy1MHo2OiodC6tTym6GWNO26dQNtRMhnIYvzXBVUpk1GwbtRRVnVEv9vw==}
+  '@platforma-open/milaboratories.gene-annotations.bos-taurus@1.1.0':
+    resolution: {integrity: sha512-sH2sr2ZZPhTqz/sPoyQL9OVFyUm1gX6zcTtbPrX2QX45OhZqj8TVnax6z+k9Dv9YkF/9x5k1K87FSUIuJQDbtg==}
 
-  '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans@1.0.0':
-    resolution: {integrity: sha512-2pVpPuoX12L+n5bL0SNz79ls58lIuevK4CwGQORLOPhRjxR2C0Vh4MWmB78S2pp5O7IlP5Q3W9wCMsTK7kKJOQ==}
+  '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans@1.1.0':
+    resolution: {integrity: sha512-MR4rPBzjw1rQxcP9ZSYiHsIteVUTE5ysvvzHQSKIoT+y5B3+1ioMiDQw/rWjwNJszJAsatTW84Zj1QWXjeYvjQ==}
 
-  '@platforma-open/milaboratories.gene-annotations.danio-rerio@1.0.0':
-    resolution: {integrity: sha512-sNNYqZCtT+1vSmtDCymPZ7gghYXbLEm28WGkuCDDzUjOWOPTcPyHXTjnsIcVFtzKBwVrrsS4A4wg4iDfRlRo1A==}
+  '@platforma-open/milaboratories.gene-annotations.danio-rerio@1.1.0':
+    resolution: {integrity: sha512-OT2e8raAsiRlO9sYVGaJu8QycV7kRni4tS2mTwi2fnE9R6FbehTcV8AnkYJF0Vgrv3nU2+55aUzHrBVlPjjtUQ==}
 
-  '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster@1.0.0':
-    resolution: {integrity: sha512-xFJrw10R+waGRZOKbx4VMhC6XOlAfYUyxcOQN0poCJ6YFRQZAGSWVB010ekG84O8QVQywmVkUtmjWGrutAb55g==}
+  '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster@1.1.0':
+    resolution: {integrity: sha512-ipdv2mI8yiHaQ1ZUPhpiebaKM8QnRJJwOSuB9pyfqWks0xAQzKcRvr0NfKKWAnNDtX8Qyg5PifL+ICEqOqBXeQ==}
 
-  '@platforma-open/milaboratories.gene-annotations.gallus-gallus@1.0.0':
-    resolution: {integrity: sha512-xQ06jFQpSO3IkG2p6T8Gv47DTxvgqVINfBkRo6zbI9eM4ExuhZA/26uQ6fydteryMD6F34YM3lWIeA0QLRCZHA==}
+  '@platforma-open/milaboratories.gene-annotations.gallus-gallus@1.1.0':
+    resolution: {integrity: sha512-IDPZ7iRP9FbmZ9qkFidS1nIrdWhMJYzAkDVgd4CNaqC0l9XgJioxsG134M7QDlEvpUYg6AcyegD1B3RlmSwtLQ==}
 
-  '@platforma-open/milaboratories.gene-annotations.homo-sapiens@1.0.0':
-    resolution: {integrity: sha512-PX8ZYDf2peRPp5shg1a+7zkimSoTvf3RPL6ezAe1L/jZmBxKsjLfXSbPZz/bzXvcK2XvS7TokcvoOdyFWT3BZw==}
+  '@platforma-open/milaboratories.gene-annotations.homo-sapiens@1.1.0':
+    resolution: {integrity: sha512-5QMyepyfjkCg9OL1m/xuSpCHJIw/AUVtTVGbwpjmsg7Md964Yu5JBXaTtx7+/LTrXM1BAzAEqHbTA85hlV+lhA==}
 
-  '@platforma-open/milaboratories.gene-annotations.mus-musculus@1.0.0':
-    resolution: {integrity: sha512-F0BubPbnkoiskrcfoJNnr0qArheGyDmJxtpxLneVXcp1XbaHbIm8+opw/LgM4wB1nRfe5bMSd3ocXQCj4mu1fA==}
+  '@platforma-open/milaboratories.gene-annotations.mus-musculus@1.1.0':
+    resolution: {integrity: sha512-nztbhqqGc89mt0b9Mcv0V2ZXPaNLPYw3MTaQ9U1Me6w0d5gW9fM50iyOdXg5d1UZthBhP1texPFKSZPZV8HpCg==}
 
-  '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus@1.0.0':
-    resolution: {integrity: sha512-uZi5z/4MJGk8yJq/HKYU4y9rjxV8mvyWlj+ZOScIhhhDGzsiQppKSLzjaWxke9CtCn5Nv3LGBTm6HwgLXKydrA==}
+  '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus@1.1.0':
+    resolution: {integrity: sha512-0aI2GX1x5f6OIarfK0oYYeSgmuvkVdtrcdrHCuH4JO33GG+qa5s3LJAVdOXFBlMzxEd3jAaa5TxApiCAFzThPw==}
 
-  '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae@1.0.0':
-    resolution: {integrity: sha512-er0b3TmOrMY6ULuQSBNSfQRjZbWJVrd950+zg9hsK7naiO6daLNL+CwhqRvjLAnNxhK5Z+52UOy5Ow5Ad6KedA==}
+  '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae@1.1.0':
+    resolution: {integrity: sha512-q0QA0ab5geXBD/itdkGfSmw00V6rsKu31UY+dtFpHRpZC1jVDms2yrJXnvB35gqMTtJl98Jl4+0WwcjnX8eDPg==}
 
-  '@platforma-open/milaboratories.gene-annotations.sus-scrofa@1.0.0':
-    resolution: {integrity: sha512-zhpodWHKEXAyrRsauD9J4NJD4Gg54XZliCT7161slBKKyByLeJwOGM85Fk7TtwVzXsIcbM5vt4RO1UEpKlziwA==}
+  '@platforma-open/milaboratories.gene-annotations.sus-scrofa@1.1.0':
+    resolution: {integrity: sha512-H7YJO09jT/EVYeIS2knLfE3EJhS1BNfI9YsAfkpkm6ytQmYesBD0L1bEazqsNHCLmsSuCh7U5uODeTuoeRgX7g==}
 
   '@platforma-open/milaboratories.runenv-python-3.10.11@1.1.0':
     resolution: {integrity: sha512-DuV7PHda0tBdESout0ELW2Syo6SE+OCwjTEwKY+Tcfe8aO8S1G/yMp3UJm0eyzDnS4iN/0+5LsPEJI+jU1Hf9g==}
@@ -7566,80 +7566,80 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets.test-species@1.0.2': {}
+  '@platforma-open/milaboratories.cellranger-genome-assets.test-species@1.1.0': {}
 
-  '@platforma-open/milaboratories.cellranger-genome-assets@1.0.3':
+  '@platforma-open/milaboratories.cellranger-genome-assets@1.1.0':
     dependencies:
-      '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa': 1.0.2
-      '@platforma-open/milaboratories.cellranger-genome-assets.test-species': 1.0.2
+      '@platforma-open/milaboratories.cellranger-genome-assets.arabidopsis-thaliana': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.bos-taurus': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.caenorhabditis-elegans': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.danio-rerio': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.drosophila-melanogaster': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.gallus-gallus': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.homo-sapiens': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.mus-musculus': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.rattus-norvegicus': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.saccharomyces-cerevisiae': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.sus-scrofa': 1.1.0
+      '@platforma-open/milaboratories.cellranger-genome-assets.test-species': 1.1.0
 
-  '@platforma-open/milaboratories.gene-annotations-assets@1.0.0':
+  '@platforma-open/milaboratories.gene-annotations-assets@1.1.0':
     dependencies:
-      '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.bos-taurus': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.danio-rerio': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.gallus-gallus': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.homo-sapiens': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.mus-musculus': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae': 1.0.0
-      '@platforma-open/milaboratories.gene-annotations.sus-scrofa': 1.0.0
+      '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.bos-taurus': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.danio-rerio': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.gallus-gallus': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.homo-sapiens': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.mus-musculus': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae': 1.1.0
+      '@platforma-open/milaboratories.gene-annotations.sus-scrofa': 1.1.0
 
-  '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.arabidopsis-thaliana@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.bos-taurus@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.bos-taurus@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.caenorhabditis-elegans@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.danio-rerio@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.danio-rerio@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.drosophila-melanogaster@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.gallus-gallus@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.gallus-gallus@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.homo-sapiens@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.homo-sapiens@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.mus-musculus@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.mus-musculus@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.rattus-norvegicus@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.saccharomyces-cerevisiae@1.1.0': {}
 
-  '@platforma-open/milaboratories.gene-annotations.sus-scrofa@1.0.0': {}
+  '@platforma-open/milaboratories.gene-annotations.sus-scrofa@1.1.0': {}
 
   '@platforma-open/milaboratories.runenv-python-3.10.11@1.1.0': {}
 
