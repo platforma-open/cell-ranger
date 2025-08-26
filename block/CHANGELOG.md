@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.3.0
+
+### Minor Changes
+
+- e28cb69: update assets
+
 ## 1.2.23
 
 ### Patch Changes
