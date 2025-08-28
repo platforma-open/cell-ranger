@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.12.0
+
+### Minor Changes
+
+- 3d4065f: Included cell filtering based on QC and gene filtering when not detected
+
+### Patch Changes
+
+- Updated dependencies [3d4065f]
+  - @platforma-open/milaboratories.cellranger.software@1.11.0
+
 ## 1.11.0
 
 ### Minor Changes
