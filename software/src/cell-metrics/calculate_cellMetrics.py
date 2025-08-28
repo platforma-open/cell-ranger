@@ -6,6 +6,12 @@ import os
 import scipy.sparse
 import scipy.io
 
+def clean_barcode_suffix(barcode):
+    """Remove '-' and following numbers from cell barcode."""
+    if '-' in barcode:
+        return barcode.split('-')[0]
+    return barcode
+
 def load_data(matrix_path, barcodes_path, features_path):
     import scipy.io
 
@@ -13,7 +19,8 @@ def load_data(matrix_path, barcodes_path, features_path):
     matrix = scipy.io.mmread(matrix_path).tocsr()
 
     # Load barcodes (cell IDs)
-    barcodes = pd.read_csv(barcodes_path, header=None)[0].tolist()
+    barcodes_raw = pd.read_csv(barcodes_path, header=None)[0].tolist()
+    barcodes = [clean_barcode_suffix(b) for b in barcodes_raw]
 
     # Load features (gene IDs and gene symbols)
     features = pd.read_csv(features_path, sep='\t', header=None)
