@@ -126,17 +126,17 @@ self.body(func(inputs) {
 		run()
 
 	rawCounts := countMatrixCsv.getFile("rawCounts.csv")
+	normCounts := countMatrixCsv.getFile("rawCounts_normalized.csv")
 
 	// Set default memory and CPU for imports
     defaultConvMem := "16GiB" // @TODO: set based on the size of the input
     defaultConvCpu := 1 // @TODO: set based on the size of the input
 
-	countCsvParams := pfCountsConv.getColumns(blockId, species)
-	countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	// countCsvParams := pfCountsConv.getColumns(blockId, species)
+	// countMatrixImport := xsv.importFile(countMatrixCsv.getFile("rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 
-	normCounts := countMatrixCsv.getFile("rawCounts_normalized.csv")
-	normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
-	normCountMatrixImport := xsv.importFile(normCounts, "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	// normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
+	// normCountMatrixImport := xsv.importFile(normCounts, "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 	
 	cellMetricsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:cell-metrics")).
@@ -159,6 +159,37 @@ self.body(func(inputs) {
 	metricsCsvParams := pfMetricsConv.getColumns(blockId, species)
 	cellMetricsImport := xsv.importFile(cellMetricsCsv.getFile("cell_metrics.csv"), "csv", metricsCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 
+	filteredCountsCsv := exec.builder().
+		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-counts")).
+		mem("16GiB").
+		cpu(1).
+		addFile("rawCounts.csv", rawCounts).
+		addFile("rawCounts_normalized.csv", normCounts).
+		addFile("cell_metrics.csv", cellMetricsCsv.getFile("cell_metrics.csv")).
+		arg("--raw_counts").arg("rawCounts.csv").
+		arg("--normalized_counts").arg("rawCounts_normalized.csv").
+		arg("--metrics").arg("cell_metrics.csv").
+		arg("--output_raw").arg("filtered_rawCounts.csv").
+		arg("--output_normalized").arg("filtered_rawCounts_normalized.csv").
+		saveFile("filtered_rawCounts.csv").
+		saveFile("filtered_rawCounts_normalized.csv").
+		printErrStreamToStdout().
+		saveStdoutContent().
+		cache(24 * 60 * 60 * 1000).
+		run()
+
+
+	countCsvParams := pfCountsConv.getColumns(blockId, species)
+	countMatrixImport := xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+
+	normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
+	normCountMatrixImport := xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	// countCsvParams = pfCountsConv.getColumns(blockId, species)
+	// countMatrixImport = xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+
+	// normCountCsvParams = pfNormCountsConv.getColumns(blockId, species)
+	// normCountMatrixImport = xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	
 	output := {
 		cellRangerLog: cellRangerLog,
 		cellRangerReport: file.exportFile(cellRangerReport),
