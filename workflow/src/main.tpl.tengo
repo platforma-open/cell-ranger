@@ -373,6 +373,19 @@ wf.body(func(args) {
 	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
 	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
+	// hvgResults := render.create(hvgTpl, {
+	// 	csvCounts: filteredGenesCountsCsv,
+	// 	normCounts: filteredGenesNormalizedCountsCsv
+	// })
+
+	// hvgCountsCsv := hvgResults.output("hvgCountsCsv")
+	// hvgNormalizedCountsCsv := hvgResults.output("hvgNormalizedCountsCsv")
+
+	// convertir a pFrames
+	// specs same as filteredRawCountsPf and filteredNormCountsPf
+	// both filteredRawCountsPf and filteredNormCountsPf and hvgRawCountsPf and hvgnormPf should be exported
+	// filteredRawCountsPf and filteredNormCountsPf should include annotation "pl7.app/hideDataFromGraphs": "true"
+
 	geneAsset := geneMap.getGeneAsset(species)
 	geneAssetName := geneMap.getAssetName(species)
 
@@ -493,6 +506,15 @@ wf.body(func(args) {
 			}),
 			data: filteredNormCountsPf["normCounts.data"]
 		},
+		// with correct specs
+		// hvgRawCountsPf: {
+		// 	spec: hvgCountsPf["hvgCounts.spec"],
+		// 	data: hvgCountsPf["hvgCounts.data"]
+		// },
+		// hvgNormCountsPf: {
+		// 	spec: hvgNormCountsPf["hvgNormCounts.spec"],
+		// 	data: hvgNormCountsPf["hvgNormCounts.data"]
+		// },
 		geneSymbols: {
 			spec: geneSymbolsPf["geneSymbol.spec"],
 			data: geneSymbolsPf["geneSymbol.data"]
