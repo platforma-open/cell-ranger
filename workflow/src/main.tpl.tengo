@@ -17,9 +17,12 @@ geneMap := import(":gene-map")
 
 //genomes := import(":genomes")
 pfCountsConv := import(":pf-counts-conv")
+pfNormCountsConv := import(":pf-norm-counts-conv")
 pfSymbolsConv := import(":pf-symbols-conv")
+filteredCountsConv := import(":filtered-counts-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
+filterGenesTpl := assets.importTemplate(":filter-genes")
 
 wf.prepare(func(args){
 	return{
@@ -161,7 +164,8 @@ wf.body(func(args) {
 						"pl7.app/species": species
 					},
 					"annotations": {
-						"pl7.app/label": "Ensembl Id"
+						"pl7.app/label": "Ensembl Id",
+						"pl7.app/graph/axis/highCardinality": "true"
 					}
 				}
 				],
@@ -169,6 +173,50 @@ wf.body(func(args) {
 		},
 		"rawCounts.data": cellRangerResults.output("rawCounts")
 	}
+
+	normCountsPf := {
+		"normCounts.spec":
+			{
+				kind: "PColumn",
+				name: "pl7.app/rna-seq/countMatrix",
+				domain: {
+					"pl7.app/blockId": blockId,
+					"pl7.app/species": species,
+					"pl7.app/rna-seq/normalized": "true"
+				},
+				valueType: "Double",
+				annotations: {
+					"pl7.app/label": "Normalized gene expression"
+				},
+				axesSpec: [
+					inputSpec.axesSpec[0],
+					{
+						"name": "pl7.app/sc/cellId",
+						"type": "String",
+						"annotations": {
+							"pl7.app/label": "Cell ID",
+							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
+							"pl7.app/table/fontFamily": "monospace",
+							"pl7.app/table/orderPriority": "110000",
+							"pl7.app/table/visibility": "default"
+						}
+					},
+					{
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id",
+							"pl7.app/graph/axis/highCardinality": "true"
+
+						}
+					}
+					]
+			},
+			"normCounts.data": cellRangerResults.output("normCounts")
+		}
 
 	cellMetricsPf := {
 		"totalCounts.spec": {
@@ -308,17 +356,32 @@ wf.body(func(args) {
 		"pctCountsInTop20Genes.data": cellRangerResults.output("pctCountsInTop20Genes")
 	}
 
+	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
+	csvCountsNormalized := xsv.exportFrame(normCountsPf, "csv", { mem: "16GiB", cpu: 1 })
+
+	filteredGenesResults := render.create(filterGenesTpl, {
+		csvCounts: csvCounts,
+		normCounts: csvCountsNormalized
+	})
+	
+	filteredGenesCountsCsv := filteredGenesResults.output("filteredGenesCountsCsv")
+	filteredGenesNormalizedCountsCsv := filteredGenesResults.output("filteredGenesNormalizedCountsCsv")
+
+	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
+	filteredRawCountsPf := xsv.importFile(filteredGenesCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
+
+	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
+	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
+
 	geneAsset := geneMap.getGeneAsset(species)
 	geneAssetName := geneMap.getAssetName(species)
-
-	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
 
 	geneSymbols := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:map-genes")).
 		mem("16GiB").
 		cpu(1).
 		addAsset(geneAsset, ".", string(geneAssetName)).
-		addFile("rawCounts.csv", csvCounts).
+		addFile("rawCounts.csv", filteredGenesCountsCsv).
 		arg("--raw_counts").arg("rawCounts.csv").
 		arg("--annotation").arg(string(geneAssetName)).
 		arg("--output").arg("geneSymbols.csv").
@@ -335,7 +398,7 @@ wf.body(func(args) {
 		cellRangerProgress: cellRangerResults.output("cellRangerLog"),
 		cellRangerReport: cellRangerResults.output("cellRangerReport"),
 		// alignedBAM: cellRangerResults.output("alignedBAM"),
-		rawCountsPf: pframes.exportFrame(rawCountsPf),
+		rawCountsPf: pframes.exportFrame(filteredRawCountsPf),
 		cellMetricsPf: pframes.exportFrame(cellMetricsPf),
 		summaryContent: cellRangerResults.output("summaryContent")
 	}
@@ -386,7 +449,7 @@ wf.body(func(args) {
 					}
 					]
 			}),
-			data: cellRangerResults.output("rawCounts")
+			data: filteredRawCountsPf["rawCounts.data"]
 	 	},
 		normCount : {
 			spec: trace.inject({
@@ -428,7 +491,7 @@ wf.body(func(args) {
 					}
 					]
 			}),
-			data: cellRangerResults.output("normCounts")
+			data: filteredNormCountsPf["normCounts.data"]
 		},
 		geneSymbols: {
 			spec: geneSymbolsPf["geneSymbol.spec"],

@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cellranger.software",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "scripts": {
     "build": "pl-pkg build",
     "prepublishOnly": "pl-pkg publish packages",
@@ -72,7 +72,7 @@
           ]
         }
       },
-      "filter-counts": {
+      "filter-cells": {
         "binary": {
           "artifact": {
             "type": "python",
@@ -82,11 +82,29 @@
               "toolset": "pip",
               "requirements": "requirements.txt"
             },
-            "root": "./src/filter-counts"
+            "root": "./src/filter-cells"
           },
           "cmd": [
             "python",
-            "{pkg}/filter_counts.py"
+            "{pkg}/filter_cells.py"
+          ]
+        }
+      },
+      "filter-genes": {
+        "binary": {
+          "artifact": {
+            "type": "python",
+            "registry": "platforma-open",
+            "environment": "@platforma-open/milaboratories.runenv-python-3:3.12.10",
+            "dependencies": {
+              "toolset": "pip",
+              "requirements": "requirements.txt"
+            },
+            "root": "./src/filter-genes"
+          },
+          "cmd": [
+            "python",
+            "{pkg}/filter_genes.py"
           ]
         }
       }
