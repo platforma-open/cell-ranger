@@ -52,7 +52,8 @@ self.body(func(inputs) {
 		addAsset(genomeAssets, "genomeIndex", "reference.json").
 		arg("count").
 		arg("--transcriptome=genomeIndex").
-		arg("--fastqs=fastqs")
+		arg("--fastqs=fastqs").
+		enableMnz(productKey)
 
 	if inputDataMeta.keyLength == 1 {
 		for sKey, inputFile in inputData.inputs() {
@@ -108,7 +109,6 @@ self.body(func(inputs) {
 		saveFile("sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
 		saveFile("./sample/outs/possorted_genome_bam.bam").
 		saveFileContent("./sample/outs/metrics_summary.csv").
-		enableMnz(productKey).
 		printErrStreamToStdout().
 		saveStdoutContent().
 		cache(24 * 60 * 60 * 1000).
