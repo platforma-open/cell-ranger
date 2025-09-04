@@ -13,7 +13,7 @@ catalog:
   "@platforma-sdk/block-tools": ^2.5.92
   "@platforma-sdk/test": ^1.42.42
   "@platforma-sdk/tengo-builder": ^2.1.17
-  "@platforma-sdk/package-builder": ^3.0.2
+  "@platforma-sdk/package-builder": ^3.2.4
   "@milaboratories/graph-maker": ^1.1.153
 
   "@milaboratories/software-pframes-conv": ^2.2.2
