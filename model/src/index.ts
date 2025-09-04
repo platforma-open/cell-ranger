@@ -33,12 +33,24 @@ export type BlockArgs = {
    * Block title
    */
   title?: string;
+
+  /**
+   * Product key
+   */
+  productKey: string;
+
+  /**
+   * Monetization date
+   */
+  __mnzDate: string;
 };
 
 export const model = BlockModel.create()
 
   .withArgs<BlockArgs>({
     species: 'homo-sapiens',
+    productKey: 'PRODUCT:UIRIKGJJYMXREJCJGKUHTWAMOSVESOOTXFDCZWRGARGHNWVM',
+    __mnzDate: new Date().toISOString(),
   })
 
   .withUiState<UiState>({
@@ -178,6 +190,11 @@ export const model = BlockModel.create()
       (acc) => acc.getDataAsString(),
       false,
     );
+  })
+
+  /** Monetization status */
+  .output('__mnzInfo', (wf) => {
+    return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
   })
 
   /**
