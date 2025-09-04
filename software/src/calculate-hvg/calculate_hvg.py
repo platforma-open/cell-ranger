@@ -7,6 +7,7 @@ import scanpy as sc
 import numpy as np
 import os
 import argparse
+import pyarrow
 
 def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output_path, normalized_output_path, max_rows=8000000, max_genes_cap=10000):
     """

@@ -23,6 +23,7 @@ filteredCountsConv := import(":filtered-counts-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 filterGenesTpl := assets.importTemplate(":filter-genes")
+hvgTpl := assets.importTemplate(":calculate-hvg")
 
 wf.prepare(func(args){
 	return{
@@ -359,6 +360,7 @@ wf.body(func(args) {
 	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
 	csvCountsNormalized := xsv.exportFrame(normCountsPf, "csv", { mem: "16GiB", cpu: 1 })
 
+	//// Filter genes
 	filteredGenesResults := render.create(filterGenesTpl, {
 		csvCounts: csvCounts,
 		normCounts: csvCountsNormalized
@@ -373,16 +375,19 @@ wf.body(func(args) {
 	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
 	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
-	// hvgResults := render.create(hvgTpl, {
-	// 	csvCounts: filteredGenesCountsCsv,
-	// 	normCounts: filteredGenesNormalizedCountsCsv
-	// })
+	//// Highly Variable Genes calculation
+	hvgResults := render.create(hvgTpl, {
+		csvCounts: filteredGenesCountsCsv,
+		normCounts: filteredGenesNormalizedCountsCsv
+	})
 
-	// hvgCountsCsv := hvgResults.output("hvgCountsCsv")
-	// hvgNormalizedCountsCsv := hvgResults.output("hvgNormalizedCountsCsv")
+	hvgCountsCsv := hvgResults.output("hvgCountsCsv")
+	hvgNormalizedCountsCsv := hvgResults.output("hvgNormalizedCountsCsv")
 
-	// convertir a pFrames
-	// specs same as filteredRawCountsPf and filteredNormCountsPf
+	// Convert to pFrames
+	hvgCountsPf := xsv.importFile(hvgCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
+	hvgNormCountsPf := xsv.importFile(hvgNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
+
 	// both filteredRawCountsPf and filteredNormCountsPf and hvgRawCountsPf and hvgnormPf should be exported
 	// filteredRawCountsPf and filteredNormCountsPf should include annotation "pl7.app/hideDataFromGraphs": "true"
 
@@ -433,7 +438,8 @@ wf.body(func(args) {
 				},
 				valueType: "Double",
 				annotations: {
-					"pl7.app/label": "Raw gene expression"
+					"pl7.app/label": "Raw gene expression",
+					"pl7.app/hideDataFromGraphs": "true"
 				},
 				axesSpec: [
 					inputSpec.axesSpec[0],
@@ -475,7 +481,8 @@ wf.body(func(args) {
 				},
 				valueType: "Double",
 				annotations: {
-					"pl7.app/label": "Normalized gene expression"
+					"pl7.app/label": "Normalized gene expression",
+					"pl7.app/hideDataFromGraphs": "true"
 				},
 				axesSpec: [
 					inputSpec.axesSpec[0],
@@ -505,6 +512,90 @@ wf.body(func(args) {
 					]
 			}),
 			data: filteredNormCountsPf["normCounts.data"]
+		},
+		rawHvgCount : {
+			spec: trace.inject({
+				kind: "PColumn",
+				name: "pl7.app/rna-seq/countMatrix",
+				domain: {
+					"pl7.app/blockId": blockId,
+					"pl7.app/species": species,
+					"pl7.app/rna-seq/normalized": "false"
+				},
+				valueType: "Double",
+				annotations: {
+					"pl7.app/label": "Raw gene expression"
+				},
+				axesSpec: [
+					inputSpec.axesSpec[0],
+					{
+						"name": "pl7.app/sc/cellId",
+						"type": "String",
+						"annotations": {
+							"pl7.app/label": "Cell ID",
+							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
+							"pl7.app/table/fontFamily": "monospace",
+							"pl7.app/table/orderPriority": "110000",
+							"pl7.app/table/visibility": "default"
+						}
+					},
+					{
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id",
+							"pl7.app/graph/axis/highCardinality": "true"
+
+						}
+					}
+					]
+			}),
+			data: hvgCountsPf["rawCounts.data"]
+	 	},
+		normHvgCount : {
+			spec: trace.inject({
+				kind: "PColumn",
+				name: "pl7.app/rna-seq/countMatrix",
+				domain: {
+					"pl7.app/blockId": blockId,
+					"pl7.app/species": species,
+					"pl7.app/rna-seq/normalized": "true"
+				},
+				valueType: "Double",
+				annotations: {
+					"pl7.app/label": "Normalized gene expression"
+				},
+				axesSpec: [
+					inputSpec.axesSpec[0],
+					{
+						"name": "pl7.app/sc/cellId",
+						"type": "String",
+						"annotations": {
+							"pl7.app/label": "Cell ID",
+							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
+							"pl7.app/table/fontFamily": "monospace",
+							"pl7.app/table/orderPriority": "110000",
+							"pl7.app/table/visibility": "default"
+						}
+					},
+					{
+						"name": "pl7.app/rna-seq/geneId",
+						"type": "String",
+						"domain": {
+							"pl7.app/species": species
+						},
+						"annotations": {
+							"pl7.app/label": "Ensembl Id",
+							"pl7.app/graph/axis/highCardinality": "true"
+
+						}
+					}
+					]
+			}),
+			data: hvgNormCountsPf["normCounts.data"]
 		},
 		// with correct specs
 		// hvgRawCountsPf: {
