@@ -49,7 +49,7 @@ export const model = BlockModel.create()
 
   .withArgs<BlockArgs>({
     species: 'homo-sapiens',
-    productKey: 'PRODUCT:UIRIKGJJYMXREJCJGKUHTWAMOSVESOOTXFDCZWRGARGHNWVM',
+    productKey: 'PRODUCT:TLFQEAHFWNBDVMJNMQODHRAGVTALSENSJASIPNQGHQJHYPHY',
     __mnzDate: new Date().toISOString(),
   })
 
