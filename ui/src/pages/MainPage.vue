@@ -30,10 +30,12 @@ const app = useApp();
 
 const data = reactive<{
   settingsOpen: boolean;
+  mnzOpen: boolean;
   sampleReportOpen: boolean;
   selectedSample: string | undefined;
 }>({
   settingsOpen: app.model.args.ref === undefined,
+  mnzOpen: false,
   sampleReportOpen: false,
   selectedSample: undefined,
 });
@@ -232,5 +234,11 @@ const gridOptions: GridOptions<Row> = {
       }}
     </template>
     <ReportPanel v-model="data.selectedSample" />
+  </PlSlideModal>
+
+  <PlSlideModal v-model="data.mnzOpen">
+    <template #title>
+      Subscription Status
+    </template>
   </PlSlideModal>
 </template>

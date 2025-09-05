@@ -21,6 +21,8 @@ pfSymbolsConv := import(":pf-symbols-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 
+wf.setPreRun(assets.importTemplate(":pre-run"))
+
 wf.prepare(func(args){
 	return{
 		resolvedInput: wf.resolve(args.ref, { errIfMissing: true })
