@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.5.0
+
+### Minor Changes
+
+- f51ff02: Added subscription for cell ranger software
+
+### Patch Changes
+
+- Updated dependencies [f51ff02]
+  - @platforma-open/milaboratories.cell-ranger.model@1.8.0
+
 ## 1.4.0
 
 ### Minor Changes
