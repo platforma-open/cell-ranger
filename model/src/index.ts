@@ -39,6 +39,8 @@ export type BlockArgs = {
    */
   productKey: string;
 
+  __mnzCanRun: boolean;
+
   /**
    * Monetization date
    */
@@ -51,6 +53,7 @@ export const model = BlockModel.create()
     species: 'homo-sapiens',
     productKey: 'PRODUCT:TLFQEAHFWNBDVMJNMQODHRAGVTALSENSJASIPNQGHQJHYPHY',
     __mnzDate: new Date().toISOString(),
+    __mnzCanRun: false,
   })
 
   .withUiState<UiState>({
@@ -65,6 +68,7 @@ export const model = BlockModel.create()
     },
   })
 
+  .argsValid((ctx) => ctx.args.ref !== undefined && ctx.args.__mnzCanRun)
   /**
    * Find possible options for the fastq input
    */
