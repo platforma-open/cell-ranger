@@ -173,8 +173,8 @@ self.body(func(inputs) {
 	metricsCsvParams := pfMetricsConv.getColumns(blockId, species)
 	cellMetricsImport := xsv.importFile(cellMetricsCsv.getFile("cell_metrics.csv"), "csv", metricsCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 
-	filteredCountsCsv := exec.builder().
-		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-counts")).
+	filteredCellsCountsCsv := exec.builder().
+		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-cells")).
 		mem("16GiB").
 		cpu(1).
 		addFile("rawCounts.csv", rawCounts).
@@ -194,15 +194,15 @@ self.body(func(inputs) {
 
 
 	countCsvParams := pfCountsConv.getColumns(blockId, species)
-	countMatrixImport := xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	countMatrixImport := xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 
 	normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
-	normCountMatrixImport := xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	normCountMatrixImport := xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 	// countCsvParams = pfCountsConv.getColumns(blockId, species)
-	// countMatrixImport = xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	// countMatrixImport = xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 
 	// normCountCsvParams = pfNormCountsConv.getColumns(blockId, species)
-	// normCountMatrixImport = xsv.importFile(filteredCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
+	// normCountMatrixImport = xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
 	
 	output := {
 		cellRangerLog: cellRangerLog,

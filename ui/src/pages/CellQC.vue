@@ -23,8 +23,8 @@ function getDefaultOptions(cellMetricsPfDefaults?: PColumnIdAndSpec[]) {
     },
     {
       inputName: 'primaryGrouping',
-      selectedSource: cellMetricsPfDefaults[getIndex('pl7.app/label',
-        cellMetricsPfDefaults)].spec,
+      selectedSource: cellMetricsPfDefaults[getIndex('pl7.app/rna-seq/totalCounts',
+        cellMetricsPfDefaults)].spec.axesSpec[0],
     },
   ];
 
