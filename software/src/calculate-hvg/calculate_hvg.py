@@ -9,7 +9,7 @@ import os
 import argparse
 import pyarrow
 
-def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output_path, normalized_output_path, max_rows=8000000, max_genes_cap=10000):
+def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output_path, normalized_output_path, max_rows=5000000, max_genes_cap=10000):
     """
     Selects highly variable genes (HVGs) from single-cell count matrices using Polars.
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
                         help='Path to save the filtered raw counts output CSV file.')
     parser.add_argument('--output_normalized', type=str, required=True,
                         help='Path to save the filtered normalized counts output CSV file.')
-    parser.add_argument('--max_rows', type=int, default=8000000, 
+    parser.add_argument('--max_rows', type=int, default=5000000, 
                         help='The target maximum number of rows for the output CSV.')
     parser.add_argument('--max_genes_cap', type=int, default=10000, 
                         help='A safeguard cap on the number of genes to select.')
