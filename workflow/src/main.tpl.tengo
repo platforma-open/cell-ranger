@@ -21,7 +21,7 @@ pfSymbolsConv := import(":pf-symbols-conv")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 
-wf.setPreRun(assets.importTemplate(":pre-run"))
+// wf.setPreRun(assets.importTemplate(":pre-run"))
 
 wf.prepare(func(args){
 	return{
