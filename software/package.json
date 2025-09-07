@@ -124,17 +124,6 @@
             "python",
             "{pkg}/calculate_hvg.py"
           ]
-        },
-        "docker": {
-          "artifact": {
-            "type": "docker",
-            "context": "./src/calculate-hvg",
-            "dockerfile": "./src/calculate-hvg/Dockerfile"
-          },
-          "cmd": [
-            "python",
-            "{pkg}/calculate_hvg.py"
-          ]
         }
       }
     }
