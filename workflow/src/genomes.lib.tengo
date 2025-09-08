@@ -27,38 +27,33 @@ getSpeciesName := func(species){
 }
 
 getGenomeAsset := func(species) {
-	yeastAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:saccharomyces-cerevisiae")
-	humanAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:homo-sapiens")
-	mouseAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:mus-musculus")
-	ratAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:rattus-norvegicus")
-	zebrafishAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:danio-rerio")
-	fruitFlyAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:drosophila-melanogaster")
-	arabidopsisAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:arabidopsis-thaliana")
-	nematodeAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:caenorhabditis-elegans")
-	chickenAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:gallus-gallus")
-	cowAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:bos-taurus")
-	pigAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:sus-scrofa")
-	testAssets := assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:test-species")
-
-	GenomeAssetsMap := ll.toStrict({
-		"saccharomyces-cerevisiae": yeastAssets,
-		"homo-sapiens": humanAssets,
-		"mus-musculus": mouseAssets,
-		"rattus-norvegicus": ratAssets,
-		"danio-rerio": zebrafishAssets,
-		"drosophila-melanogaster": fruitFlyAssets,
-		"arabidopsis-thaliana": arabidopsisAssets,
-		"caenorhabditis-elegans": nematodeAssets,
-		"gallus-gallus": chickenAssets,
-		"bos-taurus": cowAssets,
-		"sus_scrofa": pigAssets,
-		"test-species": testAssets
-	})
-
-	genomeAssets := GenomeAssetsMap[species]
-
-	return genomeAssets
-
+	if species == "saccharomyces-cerevisiae" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:saccharomyces-cerevisiae")
+	} else if species == "homo-sapiens" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:homo-sapiens")
+	} else if species == "mus-musculus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:mus-musculus")
+	} else if species == "rattus-norvegicus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:rattus-norvegicus")
+	} else if species == "danio-rerio" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:danio-rerio")
+	} else if species == "drosophila-melanogaster" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:drosophila-melanogaster")
+	} else if species == "arabidopsis-thaliana" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:arabidopsis-thaliana")
+	} else if species == "caenorhabditis-elegans" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:caenorhabditis-elegans")
+	} else if species == "gallus-gallus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:gallus-gallus")
+	} else if species == "bos-taurus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:bos-taurus")
+	} else if species == "sus-scrofa" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:sus-scrofa")
+	} else if species == "test-species" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:test-species")
+	} else {
+		return undefined
+	}
 }
 
 export ll.toStrict({

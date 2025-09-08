@@ -26,35 +26,31 @@ getAssetName := func(species){
 }
 
 getGeneAsset := func(species) {
-	arabidopsisThalianaAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:arabidopsis-thaliana")
-	bosTaurusAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:bos-taurus")
-	caenorhabditisElegansAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:caenorhabditis-elegans")
-	danioRerioAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:danio-rerio")
-	drosophilaMelanogasterAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:drosophila-melanogaster")
-	gallusGallusAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:gallus-gallus")
-	homoSapiensAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:homo-sapiens")
-	musMusculusAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:mus-musculus")
-	rattusNorvegicusAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:rattus-norvegicus")
-	saccharomycesCerevisiaeAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:saccharomyces-cerevisiae")
-	susScrofaAsset := assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:sus-scrofa")
-
-	GeneAssetsMap := ll.toStrict({
-		"arabidopsis-thaliana": arabidopsisThalianaAsset,
-		"bos-taurus": bosTaurusAsset,
-		"caenorhabditis-elegans": caenorhabditisElegansAsset,
-		"danio-rerio": danioRerioAsset,
-		"drosophila-melanogaster": drosophilaMelanogasterAsset,
-		"gallus-gallus": gallusGallusAsset,
-		"homo-sapiens": homoSapiensAsset,
-		"mus-musculus": musMusculusAsset,
-		"rattus-norvegicus": rattusNorvegicusAsset,
-		"saccharomyces-cerevisiae": saccharomycesCerevisiaeAsset,
-		"sus-scrofa": susScrofaAsset
-	})
-
-	geneAsset := GeneAssetsMap[species]
-
-	return geneAsset
+	if species == "arabidopsis-thaliana" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:arabidopsis-thaliana")
+	} else if species == "bos-taurus" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:bos-taurus")
+	} else if species == "caenorhabditis-elegans" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:caenorhabditis-elegans")
+	} else if species == "danio-rerio" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:danio-rerio")
+	} else if species == "drosophila-melanogaster" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:drosophila-melanogaster")
+	} else if species == "gallus-gallus" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:gallus-gallus")
+	} else if species == "homo-sapiens" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:homo-sapiens")
+	} else if species == "mus-musculus" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:mus-musculus")
+	} else if species == "rattus-norvegicus" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:rattus-norvegicus")
+	} else if species == "saccharomyces-cerevisiae" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:saccharomyces-cerevisiae")
+	} else if species == "sus-scrofa" {
+		return assets.importAsset("@platforma-open/milaboratories.gene-annotations-assets:sus-scrofa")
+	} else {
+		return undefined
+	}
 }
 
 export ll.toStrict({
