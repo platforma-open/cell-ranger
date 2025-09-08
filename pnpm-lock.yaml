@@ -42,6 +42,9 @@ catalogs:
     '@platforma-sdk/model':
       specifier: ^1.42.36
       version: 1.42.36
+    '@platforma-sdk/package-builder':
+      specifier: ^2.16.4
+      version: 2.16.4
     '@platforma-sdk/tengo-builder':
       specifier: ^2.1.17
       version: 2.1.17
@@ -149,7 +152,7 @@ importers:
         specifier: 'catalog:'
         version: 1.4.4
       '@platforma-sdk/package-builder':
-        specifier: 2.16.4
+        specifier: 'catalog:'
         version: 2.16.4
 
   test:
