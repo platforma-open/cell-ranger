@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.14.1
+
+### Patch Changes
+
+- 814aa94: comment subscription
+
 ## 1.14.0
 
 ### Minor Changes

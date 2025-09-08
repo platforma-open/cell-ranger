@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.8.1
+
+### Patch Changes
+
+- 814aa94: comment subscription
+
 ## 1.8.0
 
 ### Minor Changes
