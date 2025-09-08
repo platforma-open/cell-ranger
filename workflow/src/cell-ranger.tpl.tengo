@@ -90,7 +90,7 @@ self.body(func(inputs) {
 
 	cellRanger = cellRanger.
 		// arg("--sample=input_").
-		// arg("--create-bam=true").
+		arg("--create-bam=false").
 		arg("--id=sample").
 		argWithVar("--localcores={system.cpu}").
 		argWithVar("--localmem={system.ram.gb}").
