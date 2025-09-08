@@ -52,8 +52,8 @@ self.body(func(inputs) {
 		addAsset(genomeAssets, "genomeIndex", "reference.json").
 		arg("count").
 		arg("--transcriptome=genomeIndex").
-		arg("--fastqs=fastqs").
-		enableMnz(productKey)
+		arg("--fastqs=fastqs")
+		// enableMnz(productKey)
 
 	if inputDataMeta.keyLength == 1 {
 		for sKey, inputFile in inputData.inputs() {
@@ -66,12 +66,14 @@ self.body(func(inputs) {
 				ll.panic("malformed read index: %v", r)
 			}
 			fileName := "input_S1_L001" + "_" + r + "_001." + fileExtension
-			cellRanger.addFile(path.join("fastqs",fileName), inputFile, {
-				mnz: {
-					arg: "main_input",
-					metrics: ["sha256", "size"] // track usage
-				}
-			})
+			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
+			// , {
+			// 	mnz: {
+			// 		arg: "main_input",
+			// 		metrics: ["sha256", "size"] // track usage
+			// 	}
+			// }
+			// )
 		}
 	} else if inputDataMeta.keyLength == 2 {
 		for sKey, inputFile in inputData.inputs() {
@@ -88,12 +90,14 @@ self.body(func(inputs) {
 				ll.panic("malformed lane: %v", lane)
 			}
 			fileName := "input_S1_L" + lane + "_" + r + "_001." + fileExtension
-			cellRanger.addFile(path.join("fastqs",fileName), inputFile, {
-				mnz: {
-					arg: "main_input",
-					metrics: ["sha256", "size"] // track usage
-				}
-			})
+			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
+			// , {
+			// 	mnz: {
+			// 		arg: "main_input",
+			// 		metrics: ["sha256", "size"] // track usage
+			// 	}
+			// }
+			// )
 		}
 	}
 	
