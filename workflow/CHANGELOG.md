@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.14.0
+
+### Minor Changes
+
+- a5c6c70: Improved gene filtering and compatibility with cell browser visualizations
+
+### Patch Changes
+
+- Updated dependencies [a5c6c70]
+  - @platforma-open/milaboratories.cellranger.software@1.13.0
+
 ## 1.13.0
 
 ### Minor Changes

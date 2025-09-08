@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.6.0
+
+### Minor Changes
+
+- a5c6c70: Improved gene filtering and compatibility with cell browser visualizations
+
 ## 1.5.0
 
 ### Minor Changes
