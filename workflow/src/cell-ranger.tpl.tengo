@@ -4,11 +4,9 @@ json := import("json")
 path := import("@platforma-sdk/workflow-tengo:path")
 
 ll := import("@platforma-sdk/workflow-tengo:ll")
-xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
 exec := import("@platforma-sdk/workflow-tengo:exec")
 file := import("@platforma-sdk/workflow-tengo:file")
 assets := import("@platforma-sdk/workflow-tengo:assets")
-pframes := import("@platforma-sdk/workflow-tengo:pframes")
 maps := import("@platforma-sdk/workflow-tengo:maps")
 pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
 
@@ -16,19 +14,14 @@ pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
 productKey := import(":product-key")
 
 genomes := import(":genomes")
-pfCountsConv := import(":pf-counts-conv")
-pfNormCountsConv := import(":pf-norm-counts-conv")
-pfMetricsConv := import(":pf-metrics-conv")
-
 
 self.defineOutputs(
 	"cellRangerLog",
 	"cellRangerReport",
-	// "alignedBAM",
-	"countMatrixImport",
-	"normCountMatrixImport",
-	"cellMetricsImport",
-	"summaryContent"
+	"summaryContent",
+	"rawCountsCsv",
+	"normCountsCsv",
+	"cellMetricsCsv"
 )
 
 
@@ -173,9 +166,6 @@ self.body(func(inputs) {
 		printErrStreamToStdout().
 		run()
 
-	metricsCsvParams := pfMetricsConv.getColumns(blockId, species)
-	cellMetricsImport := xsv.importFile(cellMetricsCsv.getFile("cell_metrics.csv"), "csv", metricsCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
-
 	filteredCellsCountsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-cells")).
 		mem("16GiB").
@@ -193,26 +183,13 @@ self.body(func(inputs) {
 		printErrStreamToStdout().
 		run()
 
-
-	countCsvParams := pfCountsConv.getColumns(blockId, species)
-	countMatrixImport := xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
-
-	normCountCsvParams := pfNormCountsConv.getColumns(blockId, species)
-	normCountMatrixImport := xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
-	// countCsvParams = pfCountsConv.getColumns(blockId, species)
-	// countMatrixImport = xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"), "csv", countCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
-
-	// normCountCsvParams = pfNormCountsConv.getColumns(blockId, species)
-	// normCountMatrixImport = xsv.importFile(filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"), "csv", normCountCsvParams, { dataOnly: true, mem: defaultConvMem, cpu: defaultConvCpu })
-
 	output := {
 		cellRangerLog: cellRangerLog,
 		cellRangerReport: file.exportFile(cellRangerReport),
-		// alignedBAM: bamFile,
-		countMatrixImport: countMatrixImport,
-		normCountMatrixImport: normCountMatrixImport,
-		cellMetricsImport: cellMetricsImport,
-		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv")
+		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv"),
+		rawCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"),
+		normCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"),
+		cellMetricsCsv: cellMetricsCsv.getFile("cell_metrics.csv")
 	}
 
 	return output

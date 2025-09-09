@@ -24,12 +24,14 @@ getColumns := func(blockId, species) {
         "id": "totalCounts",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/cellMetricTotalCounts",
+          "name": "pl7.app/rna-seq/totalCounts",
           "valueType": "Double",
-          "domain": {},
+          "domain": {
+            "pl7.app/blockId": blockId
+          },
           "annotations": {
             "pl7.app/label": "Total counts",
-            "pl7.app/table/hValue": "true"
+				    "pl7.app/table/hValue": "true"
           }
         }
       },
@@ -38,12 +40,14 @@ getColumns := func(blockId, species) {
         "id": "nGenesByCounts",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/cellMetricNGenesByCounts",
+          "name": "pl7.app/rna-seq/nGenesByCounts",
           "valueType": "Double",
-          "domain": {},
+          "domain": {
+            "pl7.app/blockId": blockId
+          },
           "annotations": {
             "pl7.app/label": "N genes detected",
-            "pl7.app/table/hValue": "true"
+				    "pl7.app/table/hValue": "true"
           }
         }
       },
@@ -52,9 +56,11 @@ getColumns := func(blockId, species) {
         "id": "pctCountsMt",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/cellMetricPctCountsMt",
+          "name": "pl7.app/rna-seq/pctCountsMt",
           "valueType": "Double",
-          "domain": {},
+          "domain": {
+            "pl7.app/blockId": blockId
+          },
           "annotations": {
             "pl7.app/label": "Percentage mitochondrial genes",
             "pl7.app/table/hValue": "true"
@@ -66,11 +72,13 @@ getColumns := func(blockId, species) {
         "id": "complexity",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/cellMetricComplexity",
+          "name": "pl7.app/rna-seq/complexity",
           "valueType": "Double",
-          "domain": {},
+          "domain": {
+            "pl7.app/blockId": blockId
+          },
           "annotations": {
-            "pl7.app/label": "Gene expression complexity",
+            "pl7.app/label": "Complexity",
             "pl7.app/table/hValue": "true"
           }
         }
@@ -80,9 +88,11 @@ getColumns := func(blockId, species) {
         "id": "pctCountsInTop20Genes",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/cellMetricPctCountsInTop20Genes",
+          "name": "pl7.app/rna-seq/pctCountsInTop20Genes",
           "valueType": "Double",
-          "domain": {},
+          "domain": {
+            "pl7.app/blockId": blockId
+          },
           "annotations": {
             "pl7.app/label": "Percentage counts in top 20 genes",
             "pl7.app/table/hValue": "true"
