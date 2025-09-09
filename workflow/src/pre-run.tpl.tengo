@@ -1,0 +1,18 @@
+self := import("@platforma-sdk/workflow-tengo:workflow")
+monetization := import("@platforma-sdk/workflow-tengo:exec.monetization")
+ll := import("@platforma-sdk/workflow-tengo:ll")
+file := import("@platforma-sdk/workflow-tengo:file")
+
+
+self.body(func(args) {
+	mnz := monetization.builder(args.productKey).
+		setDate(args.__mnzDate).
+		build()
+
+	return {
+		outputs: {
+			mnzInfo: mnz
+			},
+		exports: {}
+	}
+})

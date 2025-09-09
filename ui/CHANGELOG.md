@@ -1,5 +1,30 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.6.1
+
+### Patch Changes
+
+- 814aa94: comment subscription
+- Updated dependencies [814aa94]
+  - @platforma-open/milaboratories.cell-ranger.model@1.8.1
+
+## 1.6.0
+
+### Minor Changes
+
+- a5c6c70: Improved gene filtering and compatibility with cell browser visualizations
+
+## 1.5.0
+
+### Minor Changes
+
+- f51ff02: Added subscription for cell ranger software
+
+### Patch Changes
+
+- Updated dependencies [f51ff02]
+  - @platforma-open/milaboratories.cell-ranger.model@1.8.0
+
 ## 1.4.0
 
 ### Minor Changes

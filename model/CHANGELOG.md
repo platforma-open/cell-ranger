@@ -1,5 +1,17 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.8.1
+
+### Patch Changes
+
+- 814aa94: comment subscription
+
+## 1.8.0
+
+### Minor Changes
+
+- f51ff02: Added subscription for cell ranger software
+
 ## 1.7.0
 
 ### Minor Changes

@@ -12,6 +12,9 @@ pframes := import("@platforma-sdk/workflow-tengo:pframes")
 maps := import("@platforma-sdk/workflow-tengo:maps")
 pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
 
+// Import product key
+productKey := import(":product-key")
+
 genomes := import(":genomes")
 pfCountsConv := import(":pf-counts-conv")
 pfNormCountsConv := import(":pf-norm-counts-conv")
@@ -51,6 +54,7 @@ self.body(func(inputs) {
 		arg("count").
 		arg("--transcriptome=genomeIndex").
 		arg("--fastqs=fastqs")
+		// enableMnz(productKey)
 
 	inputMap := inputData.inputs()
 
@@ -67,6 +71,13 @@ self.body(func(inputs) {
 			}
 			fileName := "input_S1_L001" + "_" + r + "_001." + fileExtension
 			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
+			// , {
+			// 	mnz: {
+			// 		arg: "main_input",
+			// 		metrics: ["sha256", "size"] // track usage
+			// 	}
+			// }
+			// )
 		}
 	} else if inputDataMeta.keyLength == 2 {
 		for sKey in maps.getKeys(inputMap) {
@@ -85,6 +96,13 @@ self.body(func(inputs) {
 			}
 			fileName := "input_S1_L" + lane + "_" + r + "_001." + fileExtension
 			cellRanger.addFile(path.join("fastqs",fileName), inputFile)
+			// , {
+			// 	mnz: {
+			// 		arg: "main_input",
+			// 		metrics: ["sha256", "size"] // track usage
+			// 	}
+			// }
+			// )
 		}
 	}
 

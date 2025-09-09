@@ -25,6 +25,8 @@ cellRangerTpl := assets.importTemplate(":cell-ranger")
 filterGenesTpl := assets.importTemplate(":filter-genes")
 hvgTpl := assets.importTemplate(":calculate-hvg")
 
+// wf.setPreRun(assets.importTemplate(":pre-run"))
+
 wf.prepare(func(args){
 	return{
 		resolvedInput: wf.resolve(args.ref, { errIfMissing: true })

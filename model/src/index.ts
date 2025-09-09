@@ -33,12 +33,27 @@ export type BlockArgs = {
    * Block title
    */
   title?: string;
+
+  // /**
+  //  * Product key
+  //  */
+  // productKey: string;
+
+  // __mnzCanRun: boolean;
+
+  // /**
+  //  * Monetization date
+  //  */
+  // __mnzDate: string;
 };
 
 export const model = BlockModel.create()
 
   .withArgs<BlockArgs>({
     species: 'homo-sapiens',
+  //   productKey: 'PRODUCT:TLFQEAHFWNBDVMJNMQODHRAGVTALSENSJASIPNQGHQJHYPHY',
+  //   __mnzDate: new Date().toISOString(),
+  //   __mnzCanRun: false,
   })
 
   .withUiState<UiState>({
@@ -53,6 +68,8 @@ export const model = BlockModel.create()
     },
   })
 
+  .argsValid((ctx) => ctx.args.ref !== undefined)
+  // && ctx.args.__mnzCanRun)
   /**
    * Find possible options for the fastq input
    */
@@ -179,6 +196,11 @@ export const model = BlockModel.create()
       false,
     );
   })
+
+  // /** Monetization status */
+  // .output('__mnzInfo', (wf) => {
+  //   return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
+  // })
 
   /**
    * Returns true if the block is currently in "running" state
