@@ -151,22 +151,26 @@ wf.body(func(args) {
 		summaryContent: cellRangerResults.outputData("summaryContent")
 	}
 
+	trace := pSpec.makeTrace(inputSpec,
+		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
+	)
+
 	// Count matrix export defined with sample from inputSpec + previous specs
 	exports := {
 		rawCount : {
-			spec: exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
 			data: filteredRawCountsPf["rawCounts.data"]
 	 	},
 		normCount : {
-			spec: exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
 			data: filteredNormCountsPf["normCounts.data"]
 		},
 		rawHvgCount : {
-			spec: exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
 			data: hvgCountsPf["rawCounts.data"]
 	 	},
 		normHvgCount : {
-			spec: exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
 			data: hvgNormCountsPf["normCounts.data"]
 		},
 		// with correct specs
