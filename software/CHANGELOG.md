@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.14.0
+
+### Minor Changes
+
+- 4060d7d: Refactor block and increase afficiency
+
 ## 1.13.0
 
 ### Minor Changes

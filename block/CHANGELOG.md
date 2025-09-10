@@ -1,5 +1,17 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.5.0
+
+### Minor Changes
+
+- 4060d7d: Refactor block and increase afficiency
+
+### Patch Changes
+
+- Updated dependencies [4060d7d]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.15.0
+  - @platforma-open/milaboratories.cell-ranger.ui@1.7.0
+
 ## 1.4.2
 
 ### Patch Changes
