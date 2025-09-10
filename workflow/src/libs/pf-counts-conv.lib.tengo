@@ -3,7 +3,7 @@ json := import("json")
 
 getColumns := func(blockId, species) {
   return {
-    "axes": [
+    axes: [
       {
         "column": "CellId",
         "spec": {
@@ -27,24 +27,25 @@ getColumns := func(blockId, species) {
 						},
 						"annotations": {
 							"pl7.app/label": "Ensembl Id",
-              "pl7.app/table/visibility": "optional"
+              "pl7.app/graph/axis/highCardinality": "true"
 						}
 					}
       }  
       ],
-    "columns": [{
+    columns: [{
         "column": "Count",
         "id": "rawCounts",
         "allowNA": true,
         "spec": {
-          "name": "pl7.app/rna-seq/rawCount",
+          "name": "pl7.app/rna-seq/countMatrix",
           "valueType": "Double",
           "domain": {
+            "pl7.app/blockId": blockId,
+            "pl7.app/species": species,
             "pl7.app/rna-seq/normalized": "false"
           },
           "annotations": {
-            "pl7.app/label": "Raw counts",
-            "pl7.app/table/hValue": "true"
+            "pl7.app/label": "Raw gene expression"
           }
         }
       }

@@ -8,6 +8,7 @@ import numpy as np
 import os
 import argparse
 import pyarrow
+from scipy.sparse import coo_matrix
 
 def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output_path, normalized_output_path, max_rows=5000000, max_genes_cap=10000):
     """
@@ -50,38 +51,52 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
         print(f"Error: Normalized input CSV must contain at least: {list(required_norm_cols)}")
         return
 
-    print("Step 2: Pivoting raw data and preparing for HVG analysis...")
-    # Pivot the long-format DataFrame into a gene-by-cell matrix using Polars
-    df_pivoted_pl = df_pl.pivot(
-        index='Ensembl Id', 
-        columns='Cell ID', 
-        values='Raw gene expression', 
-        aggregate_function="first"
-    ).fill_null(0)
+    print("Step 2: Creating a sparse matrix and preparing for HVG analysis...")
+
+    # Get unique cell and gene IDs to define the dimensions of our matrix
+    cell_ids = df_pl.get_column('Cell ID').unique().to_list()
+    gene_ids = df_pl.get_column('Ensembl Id').unique().to_list()
+
+    # Create mapping DataFrames from IDs to integer indices
+    cell_map_df = pl.DataFrame({'Cell ID': cell_ids, 'row_idx': np.arange(len(cell_ids))})
+    gene_map_df = pl.DataFrame({'Ensembl Id': gene_ids, 'col_idx': np.arange(len(gene_ids))})
+
+    # Join the mapping DataFrames onto the original DataFrame to get indices
+    df_with_indices = df_pl.join(cell_map_df, on='Cell ID', how='left').join(gene_map_df, on='Ensembl Id', how='left')
     
-    # Convert Polars DataFrame to Pandas DataFrame for compatibility with AnnData/Scanpy
-    df_pivoted_pd = df_pivoted_pl.to_pandas()
-    df_pivoted_pd = df_pivoted_pd.set_index('Ensembl Id')
-    
-    # Transform the pivoted DataFrame to an AnnData object
-    adata = anndata.AnnData(X=df_pivoted_pd.T, 
-                            obs=pd.DataFrame(index=df_pivoted_pd.T.index), 
-                            var=pd.DataFrame(index=df_pivoted_pd.T.columns))
+    # Extract the row and column indices and the data for the sparse matrix
+    row_indices = df_with_indices.get_column('row_idx')
+    col_indices = df_with_indices.get_column('col_idx')
+    data = df_with_indices.get_column('Raw gene expression')
+
+    # Create a sparse matrix in COO format, then convert to CSR for efficiency
+    sparse_matrix = coo_matrix(
+        (data, (row_indices, col_indices)),
+        shape=(len(cell_ids), len(gene_ids))
+    ).tocsr()
+
+    # Create the AnnData object using the sparse matrix
+    adata = anndata.AnnData(
+        X=sparse_matrix,
+        obs=pd.DataFrame(index=cell_ids),
+        var=pd.DataFrame(index=gene_ids)
+    )
 
     print("Step 3: Running Highly Variable Gene (HVG) analysis on all genes...")
     # Run HVG analysis on all genes to get their ranks
-    sc.pp.highly_variable_genes(adata, n_top_genes=adata.n_vars, flavor='seurat_v3', subset=False)
+    sc.pp.highly_variable_genes(adata, n_top_genes=max_genes_cap, flavor='seurat_v3', subset=False)
     
     # Get a DataFrame of genes sorted by their variability rank
     ranked_genes_pd = adata.var.sort_values('highly_variable_rank')
-    
+    ranked_genes_pd = ranked_genes_pd[ranked_genes_pd['highly_variable'] == True]
+
     print("Step 4: Counting rows per gene in the original data...")
     # Use Polars to efficiently count the number of rows each gene contributes
-    gene_row_counts_pl = df_pl.group_by("Ensembl Id").count()
+    gene_row_counts_pl = df_pl.group_by("Ensembl Id").len()
     
     # Create a dictionary for fast lookups: {gene_id: row_count}
     gene_row_counts_dict = {
-        row['Ensembl Id']: row['count'] 
+        row['Ensembl Id']: row['len'] 
         for row in gene_row_counts_pl.iter_rows(named=True)
     }
 
@@ -94,7 +109,7 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
         rows_for_this_gene = gene_row_counts_dict.get(gene_id, 0)
         
         # Stop if adding the next gene would exceed either the row limit or the gene cap
-        if (cumulative_rows + rows_for_this_gene > max_rows) or (len(hvg_list) >= max_genes_cap):
+        if (cumulative_rows + rows_for_this_gene > max_rows):
             break
             
         hvg_list.append(gene_id)

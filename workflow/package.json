@@ -9,22 +9,14 @@
     "format": "/usr/bin/env emacs --script ./format.el"
   },
   "dependencies": {
-    "@platforma-open/milaboratories.cellranger.software": "workspace:*"
+    "@platforma-sdk/workflow-tengo": "catalog:"
   },
   "devDependencies": {
     "@platforma-sdk/tengo-builder": "catalog:",
-    "@platforma-sdk/workflow-tengo": "catalog:",
-    "@platforma-sdk/test": "catalog:",
-    "@milaboratories/software-pframes-conv": "catalog:",
-    "@platforma-open/milaboratories.software-small-binaries": "catalog:",
+    "@platforma-open/milaboratories.cellranger.software": "workspace:*",
     "@platforma-open/milaboratories.software-cellranger": "catalog:",
     "@platforma-open/milaboratories.cellranger-genome-assets": "catalog:",
     "@platforma-open/milaboratories.gene-annotations-assets": "catalog:",
     "vitest": "catalog:"
-  },
-  "pnpm": {
-    "overrides": {
-      "@platforma-sdk/workflow-tengo": "file:/Users/aiturbide/Work/platforma/sdk/workflow-tengo/package.tgz"
-    }
   }
 }

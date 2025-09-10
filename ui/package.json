@@ -16,8 +16,8 @@
     "@platforma-sdk/model": "catalog:",
     "ag-grid-enterprise": "catalog:",
     "ag-grid-vue3": "catalog:",
-    "@milaboratories/helpers": "catalog:",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "@vueuse/core": "catalog:"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "catalog:",

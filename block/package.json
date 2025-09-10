@@ -46,6 +46,5 @@
   },
   "devDependencies": {
     "@platforma-sdk/block-tools": "catalog:"
-  },
-  "packageManager": "pnpm@9.12.0"
+  }
 }

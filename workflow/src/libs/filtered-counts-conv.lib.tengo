@@ -54,7 +54,7 @@ getRawColumns := func(blockId, species, inputSpec) {
       }
       ],
     "storageFormat": "Binary",
-    "partitionKeyLength": 0
+    "partitionKeyLength": 1
   }
 }
 
@@ -112,7 +112,7 @@ getNormColumns := func(blockId, species, inputSpec) {
       }
       ],
     "storageFormat": "Binary",
-    "partitionKeyLength": 0
+    "partitionKeyLength": 1
   }
 }
 

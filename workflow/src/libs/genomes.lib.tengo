@@ -1,0 +1,62 @@
+assets := import("@platforma-sdk/workflow-tengo:assets")
+ll := import("@platforma-sdk/workflow-tengo:ll")
+
+speciesNamesMap := {
+	"saccharomyces-cerevisiae": "Saccharomyces Cerevisiae",
+	"homo-sapiens": "Homo Sapiens",
+	"mus-musculus": "Mus Musculus",
+	"rattus-norvegicus": "Rattus Norvegicus",
+	"danio-rerio": "Danio Rerio",
+	"drosophila-melanogaster": "Drosophila Melanogaster",
+	"arabidopsis-thaliana": "Arabidopsis Thaliana",
+	"caenorhabditis-elegans": "Caenorhabditis Elegans",
+	"gallus-gallus": "Gallus Gallus",
+	"bos-taurus": "Bos Taurus",
+	"sus-scrofa": "Sus Scrofa",
+	"test-species": "Test Species"
+}
+
+getSpeciesName := func(species){
+	name := speciesNamesMap[species]
+
+	if is_undefined(name) {
+		return species
+	} else {
+		return name
+	}
+}
+
+getGenomeAsset := func(species) {
+	if species == "saccharomyces-cerevisiae" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:saccharomyces-cerevisiae")
+	} else if species == "homo-sapiens" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:homo-sapiens")
+	} else if species == "mus-musculus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:mus-musculus")
+	} else if species == "rattus-norvegicus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:rattus-norvegicus")
+	} else if species == "danio-rerio" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:danio-rerio")
+	} else if species == "drosophila-melanogaster" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:drosophila-melanogaster")
+	} else if species == "arabidopsis-thaliana" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:arabidopsis-thaliana")
+	} else if species == "caenorhabditis-elegans" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:caenorhabditis-elegans")
+	} else if species == "gallus-gallus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:gallus-gallus")
+	} else if species == "bos-taurus" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:bos-taurus")
+	} else if species == "sus-scrofa" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:sus-scrofa")
+	} else if species == "test-species" {
+		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:test-species")
+	} else {
+		return undefined
+	}
+}
+
+export ll.toStrict({
+	getGenomeAsset: getGenomeAsset,
+	getSpeciesName: getSpeciesName
+})

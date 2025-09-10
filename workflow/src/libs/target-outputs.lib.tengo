@@ -1,0 +1,70 @@
+ll := import("@platforma-sdk/workflow-tengo:ll")
+
+pfCountsConv := import(":libs.pf-counts-conv")
+pfNormCountsConv := import(":libs.pf-norm-counts-conv")
+pfMetricsConv := import(":libs.pf-metrics-conv")
+
+getTargetOutputs := func(species, blockId, sampleAxisSpec) {
+	return [
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/log",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "Log"
+		},
+		name: "cellRangerLog"
+	}, 
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/report",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "File"
+		},
+		name: "cellRangerReport"
+	}, 
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/summary",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "File"
+		},
+		name: "summaryContent"
+	},
+	{
+		type: "Xsv",
+		xsvType: "csv",
+		settings: pfCountsConv.getColumns(blockId, species),
+		name: "rawCounts",
+		path: ["rawCountsCsv"]
+	},
+	{
+		type: "Xsv",
+		xsvType: "csv",
+		settings: pfNormCountsConv.getColumns(blockId, species),
+		name: "normCounts",
+		path: ["normCountsCsv"]
+	},
+	{
+		type: "Xsv",
+		xsvType: "csv",
+		settings: pfMetricsConv.getColumns(blockId, species),
+		name: "cellMetrics",
+		path: ["cellMetricsCsv"]
+	}]
+}
+
+export ll.toStrict({
+	getTargetOutputs: getTargetOutputs
+})
