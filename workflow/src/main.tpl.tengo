@@ -12,12 +12,14 @@ assets := import("@platforma-sdk/workflow-tengo:assets")
 pframes := import("@platforma-sdk/workflow-tengo:pframes")
 json := import("json")
 
-geneMap := import(":gene-map")
-targetOutputs := import(":target-outputs")
+geneMap := import(":libs.gene-map")
+targetOutputs := import(":libs.target-outputs")
 
-//genomes := import(":genomes")
-pfSymbolsConv := import(":pf-symbols-conv")
-filteredCountsConv := import(":filtered-counts-conv")
+//genomes := import(":libs.genomes")
+pfSymbolsConv := import(":libs.pf-symbols-conv")
+filteredCountsConv := import(":libs.filtered-counts-conv")
+exportCountsConv := import(":libs.export-counts")
+exportNormCountsConv := import(":libs.export-norm-counts")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 filterGenesTpl := assets.importTemplate(":filter-genes")
@@ -152,173 +154,19 @@ wf.body(func(args) {
 	// Count matrix export defined with sample from inputSpec + previous specs
 	exports := {
 		rawCount : {
-			spec: {
-				kind: "PColumn",
-				name: "pl7.app/rna-seq/countMatrix",
-				domain: {
-					"pl7.app/blockId": blockId,
-					"pl7.app/species": species,
-					"pl7.app/rna-seq/normalized": "false"
-				},
-				valueType: "Double",
-				annotations: {
-					"pl7.app/label": "Raw gene expression",
-					"pl7.app/hideDataFromGraphs": "true"
-				},
-				axesSpec: [
-					inputSpec.axesSpec[0],
-					{
-						"name": "pl7.app/sc/cellId",
-						"type": "String",
-						"annotations": {
-							"pl7.app/label": "Cell ID",
-							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-							"pl7.app/table/fontFamily": "monospace",
-							"pl7.app/table/orderPriority": "110000",
-							"pl7.app/table/visibility": "default"
-						}
-					},
-					{
-						"name": "pl7.app/rna-seq/geneId",
-						"type": "String",
-						"domain": {
-							"pl7.app/species": species
-						},
-						"annotations": {
-							"pl7.app/label": "Ensembl Id",
-							"pl7.app/graph/axis/highCardinality": "true"
-
-						}
-					}
-					]
-			},
+			spec: exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true),
 			data: filteredRawCountsPf["rawCounts.data"]
 	 	},
 		normCount : {
-			spec: {
-				kind: "PColumn",
-				name: "pl7.app/rna-seq/countMatrix",
-				domain: {
-					"pl7.app/blockId": blockId,
-					"pl7.app/species": species,
-					"pl7.app/rna-seq/normalized": "true"
-				},
-				valueType: "Double",
-				annotations: {
-					"pl7.app/label": "Normalized gene expression",
-					"pl7.app/hideDataFromGraphs": "true"
-				},
-				axesSpec: [
-					inputSpec.axesSpec[0],
-					{
-						"name": "pl7.app/sc/cellId",
-						"type": "String",
-						"annotations": {
-							"pl7.app/label": "Cell ID",
-							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-							"pl7.app/table/fontFamily": "monospace",
-							"pl7.app/table/orderPriority": "110000",
-							"pl7.app/table/visibility": "default"
-						}
-					},
-					{
-						"name": "pl7.app/rna-seq/geneId",
-						"type": "String",
-						"domain": {
-							"pl7.app/species": species
-						},
-						"annotations": {
-							"pl7.app/label": "Ensembl Id",
-							"pl7.app/graph/axis/highCardinality": "true"
-
-						}
-					}
-					]
-			},
+			spec: exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true),
 			data: filteredNormCountsPf["normCounts.data"]
 		},
 		rawHvgCount : {
-			spec: {
-				kind: "PColumn",
-				name: "pl7.app/rna-seq/countMatrix",
-				domain: {
-					"pl7.app/blockId": blockId,
-					"pl7.app/species": species,
-					"pl7.app/rna-seq/normalized": "false"
-				},
-				valueType: "Double",
-				annotations: {
-					"pl7.app/label": "Raw gene expression"
-				},
-				axesSpec: [
-					inputSpec.axesSpec[0],
-					{
-						"name": "pl7.app/sc/cellId",
-						"type": "String",
-						"annotations": {
-							"pl7.app/label": "Cell ID",
-							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-							"pl7.app/table/fontFamily": "monospace",
-							"pl7.app/table/orderPriority": "110000",
-							"pl7.app/table/visibility": "default"
-						}
-					},
-					{
-						"name": "pl7.app/rna-seq/geneId",
-						"type": "String",
-						"domain": {
-							"pl7.app/species": species
-						},
-						"annotations": {
-							"pl7.app/label": "Ensembl Id",
-							"pl7.app/graph/axis/highCardinality": "true"
-
-						}
-					}
-					]
-			},
+			spec: exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false),
 			data: hvgCountsPf["rawCounts.data"]
 	 	},
 		normHvgCount : {
-			spec: {
-				kind: "PColumn",
-				name: "pl7.app/rna-seq/countMatrix",
-				domain: {
-					"pl7.app/blockId": blockId,
-					"pl7.app/species": species,
-					"pl7.app/rna-seq/normalized": "true"
-				},
-				valueType: "Double",
-				annotations: {
-					"pl7.app/label": "Normalized gene expression"
-				},
-				axesSpec: [
-					inputSpec.axesSpec[0],
-					{
-						"name": "pl7.app/sc/cellId",
-						"type": "String",
-						"annotations": {
-							"pl7.app/label": "Cell ID",
-							"pl7.app/parents": string(json.encode(["pl7.app/sampleId"])),
-							"pl7.app/table/fontFamily": "monospace",
-							"pl7.app/table/orderPriority": "110000",
-							"pl7.app/table/visibility": "default"
-						}
-					},
-					{
-						"name": "pl7.app/rna-seq/geneId",
-						"type": "String",
-						"domain": {
-							"pl7.app/species": species
-						},
-						"annotations": {
-							"pl7.app/label": "Ensembl Id",
-							"pl7.app/graph/axis/highCardinality": "true"
-
-						}
-					}
-					]
-			},
+			spec: exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false),
 			data: hvgNormCountsPf["normCounts.data"]
 		},
 		// with correct specs

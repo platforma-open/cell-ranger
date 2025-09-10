@@ -1,8 +1,8 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
 
-pfCountsConv := import(":pf-counts-conv")
-pfNormCountsConv := import(":pf-norm-counts-conv")
-pfMetricsConv := import(":pf-metrics-conv")
+pfCountsConv := import(":libs.pf-counts-conv")
+pfNormCountsConv := import(":libs.pf-norm-counts-conv")
+pfMetricsConv := import(":libs.pf-metrics-conv")
 
 getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 	return [

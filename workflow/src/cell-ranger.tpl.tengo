@@ -11,9 +11,9 @@ maps := import("@platforma-sdk/workflow-tengo:maps")
 pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
 
 // Import product key
-productKey := import(":product-key")
+productKey := import(":libs.product-key")
 
-genomes := import(":genomes")
+genomes := import(":libs.genomes")
 
 self.defineOutputs(
 	"cellRangerLog",
