@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cell-ranger",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "scripts": {
     "build": "rm -rf block-pack/* && block-tools pack",
     "mark-stable": "block-tools mark-stable -r 's3://milab-euce1-prod-pkgs-s3-block-registry/pub/releases/?region=eu-central-1'",
@@ -42,7 +42,9 @@
         "logo": "file:../logos/organization-logo.png"
       },
       "marketplaceRanking": 12900,
-      "supportedPlatforms": ["linux-x64"]
+      "supportedPlatforms": [
+        "linux-x64"
+      ]
     }
   },
   "devDependencies": {

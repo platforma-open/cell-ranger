@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.5.1
+
+### Patch Changes
+
+- a90deaf: Set supported platform to Linux amd64
+
 ## 1.5.0
 
 ### Minor Changes
