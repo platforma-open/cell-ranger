@@ -41,7 +41,8 @@
         "url": "https://milaboratories.com/",
         "logo": "file:../logos/organization-logo.png"
       },
-      "marketplaceRanking": 12900
+      "marketplaceRanking": 12900,
+      "supportedPlatforms": ["linux-x64"]
     }
   },
   "devDependencies": {
