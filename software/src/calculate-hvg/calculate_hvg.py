@@ -82,9 +82,30 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
         var=pd.DataFrame(index=gene_ids)
     )
 
-    print("Step 3: Running Highly Variable Gene (HVG) analysis on all genes...")
+    print("Step 3a: Pre-filtering data based on cell counts...")
+    print(f"Original number of genes: {adata.n_vars}")
+    # Filter genes that are expressed in a very small number of cells
+    sc.pp.filter_genes(adata, min_cells=3)
+    print(f"Number of genes after filtering: {adata.n_vars}")
+
+    # Check if we have enough genes left to run the analysis
+    if adata.n_vars < 3:
+        print("Error: Too few genes remaining after filtering to perform HVG analysis.")
+        print("This dataset may not be suitable for this analysis, or filtering parameters may be too strict.")
+        return
+
+    print("Step 3b: Running Highly Variable Gene (HVG) analysis on filtered genes...")
     # Run HVG analysis on all genes to get their ranks
-    sc.pp.highly_variable_genes(adata, n_top_genes=max_genes_cap, flavor='seurat_v3', subset=False)
+    try:
+        sc.pp.highly_variable_genes(adata, n_top_genes=max_genes_cap, flavor='seurat_v3', subset=False)
+    except ValueError as e:
+        if 'reciprocal condition number' in str(e):
+            print("Error: HVG analysis failed likely due to numerical instability.")
+            print("This can happen with datasets that have low numbers of genes or low expression variance.")
+            print("Please inspect your input data. The number of genes after filtering was:", adata.n_vars)
+            return
+        else:
+            raise e
     
     # Get a DataFrame of genes sorted by their variability rank
     ranked_genes_pd = adata.var.sort_values('highly_variable_rank')
