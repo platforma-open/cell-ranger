@@ -156,21 +156,22 @@ wf.body(func(args) {
 	)
 
 	// Count matrix export defined with sample from inputSpec + previous specs
+	sampleAxisSpec := copy(inputSpec.axesSpec[0])
 	exports := {
 		rawCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec, true)),
 			data: filteredRawCountsPf["rawCounts.data"]
 	 	},
 		normCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec, true)),
 			data: filteredNormCountsPf["normCounts.data"]
 		},
 		rawHvgCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec, false)),
 			data: hvgCountsPf["rawCounts.data"]
 	 	},
 		normHvgCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec, false)),
 			data: hvgNormCountsPf["normCounts.data"]
 		},
 		// with correct specs
