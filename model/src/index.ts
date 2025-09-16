@@ -197,10 +197,10 @@ export const model = BlockModel.create()
     );
   })
 
-  // /** Monetization status */
-  // .output('__mnzInfo', (wf) => {
-  //   return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
-  // })
+// /** Monetization status */
+// .output('__mnzInfo', (wf) => {
+//   return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
+// })
 
   /**
    * Returns true if the block is currently in "running" state
@@ -218,6 +218,6 @@ export const model = BlockModel.create()
       : 'Cell Ranger',
   )
 
-  .done();
+  .done(2);
 
 export type BlockOutputs = InferOutputsType<typeof model>;

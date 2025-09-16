@@ -9,7 +9,8 @@
     "mark-stable": "turbo run mark-stable",
     "watch": "turbo watch build",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "update-sdk": "pl-blocks-deps-updater"
   },
   "files": [
     "index.d.ts",
@@ -17,7 +18,8 @@
   ],
   "devDependencies": {
     "@changesets/cli": "catalog:",
-    "turbo": "catalog:"
+    "turbo": "catalog:",
+    "@platforma-sdk/blocks-deps-updater": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",
   "dependencies": {
