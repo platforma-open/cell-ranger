@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.15.0
+
+### Minor Changes
+
+- 8146f45: Fixed bug with singletone genes and added feature to support gene expression plots with latest SDK
+
 ## 1.14.0
 
 ### Minor Changes
