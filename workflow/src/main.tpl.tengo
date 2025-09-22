@@ -24,6 +24,7 @@ exportNormCountsConv := import(":libs.export-norm-counts")
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 filterGenesTpl := assets.importTemplate(":filter-genes")
 hvgTpl := assets.importTemplate(":calculate-hvg")
+mapGenesTpl := assets.importTemplate(":map-genes")
 
 // wf.setPreRun(assets.importTemplate(":pre-run"))
 
@@ -123,24 +124,15 @@ wf.body(func(args) {
 	// both filteredRawCountsPf and filteredNormCountsPf and hvgRawCountsPf and hvgnormPf should be exported
 	// filteredRawCountsPf and filteredNormCountsPf should include annotation "pl7.app/hideDataFromGraphs": "true"
 
-	geneAsset := geneMap.getGeneAsset(species)
-	geneAssetName := geneMap.getAssetName(species)
+	mapGenesResults := render.create(mapGenesTpl, {
+		filteredGenesCountsCsv: filteredGenesCountsCsv,
+		species: species
+	})
 
-	geneSymbols := exec.builder().
-		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:map-genes")).
-		mem("16GiB").
-		cpu(1).
-		addAsset(geneAsset, ".", geneAssetName).
-		addFile("rawCounts.csv", filteredGenesCountsCsv).
-		arg("--raw_counts").arg("rawCounts.csv").
-		arg("--annotation").arg(geneAssetName).
-		arg("--output").arg("geneSymbols.csv").
-		saveFile("geneSymbols.csv").
-		printErrStreamToStdout().
-		run()
+	geneSymbolsCsv := mapGenesResults.output("geneSymbolsCsv")
 
 	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
-	geneSymbolsPf := xsv.importFile(geneSymbols.getFile("geneSymbols.csv"), "csv", geneSymbolsImportParams, { mem: "16GiB", cpu: 1 })
+	geneSymbolsPf := xsv.importFile(geneSymbolsCsv, "csv", geneSymbolsImportParams, { mem: "16GiB", cpu: 1 })
 
 	outputs := {
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
@@ -156,21 +148,22 @@ wf.body(func(args) {
 	)
 
 	// Count matrix export defined with sample from inputSpec + previous specs
+	sampleAxisSpec := copy(inputSpec.axesSpec[0])
 	exports := {
 		rawCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec, true)),
 			data: filteredRawCountsPf["rawCounts.data"]
 	 	},
 		normCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], true)),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec, true)),
 			data: filteredNormCountsPf["normCounts.data"]
 		},
 		rawHvgCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
+			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec, false)),
 			data: hvgCountsPf["rawCounts.data"]
 	 	},
 		normHvgCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, inputSpec.axesSpec[0], false)),
+			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec, false)),
 			data: hvgNormCountsPf["normCounts.data"]
 		},
 		// with correct specs
