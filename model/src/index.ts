@@ -30,6 +30,9 @@ export type BlockArgs = {
    */
   species?: string;
 
+  mem?: number;
+  cpu?: number;
+
   // /**
   //  * Product key
   //  */

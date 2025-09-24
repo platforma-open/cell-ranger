@@ -24,12 +24,14 @@ self.defineOutputs(
 	"cellMetricsCsv"
 )
 
-
 self.body(func(inputs) {
 	inputData := inputs[pConstants.VALUE_FIELD_NAME]
 	species := inputs.species
 	fileExtension := inputs.fileExtension
 	blockId := inputs.blockId
+
+	mem := !is_undefined(inputs.mem) ? string(inputs.mem) + "GiB" : "64GB"
+	cpu := !is_undefined(inputs.cpu) ? inputs.cpu : 16
 
 	genomeAssets := genomes.getGenomeAsset(species)
 
@@ -37,8 +39,8 @@ self.body(func(inputs) {
 
 	cellRanger := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
-		mem("64GB").
-		cpu(16).
+		mem(mem).
+		cpu(cpu).
 		// addAsset(genomeAssets, "genomeIndex").
 		addAsset(genomeAssets, "genomeIndex", "fasta/").
 		addAsset(genomeAssets, "genomeIndex", "genes/").
@@ -123,8 +125,8 @@ self.body(func(inputs) {
 
 	countMatrixCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:counts-csv")).
-		mem("16GiB").
-		cpu(1).
+		mem(mem).
+		cpu(cpu).
 		addFile("barcodes.tsv.gz", cellRangerBarcodes).
 		addFile("features.tsv.gz", cellRangerFeatures).
 		addFile("matrix.mtx.gz", cellRangerCounts).
@@ -146,8 +148,8 @@ self.body(func(inputs) {
 
 	cellMetricsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:cell-metrics")).
-		mem("16GiB").
-		cpu(1).
+		mem(mem).
+		cpu(cpu).
 		addFile("barcodes.tsv.gz", cellRangerBarcodes).
 		addFile("features.tsv.gz", cellRangerFeatures).
 		addFile("matrix.mtx.gz", cellRangerCounts).
@@ -162,8 +164,8 @@ self.body(func(inputs) {
 
 	filteredCellsCountsCsv := exec.builder().
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-cells")).
-		mem("16GiB").
-		cpu(1).
+		mem(mem).
+		cpu(cpu).
 		addFile("rawCounts.csv", rawCounts).
 		addFile("rawCounts_normalized.csv", normCounts).
 		addFile("cell_metrics.csv", cellMetricsCsv.getFile("cell_metrics.csv")).

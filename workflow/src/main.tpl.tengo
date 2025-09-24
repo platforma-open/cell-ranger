@@ -61,7 +61,9 @@ wf.body(func(args) {
 			extra: {
 				species: species,
 				fileExtension: fileExtension,
-				blockId: blockId
+				blockId: blockId,
+				mem: args.mem,
+				cpu: args.cpu
 			}
 		}
 	)
