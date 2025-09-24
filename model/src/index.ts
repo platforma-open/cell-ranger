@@ -66,6 +66,7 @@ export const model = BlockModel.create()
 
   .argsValid((ctx) => ctx.args.ref !== undefined)
   // && ctx.args.__mnzCanRun)
+
   /**
    * Find possible options for the fastq input
    */
@@ -119,22 +120,6 @@ export const model = BlockModel.create()
         )
       : undefined;
   })
-
-/**
- * P-frame with rawCounts
- */
-// .output('rawCountsPf', (wf) => {
-//   const pCols = wf.outputs?.resolve('rawCountsPf')?.getPColumns();
-//   if (pCols === undefined) return undefined;
-
-//   return wf.createPFrame(pCols);
-// })
-
-// .output('rawCountsSpec', (wf) => {
-//   const pCols = wf.outputs?.resolve('rawCountsPf')?.getPColumns();
-//   if (pCols === undefined) return undefined;
-//   return pCols[0].spec;
-// })
 
   .output('cellMetricsPf', (wf) => {
     const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();

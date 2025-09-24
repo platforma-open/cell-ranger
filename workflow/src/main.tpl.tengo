@@ -15,7 +15,6 @@ json := import("json")
 geneMap := import(":libs.gene-map")
 targetOutputs := import(":libs.target-outputs")
 
-//genomes := import(":libs.genomes")
 pfSymbolsConv := import(":libs.pf-symbols-conv")
 filteredCountsConv := import(":libs.filtered-counts-conv")
 exportCountsConv := import(":libs.export-counts")
@@ -26,7 +25,7 @@ filterGenesTpl := assets.importTemplate(":filter-genes")
 hvgTpl := assets.importTemplate(":calculate-hvg")
 mapGenesTpl := assets.importTemplate(":map-genes")
 
-// wf.setPreRun(assets.importTemplate(":pre-run"))
+// wf.setPreRun(assets.importTemplate(":pre-run")) // monetization check
 
 wf.prepare(func(args){
 	return{
@@ -93,7 +92,7 @@ wf.body(func(args) {
 	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
 	csvCountsNormalized := xsv.exportFrame(normCountsPf, "csv", { mem: "16GiB", cpu: 1 })
 
-	//// Filter genes
+	// Filter genes
 	filteredGenesResults := render.create(filterGenesTpl, {
 		csvCounts: csvCounts,
 		normCounts: csvCountsNormalized
@@ -108,7 +107,7 @@ wf.body(func(args) {
 	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
 	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
-	//// Highly Variable Genes calculation
+	// Highly Variable Genes calculation
 	hvgResults := render.create(hvgTpl, {
 		csvCounts: filteredGenesCountsCsv,
 		normCounts: filteredGenesNormalizedCountsCsv
@@ -120,9 +119,6 @@ wf.body(func(args) {
 	// Convert to pFrames
 	hvgCountsPf := xsv.importFile(hvgCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
 	hvgNormCountsPf := xsv.importFile(hvgNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
-
-	// both filteredRawCountsPf and filteredNormCountsPf and hvgRawCountsPf and hvgnormPf should be exported
-	// filteredRawCountsPf and filteredNormCountsPf should include annotation "pl7.app/hideDataFromGraphs": "true"
 
 	mapGenesResults := render.create(mapGenesTpl, {
 		filteredGenesCountsCsv: filteredGenesCountsCsv,
@@ -166,15 +162,6 @@ wf.body(func(args) {
 			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec, false)),
 			data: hvgNormCountsPf["normCounts.data"]
 		},
-		// with correct specs
-		// hvgRawCountsPf: {
-		// 	spec: hvgCountsPf["hvgCounts.spec"],
-		// 	data: hvgCountsPf["hvgCounts.data"]
-		// },
-		// hvgNormCountsPf: {
-		// 	spec: hvgNormCountsPf["hvgNormCounts.spec"],
-		// 	data: hvgNormCountsPf["hvgNormCounts.data"]
-		// },
 		geneSymbols: {
 			spec: geneSymbolsPf["geneSymbol.spec"],
 			data: geneSymbolsPf["geneSymbol.data"]
