@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.17.0
+
+### Minor Changes
+
+- db0b566: Removed HVG calculation. Small fixes. Added resource allocation
+
 ## 1.16.0
 
 ### Minor Changes

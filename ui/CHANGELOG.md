@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.8.0
+
+### Minor Changes
+
+- db0b566: Removed HVG calculation. Small fixes. Added resource allocation
+
+### Patch Changes
+
+- Updated dependencies [db0b566]
+  - @platforma-open/milaboratories.cell-ranger.model@1.10.0
+
 ## 1.7.1
 
 ### Patch Changes
