@@ -1,7 +1,7 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
 json := import("json")
 
-getSpecs := func(blockId, species, sampleAxis, wholeTable) {
+getSpecs := func(blockId, species, sampleAxis) {
 	// Add dense annotation to sample axis
 	sampleAxis.annotations["pl7.app/graph/isDenseAxis"] = "true"
 	
@@ -45,9 +45,6 @@ getSpecs := func(blockId, species, sampleAxis, wholeTable) {
 					}
 					]
 			}
-    if wholeTable {
-        specs.annotations["pl7.app/hideDataFromGraphs"] = "true"
-    }
     return specs
 }
 
