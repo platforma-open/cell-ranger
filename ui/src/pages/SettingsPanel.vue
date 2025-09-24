@@ -9,10 +9,13 @@ const app = useApp();
 
 function setInput(inputRef?: PlRef) {
   app.model.args.ref = inputRef;
-  if (inputRef)
-    app.model.args.title = app.model.outputs.dataOptions?.find((o) => plRefsEqual(o.ref, inputRef))?.label;
-  else
-    app.model.args.title = undefined;
+  if (inputRef) {
+    app.model.ui.title = app.model.outputs.dataOptions?.find((o) =>
+      plRefsEqual(o.ref, inputRef),
+    )?.label;
+  } else {
+    app.model.ui.title = undefined;
+  }
 }
 </script>
 
