@@ -14,6 +14,7 @@ import { type GraphMakerState } from '@milaboratories/graph-maker';
 
 export type UiState = {
   graphState: GraphMakerState;
+  title?: string;
 };
 /**
  * Block arguments coming from the user interface
@@ -29,10 +30,8 @@ export type BlockArgs = {
    */
   species?: string;
 
-  /**
-   * Block title
-   */
-  title?: string;
+  mem?: number;
+  cpu?: number;
 
   // /**
   //  * Product key
@@ -70,6 +69,7 @@ export const model = BlockModel.create()
 
   .argsValid((ctx) => ctx.args.ref !== undefined)
   // && ctx.args.__mnzCanRun)
+
   /**
    * Find possible options for the fastq input
    */
@@ -122,22 +122,6 @@ export const model = BlockModel.create()
           false,
         )
       : undefined;
-  })
-
-  /**
-   * P-frame with rawCounts
-   */
-  .output('rawCountsPf', (wf) => {
-    const pCols = wf.outputs?.resolve('rawCountsPf')?.getPColumns();
-    if (pCols === undefined) return undefined;
-
-    return wf.createPFrame(pCols);
-  })
-
-  .output('rawCountsSpec', (wf) => {
-    const pCols = wf.outputs?.resolve('rawCountsPf')?.getPColumns();
-    if (pCols === undefined) return undefined;
-    return pCols[0].spec;
   })
 
   .output('cellMetricsPf', (wf) => {
@@ -213,8 +197,8 @@ export const model = BlockModel.create()
   ])
 
   .title((ctx) =>
-    ctx.args.title
-      ? `Cell Ranger - ${ctx.args.title}`
+    ctx.uiState.title
+      ? `Cell Ranger - ${ctx.uiState.title}`
       : 'Cell Ranger',
   )
 
