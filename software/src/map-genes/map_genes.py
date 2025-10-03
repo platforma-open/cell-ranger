@@ -44,6 +44,9 @@ def map_ensembl_to_gene_symbol(raw_counts_path, annotation_path, output_path):
     missing = mapped_df["Gene symbol"].isnull().sum()
     print(f"Mapping complete. {missing} Ensembl IDs could not be mapped to gene symbols.")
 
+    # Add Ensembl ID as label when gene symbol is missing
+    mapped_df["Gene symbol"] = mapped_df["Gene symbol"].fillna(mapped_df["Ensembl Id"])
+
     # Save output
     print(f"Saving output to {output_path}...")
     mapped_df.to_csv(output_path, index=False)
