@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.16.0
+
+### Minor Changes
+
+- 8bb0d66: Add Ensembl ID as label when gene symbol is missing
+
 ## 1.15.0
 
 ### Minor Changes
