@@ -1,49 +1,28 @@
-// Cell Ranger preprocessing workflow
-
-wf := import("@platforma-sdk/workflow-tengo:workflow")
-
-ll := import("@platforma-sdk/workflow-tengo:ll")
-xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
-exec := import("@platforma-sdk/workflow-tengo:exec")
-file := import("@platforma-sdk/workflow-tengo:file")
-pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
-render := import("@platforma-sdk/workflow-tengo:render")
+tpl := import("@platforma-sdk/workflow-tengo:tpl")
 assets := import("@platforma-sdk/workflow-tengo:assets")
-pframes := import("@platforma-sdk/workflow-tengo:pframes")
-json := import("json")
 
-geneMap := import(":libs.gene-map")
 targetOutputs := import(":libs.target-outputs")
-
 pfSymbolsConv := import(":libs.pf-symbols-conv")
 filteredCountsConv := import(":libs.filtered-counts-conv")
 exportCountsConv := import(":libs.export-counts")
 exportNormCountsConv := import(":libs.export-norm-counts")
 
-processTpl := assets.importTemplate(":process")
+cellRangerTpl := assets.importTemplate(":cell-ranger")
+filterGenesTpl := assets.importTemplate(":filter-genes")
+hvgTpl := assets.importTemplate(":calculate-hvg")
+mapGenesTpl := assets.importTemplate(":map-genes")
 
-// wf.setPreRun(assets.importTemplate(":pre-run")) // monetization check
+self.awaitState("params", "ResourceReady")
+self.awaitState("inputSpec", "ResourceReady")
 
-wf.body(func(args) {
-	blockId := wf.getBlockId()
-	species := args.species
+tpl.body(func(inputs) {
+	inputSpec := inputs.inputSpec
+	inputData := inputs.inputData
 
-	input := wf.resolve(args.ref, { errIfMissing: true })
-
-	runMixcr := render.createEphemeral(processTpl, {
-		inputSpec: input.getFutureInputField("spec"),
-		inputData: input.getFutureInputField("data"),
-
-		params: smart.createJsonResource({
-			species: species,
-			mem: args.mem,
-			cpu: args.cpu
-		})
-	})
-
+	fileExtension := inputSpec.domain["pl7.app/fileExtension"]
 
 	cellRangerResults := pframes.processColumn(
-		{ spec: inputSpec, data: input.data }, cellRangerTpl,
+		{ spec: inputSpec, data: inputData }, cellRangerTpl,
 		targetOutputs.getTargetOutputs(species, blockId, inputSpec.axesSpec[0]),
 		{
 			aggregate: [{
@@ -69,16 +48,6 @@ wf.body(func(args) {
 		}
 	)
 
-	rawCountsPf := {
-		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
-		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
-	}
-
-	normCountsPf := {
-		"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
-		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
-	}
-
 	cellMetricsPf := {
 		"totalCounts.spec": cellRangerResults.outputSpec("cellMetrics", "totalCounts"),
 		"totalCounts.data": cellRangerResults.outputData("cellMetrics", "totalCounts"),
@@ -92,8 +61,14 @@ wf.body(func(args) {
 		"pctCountsInTop20Genes.data": cellRangerResults.outputData("cellMetrics", "pctCountsInTop20Genes")
 	}
 
-	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
-	csvCountsNormalized := xsv.exportFrame(normCountsPf, "csv", { mem: "16GiB", cpu: 1 })
+	csvCounts := xsv.exportFrame({
+		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
+		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
+	}, "csv", { mem: "16GiB", cpu: 1 })
+	csvCountsNormalized := xsv.exportFrame({
+		"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
+		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
+	}, "csv", { mem: "16GiB", cpu: 1 })
 
 	// Filter genes
 	filteredGenesResults := render.create(filterGenesTpl, {
@@ -185,10 +160,5 @@ wf.body(func(args) {
 			spec: cellMetricsPf["complexity.spec"],
 			data: cellMetricsPf["complexity.data"]
 		}
-	}
-
-	return {
-		outputs: outputs,
-		exports: exports
 	}
 })

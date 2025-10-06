@@ -28,7 +28,6 @@ self.body(func(inputs) {
 	inputData := inputs[pConstants.VALUE_FIELD_NAME]
 	species := inputs.species
 	fileExtension := inputs.fileExtension
-	blockId := inputs.blockId
 
 	mem := !is_undefined(inputs.mem) ? string(inputs.mem) + "GiB" : "64GB"
 	cpu := !is_undefined(inputs.cpu) ? inputs.cpu : 16
@@ -41,11 +40,11 @@ self.body(func(inputs) {
 		software(assets.importSoftware("@platforma-open/milaboratories.software-cellranger:cellranger")).
 		mem(mem).
 		cpu(cpu).
-		// addAsset(genomeAssets, "genomeIndex").
-		addAsset(genomeAssets, "genomeIndex", "fasta/").
-		addAsset(genomeAssets, "genomeIndex", "genes/").
-		addAsset(genomeAssets, "genomeIndex", "star/").
-		addAsset(genomeAssets, "genomeIndex", "reference.json").
+		addAsset(genomeAssets, "genomeIndex").
+		// addAsset(genomeAssets, "genomeIndex", "fasta/").
+		// addAsset(genomeAssets, "genomeIndex", "genes/").
+		// addAsset(genomeAssets, "genomeIndex", "star/").
+		// addAsset(genomeAssets, "genomeIndex", "reference.json").
 		arg("count").
 		arg("--transcriptome=genomeIndex").
 		arg("--fastqs=fastqs")
@@ -181,7 +180,7 @@ self.body(func(inputs) {
 
 	output := {
 		cellRangerLog: cellRangerLog,
-		cellRangerReport: file.exportFile(cellRangerReport),
+		cellRangerReport: cellRangerReport,
 		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv"),
 		rawCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"),
 		normCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"),
