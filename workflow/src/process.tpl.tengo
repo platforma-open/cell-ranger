@@ -1,5 +1,9 @@
-tpl := import("@platforma-sdk/workflow-tengo:tpl")
+self := import("@platforma-sdk/workflow-tengo:tpl")
 assets := import("@platforma-sdk/workflow-tengo:assets")
+pframes := import("@platforma-sdk/workflow-tengo:pframes")
+xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
+render := import("@platforma-sdk/workflow-tengo:render")
+pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
 
 targetOutputs := import(":libs.target-outputs")
 pfSymbolsConv := import(":libs.pf-symbols-conv")
@@ -15,7 +19,10 @@ mapGenesTpl := assets.importTemplate(":map-genes")
 self.awaitState("params", "ResourceReady")
 self.awaitState("inputSpec", "ResourceReady")
 
-tpl.body(func(inputs) {
+self.body(func(inputs) {
+	blockId := inputs.params.blockId
+	species := inputs.params.species
+
 	inputSpec := inputs.inputSpec
 	inputData := inputs.inputData
 
@@ -42,24 +49,13 @@ tpl.body(func(inputs) {
 			},
 
 			metaExtra: {
-				mem: args.mem,
-				cpu: args.cpu
+				mem: inputs.params.mem,
+				cpu: inputs.params.cpu
 			}
 		}
 	)
 
-	cellMetricsPf := {
-		"totalCounts.spec": cellRangerResults.outputSpec("cellMetrics", "totalCounts"),
-		"totalCounts.data": cellRangerResults.outputData("cellMetrics", "totalCounts"),
-		"nGenesByCounts.spec": cellRangerResults.outputSpec("cellMetrics", "nGenesByCounts"),
-		"nGenesByCounts.data": cellRangerResults.outputData("cellMetrics", "nGenesByCounts"),
-		"pctCountsMt.spec": cellRangerResults.outputSpec("cellMetrics", "pctCountsMt"),
-		"pctCountsMt.data": cellRangerResults.outputData("cellMetrics", "pctCountsMt"),
-		"complexity.spec": cellRangerResults.outputSpec("cellMetrics", "complexity"),
-		"complexity.data": cellRangerResults.outputData("cellMetrics", "complexity"),
-		"pctCountsInTop20Genes.spec": cellRangerResults.outputSpec("cellMetrics", "pctCountsInTop20Genes"),
-		"pctCountsInTop20Genes.data": cellRangerResults.outputData("cellMetrics", "pctCountsInTop20Genes")
-	}
+	cellMetricsPf := cellRangerResults.xsvOutputFrame("cellMetrics")
 
 	csvCounts := xsv.exportFrame({
 		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
@@ -108,57 +104,28 @@ tpl.body(func(inputs) {
 	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
 	geneSymbolsPf := xsv.importFile(geneSymbolsCsv, "csv", geneSymbolsImportParams, { mem: "16GiB", cpu: 1 })
 
-	outputs := {
-		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
-		cellRangerReport: pframes.exportColumnData(cellRangerResults.outputData("cellRangerReport")),
-		// alignedBAM: cellRangerResults.output("alignedBAM"),
-		rawCountsPf: pframes.exportFrame(filteredRawCountsPf),
-		cellMetricsPf: pframes.exportFrame(cellMetricsPf),
-		summaryContent: cellRangerResults.outputData("summaryContent")
-	}
-
 	trace := pSpec.makeTrace(inputSpec,
 		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
 	)
 
 	// Count matrix export defined with sample from inputSpec + previous specs
 	sampleAxisSpec := copy(inputSpec.axesSpec[0])
-	exports := {
-		rawCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-			data: filteredRawCountsPf["rawCounts.data"]
-	 	},
-		normCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-			data: filteredNormCountsPf["normCounts.data"]
-		},
-		// rawHvgCount : {
-		// 	spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-		// 	data: hvgCountsPf["rawCounts.data"]
-	 	// },
-		// normHvgCount : {
-		// 	spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-		// 	data: hvgNormCountsPf["normCounts.data"]
-		// },
-		geneSymbols: {
-			spec: geneSymbolsPf["geneSymbol.spec"],
-			data: geneSymbolsPf["geneSymbol.data"]
-		},
-		totalCounts: {
-			spec: cellMetricsPf["totalCounts.spec"],
-			data: cellMetricsPf["totalCounts.data"]
-		},
-		nGenesByCounts: {
-			spec: cellMetricsPf["nGenesByCounts.spec"],
-			data: cellMetricsPf["nGenesByCounts.data"]
-		},
-		pctCountsMt: {
-			spec: cellMetricsPf["pctCountsMt.spec"],
-			data: cellMetricsPf["pctCountsMt.data"]
-		},
-		complexity: {
-			spec: cellMetricsPf["complexity.spec"],
-			data: cellMetricsPf["complexity.data"]
-		}
+
+	exportPfBuilder := pframes.pFrameBuilder()
+	exportPfBuilder.add("rawCount", trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)), filteredRawCountsPf["rawCounts.data"])
+	exportPfBuilder.add("normCount", trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)), filteredNormCountsPf["normCounts.data"])
+	// exportPfBuilder.add("rawHvgCount", trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)), hvgCountsPf["rawCounts.data"])
+	// exportPfBuilder.add("normHvgCount", trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)), hvgNormCountsPf["normCounts.data"])
+	exportPfBuilder.add("geneSymbols", geneSymbolsPf["geneSymbol.spec"], geneSymbolsPf["geneSymbol.data"])
+
+
+	return {
+		exports: exportPfBuilder.build(),
+		cellMetricsPf: cellMetricsPf,
+
+		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
+		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
+		rawCountsPf: filteredRawCountsPf,
+		summaryContent: cellRangerResults.outputData("summaryContent")
 	}
 })

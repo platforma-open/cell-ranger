@@ -38,7 +38,7 @@ getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 			domain: {
 				"pl7.app/blockId": blockId
 			},
-			valueType: "File"
+			valueType: "FileContent"
 		},
 		name: "summaryContent"
 	},
