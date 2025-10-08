@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.6.0
+
+### Minor Changes
+
+- 4c6a7d5: Deduplication fixes
+
+### Patch Changes
+
+- Updated dependencies [4c6a7d5]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.18.0
+
 ## 1.5.3
 
 ### Patch Changes
