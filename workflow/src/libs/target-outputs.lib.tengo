@@ -17,7 +17,7 @@ getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 			valueType: "Log"
 		},
 		name: "cellRangerLog"
-	}, 
+	},
 	{
 		type: "Resource",
 		spec: {
@@ -29,7 +29,7 @@ getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 			valueType: "File"
 		},
 		name: "cellRangerReport"
-	}, 
+	},
 	{
 		type: "Resource",
 		spec: {
@@ -38,10 +38,55 @@ getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 			domain: {
 				"pl7.app/blockId": blockId
 			},
-			valueType: "File"
+			valueType: "FileContent"
 		},
 		name: "summaryContent"
 	},
+
+	// Raw CSV tables to be stored in the outputs for deduplication
+
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/files/rawCountsCsv",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "File"
+		},
+		name: "rawCountsCsv",
+		path: ["rawCountsCsv"]
+	},
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/files/normCountsCsv",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "File"
+		},
+		name: "normCountsCsv",
+		path: ["normCountsCsv"]
+	},
+	{
+		type: "Resource",
+		spec: {
+			kind: "PColumn",
+			name: "milaboratories.cell-ranger/files/cellMetricsCsv",
+			domain: {
+				"pl7.app/blockId": blockId
+			},
+			valueType: "File"
+		},
+		name: "cellMetricsCsv",
+		path: ["cellMetricsCsv"]
+	},
+
+	// Exporting data to PFrames
+
 	{
 		type: "Xsv",
 		xsvType: "csv",

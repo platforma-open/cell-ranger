@@ -2,192 +2,44 @@
 
 wf := import("@platforma-sdk/workflow-tengo:workflow")
 
-ll := import("@platforma-sdk/workflow-tengo:ll")
-xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
-exec := import("@platforma-sdk/workflow-tengo:exec")
-file := import("@platforma-sdk/workflow-tengo:file")
-pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
 render := import("@platforma-sdk/workflow-tengo:render")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 pframes := import("@platforma-sdk/workflow-tengo:pframes")
-json := import("json")
+smart := import("@platforma-sdk/workflow-tengo:smart")
 
-geneMap := import(":libs.gene-map")
-targetOutputs := import(":libs.target-outputs")
-
-pfSymbolsConv := import(":libs.pf-symbols-conv")
-filteredCountsConv := import(":libs.filtered-counts-conv")
-exportCountsConv := import(":libs.export-counts")
-exportNormCountsConv := import(":libs.export-norm-counts")
-
-cellRangerTpl := assets.importTemplate(":cell-ranger")
-filterGenesTpl := assets.importTemplate(":filter-genes")
-hvgTpl := assets.importTemplate(":calculate-hvg")
-mapGenesTpl := assets.importTemplate(":map-genes")
+processTpl := assets.importTemplate(":process")
 
 // wf.setPreRun(assets.importTemplate(":pre-run")) // monetization check
 
-wf.prepare(func(args){
-	return{
-		resolvedInput: wf.resolve(args.ref, { errIfMissing: true })
-	}
-})
-
 wf.body(func(args) {
-
-	blockId := wf.blockId().getDataAsJson()
-	input := args.resolvedInput
-	inputSpec := input.spec
-
+	blockId := wf.getBlockId()
 	species := args.species
 
-	fileExtension := inputSpec.domain["pl7.app/fileExtension"]
+	input := wf.resolve(args.ref, { errIfMissing: true })
 
-	cellRangerResults := pframes.processColumn(
-		{ spec: inputSpec, data: input.data }, cellRangerTpl,
-		targetOutputs.getTargetOutputs(species, blockId, inputSpec.axesSpec[0]),
-		{
-			aggregate: [{
-				name: "pl7.app/sequencing/lane",
-				optional: true
-			}, {
-				name: "pl7.app/sequencing/readIndex",
-				optional: true
-			}],
-			passAggregationAxesNames: true, 
+	processRun := render.createEphemeral(processTpl, {
+		inputSpec: input.getFutureInputField("spec"),
+		inputData: input.getFutureInputField("data"),
 
-			traceSteps: [{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger"}],
-
-			extra: {
-				species: species,
-				fileExtension: fileExtension,
-				blockId: blockId,
-				mem: args.mem,
-				cpu: args.cpu
-			}
-		}
-	)
-
-	rawCountsPf := {
-		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
-		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
-	}
-
-	normCountsPf := {
-		"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
-		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
-	}
-
-	cellMetricsPf := {
-		"totalCounts.spec": cellRangerResults.outputSpec("cellMetrics", "totalCounts"),
-		"totalCounts.data": cellRangerResults.outputData("cellMetrics", "totalCounts"),
-		"nGenesByCounts.spec": cellRangerResults.outputSpec("cellMetrics", "nGenesByCounts"),
-		"nGenesByCounts.data": cellRangerResults.outputData("cellMetrics", "nGenesByCounts"),
-		"pctCountsMt.spec": cellRangerResults.outputSpec("cellMetrics", "pctCountsMt"),
-		"pctCountsMt.data": cellRangerResults.outputData("cellMetrics", "pctCountsMt"),
-		"complexity.spec": cellRangerResults.outputSpec("cellMetrics", "complexity"),
-		"complexity.data": cellRangerResults.outputData("cellMetrics", "complexity"),
-		"pctCountsInTop20Genes.spec": cellRangerResults.outputSpec("cellMetrics", "pctCountsInTop20Genes"),
-		"pctCountsInTop20Genes.data": cellRangerResults.outputData("cellMetrics", "pctCountsInTop20Genes")
-	}
-
-	csvCounts := xsv.exportFrame(rawCountsPf, "csv", { mem: "16GiB", cpu: 1 })
-	csvCountsNormalized := xsv.exportFrame(normCountsPf, "csv", { mem: "16GiB", cpu: 1 })
-
-	// Filter genes
-	filteredGenesResults := render.create(filterGenesTpl, {
-		csvCounts: csvCounts,
-		normCounts: csvCountsNormalized
+		params: smart.createJsonResource({
+			blockId: blockId,
+			species: species,
+			mem: args.mem,
+			cpu: args.cpu
+		})
 	})
-
-	filteredGenesCountsCsv := filteredGenesResults.output("filteredGenesCountsCsv")
-	filteredGenesNormalizedCountsCsv := filteredGenesResults.output("filteredGenesNormalizedCountsCsv")
-
-	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
-	filteredRawCountsPf := xsv.importFile(filteredGenesCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
-
-	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
-	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
-
-	// // Highly Variable Genes calculation
-	// hvgResults := render.create(hvgTpl, {
-	// 	csvCounts: filteredGenesCountsCsv,
-	// 	normCounts: filteredGenesNormalizedCountsCsv
-	// })
-
-	// hvgCountsCsv := hvgResults.output("hvgCountsCsv")
-	// hvgNormalizedCountsCsv := hvgResults.output("hvgNormalizedCountsCsv")
-
-	// // Convert to pFrames
-	// hvgCountsPf := xsv.importFile(hvgCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
-	// hvgNormCountsPf := xsv.importFile(hvgNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
-
-	mapGenesResults := render.create(mapGenesTpl, {
-		filteredGenesCountsCsv: filteredGenesCountsCsv,
-		species: species
-	})
-
-	geneSymbolsCsv := mapGenesResults.output("geneSymbolsCsv")
-
-	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
-	geneSymbolsPf := xsv.importFile(geneSymbolsCsv, "csv", geneSymbolsImportParams, { mem: "16GiB", cpu: 1 })
-
-	outputs := {
-		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
-		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
-		// alignedBAM: cellRangerResults.output("alignedBAM"),
-		rawCountsPf: pframes.exportFrame(filteredRawCountsPf),
-		cellMetricsPf: pframes.exportFrame(cellMetricsPf),
-		summaryContent: cellRangerResults.outputData("summaryContent")
-	}
-
-	trace := pSpec.makeTrace(inputSpec,
-		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
-	)
-
-	// Count matrix export defined with sample from inputSpec + previous specs
-	sampleAxisSpec := copy(inputSpec.axesSpec[0])
-	exports := {
-		rawCount : {
-			spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-			data: filteredRawCountsPf["rawCounts.data"]
-	 	},
-		normCount : {
-			spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-			data: filteredNormCountsPf["normCounts.data"]
-		},
-		// rawHvgCount : {
-		// 	spec: trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-		// 	data: hvgCountsPf["rawCounts.data"]
-	 	// },
-		// normHvgCount : {
-		// 	spec: trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
-		// 	data: hvgNormCountsPf["normCounts.data"]
-		// },
-		geneSymbols: {
-			spec: geneSymbolsPf["geneSymbol.spec"],
-			data: geneSymbolsPf["geneSymbol.data"]
-		},
-		totalCounts: {
-			spec: cellMetricsPf["totalCounts.spec"],
-			data: cellMetricsPf["totalCounts.data"]
-		},
-		nGenesByCounts: {
-			spec: cellMetricsPf["nGenesByCounts.spec"],
-			data: cellMetricsPf["nGenesByCounts.data"]
-		},
-		pctCountsMt: {
-			spec: cellMetricsPf["pctCountsMt.spec"],
-			data: cellMetricsPf["pctCountsMt.data"]
-		},
-		complexity: {
-			spec: cellMetricsPf["complexity.spec"],
-			data: cellMetricsPf["complexity.data"]
-		}
-	}
 
 	return {
-		outputs: outputs,
-		exports: exports
+		outputs: {
+			cellRangerProgress: processRun.output("cellRangerProgress"),
+			cellRangerReport: pframes.exportColumnData(processRun.output("cellRangerReport")),
+			rawCountsPf: pframes.exportFrame(processRun.output("rawCountsPf")),
+			cellMetricsPf: pframes.exportFrame(processRun.output("cellMetricsPf")),
+			summaryContent: processRun.output("summaryContent")
+		},
+		exports: {
+			exports: processRun.output("exports"),
+			cellMetricsPf: processRun.output("cellMetricsPf")
+		}
 	}
 })
