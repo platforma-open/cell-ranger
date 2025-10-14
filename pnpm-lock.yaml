@@ -22,8 +22,8 @@ catalogs:
       specifier: ^1.4.4
       version: 1.4.4
     '@platforma-open/milaboratories.software-cellranger':
-      specifier: ^1.0.2
-      version: 1.0.2
+      specifier: ^1.0.5
+      version: 1.0.5
     '@platforma-sdk/block-tools':
       specifier: ^2.6.6
       version: 2.6.6
@@ -230,7 +230,7 @@ importers:
         version: 1.1.0
       '@platforma-open/milaboratories.software-cellranger':
         specifier: 'catalog:'
-        version: 1.0.2
+        version: 1.0.5
       '@platforma-sdk/tengo-builder':
         specifier: 'catalog:'
         version: 2.3.0
@@ -1350,8 +1350,8 @@ packages:
   '@platforma-open/milaboratories.runenv-python-3@1.4.4':
     resolution: {integrity: sha512-NkaX1J0RKHbqhBZbVEdFshSSeP5kYxp5sWfye7vFgTfu24UjlrBkGg2RAKjPPv3mznkSyMSxby1uG/KiZiyMFQ==}
 
-  '@platforma-open/milaboratories.software-cellranger@1.0.2':
-    resolution: {integrity: sha512-Objqppf3eiZCwihheZrJzOXGkSMjvgM5/ulhcicFxTA7g6vElcZC6tFtzPJM39jm9s6fBrLPdAlnJwEA1cfouw==}
+  '@platforma-open/milaboratories.software-cellranger@1.0.5':
+    resolution: {integrity: sha512-LQEybb7VcrwkFVs4qFevSHCIFn7id/eg5XrDqnrw+w+SHizMMvpilKvW1DMlO28qfW2novVYpw3qRrzzsd31lA==}
 
   '@platforma-open/milaboratories.software-ptabler@1.12.4':
     resolution: {integrity: sha512-owDO4imeBgHawQRrHV9GbsA+8WJaIl0Mlxwam1unUsfnCOWxqtbWi9Kt+Q201otp4VjACPbA5KOtO6Czwz4hHg==}
@@ -7394,7 +7394,7 @@ snapshots:
       '@platforma-open/milaboratories.runenv-python-3.12.10': 1.2.4
       '@platforma-open/milaboratories.runenv-python-3.12.10-atls': 1.1.6
 
-  '@platforma-open/milaboratories.software-cellranger@1.0.2': {}
+  '@platforma-open/milaboratories.software-cellranger@1.0.5': {}
 
   '@platforma-open/milaboratories.software-ptabler@1.12.4': {}
 
