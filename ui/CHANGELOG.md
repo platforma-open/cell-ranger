@@ -1,5 +1,19 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.8.1
+
+### Patch Changes
+
+- 9899144: technical release
+- 54d8988: technical release
+- 5758f7a: technical release
+- c02e940: technical release
+- Updated dependencies [9899144]
+- Updated dependencies [54d8988]
+- Updated dependencies [5758f7a]
+- Updated dependencies [c02e940]
+  - @platforma-open/milaboratories.cell-ranger.model@1.10.1
+
 ## 1.8.0
 
 ### Minor Changes

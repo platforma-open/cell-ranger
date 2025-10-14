@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.cell-ranger.test
 
+## 1.2.2
+
+### Patch Changes
+
+- 9899144: technical release
+- 54d8988: technical release
+- 5758f7a: technical release
+- c02e940: technical release
+
 ## 1.2.1
 
 ### Patch Changes

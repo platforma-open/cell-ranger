@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.cell-ranger.model
 
+## 1.10.1
+
+### Patch Changes
+
+- 9899144: technical release
+- 54d8988: technical release
+- 5758f7a: technical release
+- c02e940: technical release
+
 ## 1.10.0
 
 ### Minor Changes
