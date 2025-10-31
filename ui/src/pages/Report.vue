@@ -8,6 +8,8 @@ import { resultMap } from './results';
 const app = useApp();
 const sampleId = defineModel<string | undefined>();
 
+const reactiveFileContent = ReactiveFileContent.useGlobal();
+
 type TabId = 'visual' | 'log' | 'html';
 const data = reactive<{ currentTab: TabId }>({ currentTab: 'visual' });
 
@@ -33,7 +35,7 @@ const reportHtml = computed(() => {
   if (handle === undefined) {
     return;
   }
-  return ReactiveFileContent.getContentString(handle).value;// ?.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
+  return reactiveFileContent.getContentString(handle)?.value;// ?.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
 });
 
 // const testHtml = `<!doctype html><p>Hello World!</p>`;
