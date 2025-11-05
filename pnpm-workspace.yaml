@@ -8,10 +8,10 @@ packages:
 
 catalog:
   "@platforma-sdk/model": ^1.45.0
-  "@platforma-sdk/ui-vue": ^1.45.5
-  "@platforma-sdk/workflow-tengo": ^5.5.9
+  "@platforma-sdk/ui-vue": ^1.45.13
+  "@platforma-sdk/workflow-tengo": ^5.5.12
   "@platforma-sdk/block-tools": ^2.6.16
-  "@platforma-sdk/test": ^1.45.11
+  "@platforma-sdk/test": ^1.45.15
   "@platforma-sdk/tengo-builder": ^2.3.3
   "@platforma-sdk/package-builder": ^3.10.7
   "@milaboratories/graph-maker": ^1.1.175
@@ -25,7 +25,7 @@ catalog:
 
   "@platforma-open/milaboratories.runenv-python-3": ^1.4.4
 
-  'ag-grid-enterprise': &ag-grid ^34.1.2
+  'ag-grid-enterprise': &ag-grid ~34.1.2
   'ag-grid-vue3': *ag-grid
   "vue": ^3.5.15
   "vue-tsc": ^2.2.10
