@@ -7,11 +7,11 @@ packages:
   - test
 
 catalog:
-  "@platforma-sdk/model": ^1.45.0
-  "@platforma-sdk/ui-vue": ^1.45.13
-  "@platforma-sdk/workflow-tengo": ^5.5.12
+  "@platforma-sdk/model": ^1.45.17
+  "@platforma-sdk/ui-vue": ^1.45.17
+  "@platforma-sdk/workflow-tengo": ^5.5.13
   "@platforma-sdk/block-tools": ^2.6.16
-  "@platforma-sdk/test": ^1.45.15
+  "@platforma-sdk/test": ^1.45.18
   "@platforma-sdk/tengo-builder": ^2.3.3
   "@platforma-sdk/package-builder": ^3.10.7
   "@milaboratories/graph-maker": ^1.1.175

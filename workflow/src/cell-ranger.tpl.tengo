@@ -110,7 +110,7 @@ self.body(func(inputs) {
 		saveFile("sample/outs/filtered_feature_bc_matrix/matrix.mtx.gz").
 		// saveFile("sample/outs/possorted_genome_bam.bam").
 		saveFileContent("sample/outs/metrics_summary.csv").
-		saveStdout().
+		saveStdoutStream().
 		printErrStreamToStdout().
 		run()
 
