@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.18.2
+
+### Patch Changes
+
+- d5c75d4: Update to Parquet
+
 ## 1.18.1
 
 ### Patch Changes

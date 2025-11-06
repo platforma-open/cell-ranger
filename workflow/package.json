@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cell-ranger.workflow",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "type": "module",
   "description": "Block Workflow",
   "scripts": {

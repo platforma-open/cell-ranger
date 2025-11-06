@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.8.2
+
+### Patch Changes
+
+- d5c75d4: Update to Parquet
+
 ## 1.8.1
 
 ### Patch Changes
