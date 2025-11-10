@@ -12,7 +12,6 @@ exportCountsConv := import(":libs.export-counts")
 exportNormCountsConv := import(":libs.export-norm-counts")
 
 cellRangerTpl := assets.importTemplate(":cell-ranger")
-filterGenesTpl := assets.importTemplate(":filter-genes")
 hvgTpl := assets.importTemplate(":calculate-hvg")
 mapGenesTpl := assets.importTemplate(":map-genes")
 
@@ -66,25 +65,16 @@ self.body(func(inputs) {
 		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
 	}, "csv", { mem: "16GiB", cpu: 1 })
 
-	// Filter genes
-	filteredGenesResults := render.create(filterGenesTpl, {
-		csvCounts: csvCounts,
-		normCounts: csvCountsNormalized
-	})
-
-	filteredGenesCountsCsv := filteredGenesResults.output("filteredGenesCountsCsv")
-	filteredGenesNormalizedCountsCsv := filteredGenesResults.output("filteredGenesNormalizedCountsCsv")
-
 	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
-	filteredRawCountsPf := xsv.importFile(filteredGenesCountsCsv, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
+	filteredRawCountsPf := xsv.importFile(csvCounts, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
 
 	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
-	filteredNormCountsPf := xsv.importFile(filteredGenesNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
+	filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
 	// // Highly Variable Genes calculation
 	// hvgResults := render.create(hvgTpl, {
-	// 	csvCounts: filteredGenesCountsCsv,
-	// 	normCounts: filteredGenesNormalizedCountsCsv
+	// 	csvCounts: csvCounts,
+	// 	normCounts: csvCountsNormalized
 	// })
 
 	// hvgCountsCsv := hvgResults.output("hvgCountsCsv")
@@ -95,7 +85,7 @@ self.body(func(inputs) {
 	// hvgNormCountsPf := xsv.importFile(hvgNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
 	mapGenesResults := render.create(mapGenesTpl, {
-		filteredGenesCountsCsv: filteredGenesCountsCsv,
+		genesCountsCsv: csvCounts,
 		species: species
 	})
 
