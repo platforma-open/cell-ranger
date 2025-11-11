@@ -60,16 +60,16 @@ self.body(func(inputs) {
 		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
 		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
 	}, "csv", { mem: "32GiB", cpu: 1 })
-	csvCountsNormalized := xsv.exportFrame({
-		"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
-		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
-	}, "csv", { mem: "32GiB", cpu: 1 })
+	// csvCountsNormalized := xsv.exportFrame({
+	// 	"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
+	// 	"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
+	// }, "csv", { mem: "32GiB", cpu: 1 })
 
 	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
 	filteredRawCountsPf := xsv.importFile(csvCounts, "csv", countCsvParams, { mem: "32GiB", cpu: 1 })
 
-	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
-	filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "32GiB", cpu: 1 })
+	// normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
+	// filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "32GiB", cpu: 1 })
 
 	// // Highly Variable Genes calculation
 	// hvgResults := render.create(hvgTpl, {
@@ -103,7 +103,11 @@ self.body(func(inputs) {
 
 	exportPfBuilder := pframes.pFrameBuilder()
 	exportPfBuilder.add("rawCount", trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)), filteredRawCountsPf["rawCounts.data"])
-	exportPfBuilder.add("normCount", trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)), filteredNormCountsPf["normCounts.data"])
+	exportPfBuilder.add(
+		"normCount",
+		trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
+		cellRangerResults.outputData("normCounts", "normCounts")
+	)
 	// exportPfBuilder.add("rawHvgCount", trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)), hvgCountsPf["rawCounts.data"])
 	// exportPfBuilder.add("normHvgCount", trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)), hvgNormCountsPf["normCounts.data"])
 	exportPfBuilder.add("geneSymbols", geneSymbolsPf["geneSymbol.spec"], geneSymbolsPf["geneSymbol.data"])
