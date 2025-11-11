@@ -4,10 +4,10 @@ pframes := import("@platforma-sdk/workflow-tengo:pframes")
 xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
 render := import("@platforma-sdk/workflow-tengo:render")
 pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
+pt := import("@platforma-sdk/workflow-tengo:pt")
 
 targetOutputs := import(":libs.target-outputs")
 pfSymbolsConv := import(":libs.pf-symbols-conv")
-filteredCountsConv := import(":libs.filtered-counts-conv")
 exportCountsConv := import(":libs.export-counts")
 exportNormCountsConv := import(":libs.export-norm-counts")
 
@@ -56,20 +56,20 @@ self.body(func(inputs) {
 
 	cellMetricsPf := cellRangerResults.xsvOutputFrame("cellMetrics")
 
-	csvCounts := xsv.exportFrame({
-		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
-		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
-	}, "csv", { mem: "32GiB", cpu: 1 })
-	// csvCountsNormalized := xsv.exportFrame({
-	// 	"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
-	// 	"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
-	// }, "csv", { mem: "32GiB", cpu: 1 })
+	// Build pFrame from rawCounts to pass directly to ptabler
+	rawCountsPf := pframes.pFrameBuilder()
+	rawCountsPf.add("rawCounts", cellRangerResults.outputSpec("rawCounts", "rawCounts"), cellRangerResults.outputData("rawCounts", "rawCounts"))
+	rawCountsPfBuilt := rawCountsPf.build()
 
-	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
-	filteredRawCountsPf := xsv.importFile(csvCounts, "csv", countCsvParams, { mem: "32GiB", cpu: 1 })
-
-	// normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
-	// filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "32GiB", cpu: 1 })
+	// Use ptabler directly on pFrame data to extract unique Ensembl IDs
+	// Pass the pFrame using p.full() and access the gene axis by name
+	ptWf := pt.workflow().mem("4GiB").cpu(1)
+	axesDf := ptWf.frame(pt.p.full(rawCountsPfBuilt))
+	groupedDf := axesDf.select(pt.axis("pl7.app/rna-seq/geneId").alias("Ensembl Id")).groupBy("Ensembl Id").agg(pt.col("Ensembl Id").count().alias("_count"))
+	uniqueGeneIdsDf := groupedDf.select("Ensembl Id")
+	uniqueGeneIdsDf.save("unique_gene_ids.csv")
+	ptResult := ptWf.run()
+	uniqueGeneIdsCsv := ptResult.getFile("unique_gene_ids.csv")
 
 	// // Highly Variable Genes calculation
 	// hvgResults := render.create(hvgTpl, {
@@ -85,7 +85,7 @@ self.body(func(inputs) {
 	// hvgNormCountsPf := xsv.importFile(hvgNormalizedCountsCsv, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
 
 	mapGenesResults := render.create(mapGenesTpl, {
-		genesCountsCsv: csvCounts,
+		genesCountsCsv: uniqueGeneIdsCsv,
 		species: species
 	})
 
@@ -102,7 +102,11 @@ self.body(func(inputs) {
 	sampleAxisSpec := copy(inputSpec.axesSpec[0])
 
 	exportPfBuilder := pframes.pFrameBuilder()
-	exportPfBuilder.add("rawCount", trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)), filteredRawCountsPf["rawCounts.data"])
+	exportPfBuilder.add(
+		"rawCount",
+		trace.inject(exportCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
+		cellRangerResults.outputData("rawCounts", "rawCounts")
+	)
 	exportPfBuilder.add(
 		"normCount",
 		trace.inject(exportNormCountsConv.getSpecs(blockId, species, sampleAxisSpec)),
@@ -116,10 +120,10 @@ self.body(func(inputs) {
 	return {
 		exports: exportPfBuilder.build(),
 		cellMetricsPf: cellMetricsPf,
+		rawCountsPf: rawCountsPfBuilt,
 
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
 		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
-		rawCountsPf: filteredRawCountsPf,
 		summaryContent: cellRangerResults.outputData("summaryContent")
 	}
 })
