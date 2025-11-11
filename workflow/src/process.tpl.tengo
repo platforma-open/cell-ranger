@@ -59,17 +59,17 @@ self.body(func(inputs) {
 	csvCounts := xsv.exportFrame({
 		"rawCounts.spec": cellRangerResults.outputSpec("rawCounts", "rawCounts"),
 		"rawCounts.data": cellRangerResults.outputData("rawCounts", "rawCounts")
-	}, "csv", { mem: "16GiB", cpu: 1 })
+	}, "csv", { mem: "32GiB", cpu: 1 })
 	csvCountsNormalized := xsv.exportFrame({
 		"normCounts.spec": cellRangerResults.outputSpec("normCounts", "normCounts"),
 		"normCounts.data": cellRangerResults.outputData("normCounts", "normCounts")
-	}, "csv", { mem: "16GiB", cpu: 1 })
+	}, "csv", { mem: "32GiB", cpu: 1 })
 
 	countCsvParams := filteredCountsConv.getRawColumns(blockId, species, inputSpec)
-	filteredRawCountsPf := xsv.importFile(csvCounts, "csv", countCsvParams, { mem: "16GiB", cpu: 1 })
+	filteredRawCountsPf := xsv.importFile(csvCounts, "csv", countCsvParams, { mem: "32GiB", cpu: 1 })
 
 	normCountCsvParams := filteredCountsConv.getNormColumns(blockId, species, inputSpec)
-	filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "16GiB", cpu: 1 })
+	filteredNormCountsPf := xsv.importFile(csvCountsNormalized, "csv", normCountCsvParams, { mem: "32GiB", cpu: 1 })
 
 	// // Highly Variable Genes calculation
 	// hvgResults := render.create(hvgTpl, {
@@ -92,7 +92,7 @@ self.body(func(inputs) {
 	geneSymbolsCsv := mapGenesResults.output("geneSymbolsCsv")
 
 	geneSymbolsImportParams := pfSymbolsConv.getColumns(species)
-	geneSymbolsPf := xsv.importFile(geneSymbolsCsv, "csv", geneSymbolsImportParams, { mem: "16GiB", cpu: 1 })
+	geneSymbolsPf := xsv.importFile(geneSymbolsCsv, "csv", geneSymbolsImportParams, { mem: "32GiB", cpu: 1 })
 
 	trace := pSpec.makeTrace(inputSpec,
 		{type: "milaboratories.cell-ranger", id: blockId, importance: 20, label: "Cell Ranger"}// + genomes.getSpeciesName(species)}
