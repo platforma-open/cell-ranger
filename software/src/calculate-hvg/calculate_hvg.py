@@ -1,7 +1,6 @@
 # polars_hvg_selector.py
 
 import polars as pl
-import pandas as pd
 import anndata
 import scanpy as sc
 import numpy as np
@@ -78,9 +77,11 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
     # Create the AnnData object using the sparse matrix
     adata = anndata.AnnData(
         X=sparse_matrix,
-        obs=pd.DataFrame(index=cell_ids),
-        var=pd.DataFrame(index=gene_ids)
+        obs={'obs_names': cell_ids},
+        var={'var_names': gene_ids}
     )
+    adata.obs_names = cell_ids
+    adata.var_names = gene_ids
 
     print("Step 3a: Pre-filtering data based on cell counts...")
     print(f"Original number of genes: {adata.n_vars}")
@@ -108,8 +109,8 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
             raise e
     
     # Get a DataFrame of genes sorted by their variability rank
-    ranked_genes_pd = adata.var.sort_values('highly_variable_rank')
-    ranked_genes_pd = ranked_genes_pd[ranked_genes_pd['highly_variable'] == True]
+    ranked_genes_df = adata.var.sort_values('highly_variable_rank')
+    ranked_genes_df = ranked_genes_df[ranked_genes_df['highly_variable'] == True]
 
     print("Step 4: Counting rows per gene in the original data...")
     # Use Polars to efficiently count the number of rows each gene contributes
@@ -126,7 +127,7 @@ def select_dynamic_hvgs_polars(raw_input_path, normalized_input_path, raw_output
     cumulative_rows = 0
     
     # Iterate through the ranked genes and add them until a limit is reached
-    for gene_id in ranked_genes_pd.index:
+    for gene_id in ranked_genes_df.index:
         rows_for_this_gene = gene_row_counts_dict.get(gene_id, 0)
         
         # Stop if adding the next gene would exceed either the row limit or the gene cap
