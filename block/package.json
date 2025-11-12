@@ -25,8 +25,8 @@
     "meta": {
       "title": "Cell Ranger",
       "logo": "file:../logos/block-logo.png",
-      "url": "https://github.com/milaboratory/platforma-cell-ranger",
-      "docs": "https://github.com/milaboratory/platforma-cell-ranger/docs",
+      "url": "https://github.com/platforma-open/cell-ranger",
+      "docs": "https://docs.platforma.bio/guides/sc-rna-seq-analysis/cellranger/",
       "support": "mailto:support@milaboratories.com",
       "description": "Preprocessing of scRNA-seq fastq files with Cell Ranger to generate count matrices.",
       "longDescription": "file:../docs/description.md",
