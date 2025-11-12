@@ -6,7 +6,6 @@ import {
   PlDropdown,
   PlDropdownRef,
   PlNumberField,
-  PlSectionSeparator,
 } from '@platforma-sdk/ui-vue';
 import { useApp } from '../app';
 import { speciesOptions } from '../species';
@@ -39,7 +38,6 @@ function setInput(inputRef?: PlRef) {
     label="Select species"
   />
   <PlAccordionSection label="Advanced Settings">
-    <PlSectionSeparator>Resource Allocation</PlSectionSeparator>
     <PlNumberField
       v-model="app.model.args.mem"
       label="Memory (GiB)"
