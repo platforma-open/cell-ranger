@@ -32,7 +32,8 @@ export const resultMap = computed(
     const cellRangerProgressLine = app.model.outputs.cellRangerProgressLine;
     if (cellRangerProgressLine !== undefined) {
       for (const prog of cellRangerProgressLine.data) {
-        r[prog.key[0]].cellRangerProgressLine = prog.value;
+        r[prog.key[0]].cellRangerProgressLine = prog.value
+          && JSON.parse(JSON.stringify(prog.value));
       }
     }
 
