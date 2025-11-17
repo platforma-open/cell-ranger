@@ -52,7 +52,7 @@ getGenomeAsset := func(species) {
 	} else if species == "test-species" {
 		return assets.importAsset("@platforma-open/milaboratories.cellranger-genome-assets:test-species")
 	} else {
-		return undefined
+		ll.panic("genome asset not found for species: %v", species)
 	}
 }
 

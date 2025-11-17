@@ -28,6 +28,9 @@ self.body(func(inputs) {
 
 	fileExtension := inputSpec.domain["pl7.app/fileExtension"]
 
+	// We will collect all the intermediate results that we want to preserve for deduplication in this builder
+	intermediateResultsBuilder := pframes.pFrameBuilder()
+
 	cellRangerResults := pframes.processColumn(
 		{ spec: inputSpec, data: inputData }, cellRangerTpl,
 		targetOutputs.getTargetOutputs(species, blockId, inputSpec.axesSpec[0]),
@@ -54,6 +57,8 @@ self.body(func(inputs) {
 			}
 		}
 	)
+
+	cellRangerResults.addAllOutputsToBuilder(intermediateResultsBuilder)
 
 	cellMetricsPf := cellRangerResults.xsvOutputFrame("cellMetrics")
 
@@ -126,6 +131,8 @@ self.body(func(inputs) {
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
 		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
 		rawCountsPf: filteredRawCountsPf,
-		summaryContent: cellRangerResults.outputData("summaryContent")
+		summaryContent: cellRangerResults.outputData("summaryContent"),
+
+		_intermediateResults: intermediateResultsBuilder.build()
 	}
 })
