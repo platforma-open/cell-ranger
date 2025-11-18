@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.19.0
+
+### Minor Changes
+
+- 1356884: Fix for heavy calculation deduplication & SDK upgrade
+
 ## 1.18.2
 
 ### Patch Changes

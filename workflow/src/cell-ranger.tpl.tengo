@@ -174,7 +174,7 @@ self.body(func(inputs) {
 		saveFile("filtered_rawCounts_normalized.csv").
 		run()
 
-	output := {
+	return {
 		cellRangerLog: cellRangerLog,
 		cellRangerReport: cellRangerReport,
 		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv"),
@@ -182,7 +182,4 @@ self.body(func(inputs) {
 		normCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"),
 		cellMetricsCsv: cellMetricsCsv.getFile("cell_metrics.csv")
 	}
-
-	return output
-
 })
