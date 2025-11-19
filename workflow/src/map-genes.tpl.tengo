@@ -7,7 +7,7 @@ self.defineOutputs("geneSymbolsCsv")
 
 self.body(func(inputs) {
 	species := inputs.species
-	filteredGenesCountsCsv := inputs.filteredGenesCountsCsv
+	genesCountsCsv := inputs.genesCountsCsv
 
 	geneAsset := geneMap.getGeneAsset(species)
 	geneAssetName := geneMap.getAssetName(species)
@@ -17,7 +17,7 @@ self.body(func(inputs) {
 		mem("16GiB").
 		cpu(1).
 		addAsset(geneAsset, ".", geneAssetName).
-		addFile("rawCounts.csv", filteredGenesCountsCsv).
+		addFile("rawCounts.csv", genesCountsCsv).
 		arg("--raw_counts").arg("rawCounts.csv").
 		arg("--annotation").arg(geneAssetName).
 		arg("--output").arg("geneSymbols.csv").

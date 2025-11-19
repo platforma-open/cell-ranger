@@ -1,5 +1,6 @@
 import scanpy as sc
 import pandas as pd
+import polars as pl
 import numpy as np
 import argparse
 import os
@@ -18,39 +19,40 @@ def load_data(matrix_path, barcodes_path, features_path):
     # Load the matrix
     matrix = scipy.io.mmread(matrix_path).tocsr()
 
-    # Load barcodes (cell IDs)
-    barcodes_raw = pd.read_csv(barcodes_path, header=None)[0].tolist()
+    # Load barcodes (cell IDs) using Polars
+    barcodes_raw = pl.read_csv(barcodes_path, has_header=False, new_columns=["barcode"])["barcode"].to_list()
     barcodes = [clean_barcode_suffix(b) for b in barcodes_raw]
 
-    # Load features (gene IDs and gene symbols)
-    features = pd.read_csv(features_path, sep='\t', header=None)
-    features.columns = ['gene_id', 'gene_symbol', 'feature_type']
+    # Load features (gene IDs and gene symbols) using Polars
+    features_df = pl.read_csv(features_path, separator='\t', has_header=False, new_columns=['gene_id', 'gene_symbol', 'feature_type'])
 
     # Debugging output
     print(f"Matrix shape: {matrix.shape}")
-    print(f"Features shape: {features.shape}")
+    print(f"Features shape: {features_df.height}")
     print(f"Barcodes count: {len(barcodes)}")
 
     # Clean up hidden characters
-    features['gene_id'] = features['gene_id'].astype(str).str.strip()
-    features['gene_symbol'] = features['gene_symbol'].astype(str).str.strip()
+    features_df = features_df.with_columns(
+        pl.col('gene_id').str.strip_chars(),
+        pl.col('gene_symbol').str.strip_chars()
+    )
 
     # Check for duplicate gene IDs
-    if not features['gene_id'].is_unique:
+    if features_df['gene_id'].is_duplicated().any():
         print("⚠️ Found duplicate gene IDs. Removing duplicates.")
-        features = features.drop_duplicates(subset='gene_id', keep='first')
-        matrix = matrix[:features.shape[0], :]
+        features_df = features_df.unique(subset='gene_id', keep='first')
+        matrix = matrix[:features_df.height, :]
     else:
         print("✅ Gene IDs are unique.")
 
     # Check for duplicate barcodes
-    barcode_duplicates = pd.Series(barcodes)[pd.Series(barcodes).duplicated()]
-    if not barcode_duplicates.empty:
-        print(f"⚠️ Found {barcode_duplicates.nunique()} duplicate barcodes.")
-        barcodes = pd.Series(barcodes).drop_duplicates().tolist()
+    barcodes_series = pl.Series("barcodes", barcodes)
+    if barcodes_series.is_duplicated().any():
+        print(f"⚠️ Found {barcodes_series.n_unique()} duplicate barcodes.")
+        barcodes = barcodes_series.unique().to_list()
 
     # ✅ FINAL FIX: Transpose the matrix
-    if matrix.shape[0] == len(features) and matrix.shape[1] == len(barcodes):
+    if matrix.shape[0] == features_df.height and matrix.shape[1] == len(barcodes):
         print("🔄 Transposing matrix to match AnnData format (cells × genes).")
         matrix = matrix.transpose()
     else:
@@ -58,9 +60,9 @@ def load_data(matrix_path, barcodes_path, features_path):
 
     # Final assignment
     adata = sc.AnnData(matrix)
-    adata.var_names = pd.Index(features['gene_id'].values, name='gene_id')
+    adata.var_names = pd.Index(features_df['gene_id'].to_list(), name='gene_id')
     adata.obs_names = pd.Index(barcodes, name='cell_id')
-    adata.var['gene_symbol'] = features['gene_symbol'].values
+    adata.var['gene_symbol'] = features_df['gene_symbol'].to_list()
 
     return adata
 

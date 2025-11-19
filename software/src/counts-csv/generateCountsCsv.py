@@ -1,14 +1,15 @@
 import argparse
 import pandas as pd
+import polars as pl
 import scipy.io
 import gzip
 import scanpy as sc
 import anndata 
 
-def read_gzip_tsv(file_path):
-    """Reads a gzipped TSV file into a pandas DataFrame."""
-    with gzip.open(file_path, 'rt') as f:
-        return pd.read_csv(f, sep='\t', header=None)
+def read_gzip_tsv_polars(file_path):
+    """Reads a gzipped TSV file into a Polars DataFrame."""
+    with gzip.open(file_path, 'rb') as f:
+        return pl.read_csv(f, separator='\t', has_header=False)
 
 def clean_barcode_suffix(barcode):
     """Remove '-' and following numbers from cell barcode."""
@@ -22,34 +23,27 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
     matrix = scipy.io.mmread(matrix_path).tocoo()  # Sparse COO format
 
     print("Loading barcodes.tsv.gz...")
-    barcodes = read_gzip_tsv(barcodes_path)
+    barcodes = read_gzip_tsv_polars(barcodes_path)
     
     print("Loading features.tsv.gz...")
-    features = read_gzip_tsv(features_path)
+    features = read_gzip_tsv_polars(features_path)
     
-    barcodes_list = [clean_barcode_suffix(barcode) for barcode in barcodes[0].tolist()]
-    print(f"Cleaned barcode suffixes. Example: {barcodes[0].tolist()[0]} -> {barcodes_list[0]}")
-    features_list = features[0].tolist()
+    barcodes_list = [clean_barcode_suffix(barcode) for barcode in barcodes.to_series().to_list()]
+    print(f"Cleaned barcode suffixes. Example: {barcodes.to_series().to_list()[0]} -> {barcodes_list[0]}")
+    features_list = features.to_series().to_list()
 
-    data = []
+    data = {
+        "CellId": [barcodes_list[j] for j in matrix.col],
+        "GeneId": [features_list[i] for i in matrix.row],
+        "Count": matrix.data
+    }
 
     print(f"Processing {matrix.nnz} nonzero entries...")
-    count_debug = 0
 
-    for i, j, value in zip(matrix.row, matrix.col, matrix.data):
-        if count_debug < 10:
-            print(f"Row: {i}, Column: {j}, Count: {value}")
-        cell_id = barcodes_list[j]
-        gene_id = features_list[i]
-        count = value
-        data.append([cell_id, gene_id, count])
-        count_debug += 1
-
-    print(f"Total rows written: {count_debug}")
-    df = pd.DataFrame(data, columns=["CellId", "GeneId", "Count"])
+    df = pl.DataFrame(data)
 
     print(f"Writing raw count matrix to {output_csv_path}...")
-    df.to_csv(output_csv_path, index=False)
+    df.write_csv(output_csv_path)
 
     # Normalize counts
     print("Normalizing counts...")
@@ -71,11 +65,11 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
         gene_id = adata.var_names[j]
         norm_data.append([cell_id, gene_id, value])
 
-    norm_df = pd.DataFrame(norm_data, columns=["CellId", "GeneId", "NormalizedCount"])
+    norm_df = pl.DataFrame(norm_data, schema=["CellId", "GeneId", "NormalizedCount"])
     normalized_output_csv_path = output_csv_path.replace(".csv", "_normalized.csv")
 
     print(f"Writing normalized count matrix to {normalized_output_csv_path}...")
-    norm_df.to_csv(normalized_output_csv_path, index=False)
+    norm_df.write_csv(normalized_output_csv_path)
 
     print("Done!")
 

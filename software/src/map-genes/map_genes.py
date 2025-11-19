@@ -1,55 +1,51 @@
-import pandas as pd
+import polars as pl
 import argparse
 
 
 def map_ensembl_to_gene_symbol(raw_counts_path, annotation_path, output_path):
-    # Load the raw count data
+    # Lazily load the raw count data to select columns before parsing
     print("Loading raw count data...")
-    raw_df = pd.read_csv(raw_counts_path)
-
-    # Validate required columns in raw count data (support both legacy and new headers)
-    base_required = {"Sample", "Ensembl Id", "Raw gene expression"}
-    cell_headers = {"Cell Barcode", "Cell ID"}
-    missing_base = base_required - set(raw_df.columns)
-    has_cell_header = any(h in raw_df.columns for h in cell_headers)
-    if missing_base or not has_cell_header:
-        expected_desc = f"{sorted(base_required)} and one of {sorted(cell_headers)}"
-        raise ValueError(f"Raw count data must contain columns: {expected_desc}")
-
-    # Normalize column name for downstream logic (keep legacy name internally)
-    if "Cell ID" in raw_df.columns and "Cell Barcode" not in raw_df.columns:
-        raw_df = raw_df.rename(columns={"Cell ID": "Cell Barcode"})
+    try:
+        raw_lazy = pl.scan_csv(raw_counts_path)
+        raw_df = raw_lazy.select(["Ensembl Id"]).collect()
+    except pl.ColumnNotFoundError:
+        raise ValueError("Raw count data must contain 'Ensembl Id' column")
 
     # Extract unique Ensembl IDs
     unique_ensembl_ids = raw_df["Ensembl Id"].unique()
     print(f"Found {len(unique_ensembl_ids)} unique Ensembl IDs.")
 
-    # Load the annotation data
+    # Lazily load the annotation data
     print("Loading annotation data...")
-    annotation_df = pd.read_csv(annotation_path)
-
-    # Validate required columns in annotation data
-    if not {"Ensembl Id", "Gene symbol"}.issubset(annotation_df.columns):
+    try:
+        annotation_lazy = pl.scan_csv(annotation_path)
+        annotation_df = annotation_lazy.select(["Ensembl Id", "Gene symbol"]).collect()
+    except pl.ColumnNotFoundError:
         raise ValueError("Annotation file must contain 'Ensembl Id' and 'Gene symbol' columns")
 
-    # Create a mapping dictionary from the annotation file
-    annotation_map = annotation_df.drop_duplicates("Ensembl Id").set_index("Ensembl Id")
+    # Create a mapping DataFrame from the annotation file
+    annotation_map = annotation_df.unique(subset=["Ensembl Id"])
 
-    # Map Ensembl IDs to Gene symbols
+    # Map Ensembl IDs to Gene symbols using a join
     print("Mapping Ensembl IDs to gene symbols...")
-    mapped_df = pd.DataFrame(unique_ensembl_ids, columns=["Ensembl Id"])
-    mapped_df["Gene symbol"] = mapped_df["Ensembl Id"].map(annotation_map["Gene symbol"])
+    mapped_df = pl.DataFrame({"Ensembl Id": unique_ensembl_ids})
+    mapped_df = mapped_df.join(annotation_map, on="Ensembl Id", how="left")
 
     # Report missing mappings
-    missing = mapped_df["Gene symbol"].isnull().sum()
+    missing = mapped_df["Gene symbol"].is_null().sum()
     print(f"Mapping complete. {missing} Ensembl IDs could not be mapped to gene symbols.")
 
     # Add Ensembl ID as label when gene symbol is missing
-    mapped_df["Gene symbol"] = mapped_df["Gene symbol"].fillna(mapped_df["Ensembl Id"])
+    mapped_df = mapped_df.with_columns(
+        pl.when(pl.col("Gene symbol").is_null())
+        .then(pl.col("Ensembl Id"))
+        .otherwise(pl.col("Gene symbol"))
+        .alias("Gene symbol")
+    )
 
     # Save output
     print(f"Saving output to {output_path}...")
-    mapped_df.to_csv(output_path, index=False)
+    mapped_df.write_csv(output_path)
     print("Done.")
 
 

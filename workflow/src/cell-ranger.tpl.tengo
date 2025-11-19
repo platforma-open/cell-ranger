@@ -134,7 +134,6 @@ self.body(func(inputs) {
 		arg("--output").arg("rawCounts.csv").
 		saveFile("rawCounts.csv").
 		saveFile("rawCounts_normalized.csv").
-		printErrStreamToStdout().
 		run()
 
 	rawCounts := countMatrixCsv.getFile("rawCounts.csv")
@@ -157,7 +156,6 @@ self.body(func(inputs) {
 		arg("--species").arg(species).
 		arg("--output").arg(".").
 		saveFile("cell_metrics.csv").
-		printErrStreamToStdout().
 		run()
 
 	filteredCellsCountsCsv := exec.builder().
@@ -174,7 +172,6 @@ self.body(func(inputs) {
 		arg("--output_normalized").arg("filtered_rawCounts_normalized.csv").
 		saveFile("filtered_rawCounts.csv").
 		saveFile("filtered_rawCounts_normalized.csv").
-		printErrStreamToStdout().
 		run()
 
 	return {
