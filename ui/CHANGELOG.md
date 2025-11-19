@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.9.0
+
+### Minor Changes
+
+- 05e9789: Support larger datasets and improve performance
+
 ## 1.8.2
 
 ### Patch Changes

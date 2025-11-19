@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.20.0
+
+### Minor Changes
+
+- 05e9789: Support larger datasets and improve performance
+
 ## 1.19.0
 
 ### Minor Changes

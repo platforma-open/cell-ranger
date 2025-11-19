@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cellranger.software",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "scripts": {
     "build": "pl-pkg build",
     "prepublishOnly": "pl-pkg prepublish",

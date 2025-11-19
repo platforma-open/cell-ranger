@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.17.0
+
+### Minor Changes
+
+- 05e9789: Support larger datasets and improve performance
+
 ## 1.16.1
 
 ### Patch Changes

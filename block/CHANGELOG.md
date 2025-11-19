@@ -1,5 +1,17 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.7.0
+
+### Minor Changes
+
+- 05e9789: Support larger datasets and improve performance
+
+### Patch Changes
+
+- Updated dependencies [05e9789]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.20.0
+  - @platforma-open/milaboratories.cell-ranger.ui@1.9.0
+
 ## 1.6.3
 
 ### Patch Changes
