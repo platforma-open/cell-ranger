@@ -126,10 +126,8 @@ self.body(func(inputs) {
 		exports: exportPfBuilder.build(),
 		cellMetricsPf: cellMetricsPf,
 		rawCountsPf: rawCountsPfBuilt,
-
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
 		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
-		rawCountsPf: filteredRawCountsPf,
 		summaryContent: cellRangerResults.outputData("summaryContent"),
 
 		_intermediateResults: intermediateResultsBuilder.build()
