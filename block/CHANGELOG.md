@@ -1,5 +1,12 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.7.1
+
+### Patch Changes
+
+- Updated dependencies [87ac8c2]
+  - @platforma-open/milaboratories.cell-ranger.ui@1.9.1
+
 ## 1.7.0
 
 ### Minor Changes

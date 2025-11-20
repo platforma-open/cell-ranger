@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-ranger.ui
 
+## 1.9.1
+
+### Patch Changes
+
+- 87ac8c2: - Clone reactive status values to fix broken progressbar
+  - Fix styling
+  - Update SDK
+
 ## 1.9.0
 
 ### Minor Changes
