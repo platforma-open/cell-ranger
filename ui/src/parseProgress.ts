@@ -33,6 +33,8 @@ export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): Co
     return res;
   }
 
+  res.status = 'running'; // Shows "infinite" progress if percent is not known
+
   const raw = progressLine.progressLine?.trim();
 
   if (!raw) {
@@ -40,8 +42,6 @@ export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): Co
   }
 
   res.text = raw;
-
-  res.status = 'running'; // Shows "infinite" progress if percent is not known
 
   const groups = match(raw);
 

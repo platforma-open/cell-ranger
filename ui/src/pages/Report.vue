@@ -62,16 +62,23 @@ const logHandle = computed(() => {
 <template>
   <PlBtnGroup v-model="data.currentTab" :options="tabOptions" />
 
-  <div v-if="data.currentTab === 'visual'" style="padding: 12px 0; display: flex;">
+  <template v-if="data.currentTab === 'visual'">
     <PlChartStackedBar v-if="alignmentValue" :settings="alignmentValue" />
-  </div>
+  </template>
 
-  <div v-else-if="data.currentTab === 'log'">
-    <PlLogView :log-handle="logHandle" label="CellRanger Log"/>
-  </div>
+  <template v-if="data.currentTab === 'log'">
+    <PlLogView :log-handle="logHandle" label="CellRanger Log" />
+  </template>
 
-  <div v-else>
-    <iframe v-if="reportHtml" :srcdoc="reportHtml" style="width: 100%; height: 80vh; border: 0;" />
+  <template v-if="data.currentTab === 'html'">
+    <iframe v-if="reportHtml" :srcdoc="reportHtml" :class="$style.iframe" />
     <div v-else>No HTML report available</div>
-  </div>
+  </template>
 </template>
+
+<style module>
+.iframe {
+  flex: 1;
+  border: none;
+}
+</style>
