@@ -103,7 +103,7 @@ self.body(func(inputs) {
 		arg("--create-bam=false").
 		arg("--id=sample").
 		argWithVar("--localcores={system.cpu}").
-		argWithVar("--localmem={system.ram.gb}").
+		argWithVar("--localmem={int(max(min(system.ram.gb*90/100,system.ram.gb-2),system.ram.gb*50/100))}").
 		saveFile("sample/outs/web_summary.html").
 		saveFile("sample/outs/filtered_feature_bc_matrix/barcodes.tsv.gz").
 		saveFile("sample/outs/filtered_feature_bc_matrix/features.tsv.gz").
