@@ -4,6 +4,7 @@ import scipy.io
 import gzip
 import scanpy as sc
 import anndata
+from pathlib import Path
 
 def read_gzip_tsv_polars(file_path):
     """Reads a gzipped TSV file into a Polars DataFrame."""
@@ -65,7 +66,8 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_path):
         "GeneId": gene_id_series.gather(normalized_matrix.col),
         "NormalizedCount": normalized_matrix.data,
     })
-    normalized_output_path = output_path.replace(".parquet", "_normalized.parquet")
+    raw_path = Path(output_path)
+    normalized_output_path = str(raw_path.with_name(raw_path.stem + "_normalized" + raw_path.suffix))
 
     print(f"Writing normalized count matrix to {normalized_output_path}...")
     norm_df.write_parquet(normalized_output_path)

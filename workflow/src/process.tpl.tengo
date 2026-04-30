@@ -30,7 +30,7 @@ self.body(func(inputs) {
 	// Resource budget for the whole step. Same defaults as the cellranger
 	// invocation in cell-ranger.tpl.tengo (which receives these via metaExtra
 	// below) so the auto-import ptabler runs with the user-supplied budget.
-	mem := !is_undefined(inputs.params.mem) ? string(inputs.params.mem) + "GiB" : "64GiB"
+	mem := !is_undefined(inputs.params.mem) ? string(inputs.params.mem) + "GiB" : "64GB"
 	cpu := !is_undefined(inputs.params.cpu) ? inputs.params.cpu : 16
 
 	// We will collect all the intermediate results that we want to preserve for deduplication in this builder

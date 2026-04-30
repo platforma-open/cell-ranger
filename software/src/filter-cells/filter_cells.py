@@ -16,10 +16,11 @@ def filter_outliers(raw_counts_path, normalized_counts_path, metrics_path, outpu
     """
     # Metrics is small (one row per cell); fine to load eagerly.
     metrics_df = pl.read_csv(metrics_path)
-    outlier_cells_lf = metrics_df.filter(pl.col('outlier')).select('CellId').lazy()
+    outliers_df = metrics_df.filter(pl.col('outlier'))
+    outlier_cells_lf = outliers_df.select('CellId').lazy()
 
     initial_cell_count = metrics_df.height
-    outlier_cell_count = metrics_df.filter(pl.col('outlier')).height
+    outlier_cell_count = outliers_df.height
     print(f"Total number of cells: {initial_cell_count}")
     print(f"Number of cells flagged as outliers: {outlier_cell_count}")
     print(f"Number of cells after filtering: {initial_cell_count - outlier_cell_count}")
