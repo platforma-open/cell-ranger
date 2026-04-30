@@ -1,8 +1,6 @@
 import polars as pl
 import argparse
-import time
 import os
-import polars.selectors as cs
 
 
 def filter_outliers(raw_counts_path, normalized_counts_path, metrics_path, output_raw_path, output_normalized_path):
@@ -10,49 +8,44 @@ def filter_outliers(raw_counts_path, normalized_counts_path, metrics_path, outpu
     Filters outlier cells from count matrices based on a metrics file.
 
     Args:
-        raw_counts_path (str): Path to the raw counts CSV file.
-        normalized_counts_path (str): Path to the normalized counts CSV file.
+        raw_counts_path (str): Path to the raw counts Parquet file.
+        normalized_counts_path (str): Path to the normalized counts Parquet file.
         metrics_path (str): Path to the cell metrics CSV file containing outlier flags.
-        output_raw_path (str): Path to save the filtered raw counts CSV.
-        output_normalized_path (str): Path to save the filtereThed normalized counts CSV.
+        output_raw_path (str): Path to save the filtered raw counts Parquet file.
+        output_normalized_path (str): Path to save the filtered normalized counts Parquet file.
     """
-    # Load data
+    # Metrics is small (one row per cell); fine to load eagerly.
     metrics_df = pl.read_csv(metrics_path)
-    raw_counts_long = pl.read_csv(raw_counts_path)
-    normalized_counts_long = pl.read_csv(normalized_counts_path)
+    outlier_cells_lf = metrics_df.filter(pl.col('outlier')).select('CellId').lazy()
 
-    # Identify outliers
-    outlier_cells_df = metrics_df.filter(pl.col('outlier') == True).select('CellId')
-
-    # Log initial counts
-    initial_cell_count = raw_counts_long['CellId'].n_unique()
-    outlier_cell_count = len(outlier_cells_df)
+    initial_cell_count = metrics_df.height
+    outlier_cell_count = metrics_df.filter(pl.col('outlier')).height
     print(f"Total number of cells: {initial_cell_count}")
     print(f"Number of cells flagged as outliers: {outlier_cell_count}")
+    print(f"Number of cells after filtering: {initial_cell_count - outlier_cell_count}")
 
-    # Filter out outliers
-    final_raw_long = raw_counts_long.join(outlier_cells_df, on='CellId', how='anti')
-    final_normalized_long = normalized_counts_long.join(outlier_cells_df, on='CellId', how='anti')
-
-    # Log final counts
-    final_cell_count = final_raw_long['CellId'].n_unique()
-    print(f"Number of cells after filtering: {final_cell_count}")
-
-    # Save filtered data
+    # Resolve output paths before sinking.
     if os.path.isdir(output_raw_path):
-        output_raw_path = os.path.join(output_raw_path, 'filtered_raw_counts.csv')
+        output_raw_path = os.path.join(output_raw_path, 'filtered_raw_counts.parquet')
     if os.path.isdir(output_normalized_path):
-        output_normalized_path = os.path.join(output_normalized_path, 'filtered_normalized_counts.csv')
-    final_raw_long.write_csv(output_raw_path)
-    final_normalized_long.write_csv(output_normalized_path)
+        output_normalized_path = os.path.join(output_normalized_path, 'filtered_normalized_counts.parquet')
+
+    # Stream the long-format counts: scan + lazy anti-join + sink, no full
+    # materialization of either count file.
+    pl.scan_parquet(raw_counts_path) \
+        .join(outlier_cells_lf, on='CellId', how='anti') \
+        .sink_parquet(output_raw_path)
+    pl.scan_parquet(normalized_counts_path) \
+        .join(outlier_cells_lf, on='CellId', how='anti') \
+        .sink_parquet(output_normalized_path)
 
 def main():
     parser = argparse.ArgumentParser(description='Filter outlier cells from count matrices.')
-    parser.add_argument('--raw_counts', type=str, required=True, help='Path to raw counts CSV file.')
-    parser.add_argument('--normalized_counts', type=str, required=True, help='Path to normalized counts CSV file.')
+    parser.add_argument('--raw_counts', type=str, required=True, help='Path to raw counts Parquet file.')
+    parser.add_argument('--normalized_counts', type=str, required=True, help='Path to normalized counts Parquet file.')
     parser.add_argument('--metrics', type=str, required=True, help='Path to cell metrics CSV file.')
-    parser.add_argument('--output_raw', type=str, required=True, help='Path to save filtered raw counts CSV.')
-    parser.add_argument('--output_normalized', type=str, required=True, help='Path to save filtered normalized counts CSV.')
+    parser.add_argument('--output_raw', type=str, required=True, help='Path to save filtered raw counts Parquet file.')
+    parser.add_argument('--output_normalized', type=str, required=True, help='Path to save filtered normalized counts Parquet file.')
 
     args = parser.parse_args()
 

@@ -27,12 +27,18 @@ self.body(func(inputs) {
 
 	fileExtension := inputSpec.domain["pl7.app/fileExtension"]
 
+	// Resource budget for the whole step. Same defaults as the cellranger
+	// invocation in cell-ranger.tpl.tengo (which receives these via metaExtra
+	// below) so the auto-import ptabler runs with the user-supplied budget.
+	mem := !is_undefined(inputs.params.mem) ? string(inputs.params.mem) + "GiB" : "64GiB"
+	cpu := !is_undefined(inputs.params.cpu) ? inputs.params.cpu : 16
+
 	// We will collect all the intermediate results that we want to preserve for deduplication in this builder
 	intermediateResultsBuilder := pframes.pFrameBuilder()
 
 	cellRangerResults := pframes.processColumn(
 		{ spec: inputSpec, data: inputData }, cellRangerTpl,
-		targetOutputs.getTargetOutputs(species, blockId, inputSpec.axesSpec[0]),
+		targetOutputs.getTargetOutputs(species, blockId, inputSpec.axesSpec[0], mem, cpu),
 		{
 			aggregate: [{
 				name: "pl7.app/sequencing/lane",
