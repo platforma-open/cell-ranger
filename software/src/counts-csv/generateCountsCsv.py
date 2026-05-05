@@ -1,10 +1,10 @@
 import argparse
-import pandas as pd
 import polars as pl
 import scipy.io
 import gzip
 import scanpy as sc
-import anndata 
+import anndata
+from pathlib import Path
 
 def read_gzip_tsv_polars(file_path):
     """Reads a gzipped TSV file into a Polars DataFrame."""
@@ -17,7 +17,7 @@ def clean_barcode_suffix(barcode):
         return barcode.split('-')[0]
     return barcode
 
-def process_input_files(matrix_path, barcodes_path, features_path, output_csv_path):
+def process_input_files(matrix_path, barcodes_path, features_path, output_path):
     # Load the input files
     print("Loading matrix.mtx.gz...")
     matrix = scipy.io.mmread(matrix_path).tocoo()  # Sparse COO format
@@ -32,18 +32,20 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
     print(f"Cleaned barcode suffixes. Example: {barcodes.to_series().to_list()[0]} -> {barcodes_list[0]}")
     features_list = features.to_series().to_list()
 
-    data = {
-        "CellId": [barcodes_list[j] for j in matrix.col],
-        "GeneId": [features_list[i] for i in matrix.row],
-        "Count": matrix.data
-    }
+    # Polars Series for vectorized lookup over nnz entries (no Python loop).
+    cell_id_series = pl.Series(barcodes_list)
+    gene_id_series = pl.Series(features_list)
 
     print(f"Processing {matrix.nnz} nonzero entries...")
 
-    df = pl.DataFrame(data)
+    df = pl.DataFrame({
+        "CellId": cell_id_series.gather(matrix.col),
+        "GeneId": gene_id_series.gather(matrix.row),
+        "Count": matrix.data,
+    })
 
-    print(f"Writing raw count matrix to {output_csv_path}...")
-    df.write_csv(output_csv_path)
+    print(f"Writing raw count matrix to {output_path}...")
+    df.write_parquet(output_path)
 
     # Normalize counts
     print("Normalizing counts...")
@@ -58,27 +60,26 @@ def process_input_files(matrix_path, barcodes_path, features_path, output_csv_pa
     sc.pp.normalize_total(adata, target_sum=1e4)
     normalized_matrix = adata.X.tocoo()
 
-    # Extract normalized counts
-    norm_data = []
-    for i, j, value in zip(normalized_matrix.row, normalized_matrix.col, normalized_matrix.data):
-        cell_id = adata.obs_names[i]
-        gene_id = adata.var_names[j]
-        norm_data.append([cell_id, gene_id, value])
+    # Reuse the same Polars Series as above; scanpy doesn't reorder names.
+    norm_df = pl.DataFrame({
+        "CellId": cell_id_series.gather(normalized_matrix.row),
+        "GeneId": gene_id_series.gather(normalized_matrix.col),
+        "NormalizedCount": normalized_matrix.data,
+    })
+    raw_path = Path(output_path)
+    normalized_output_path = str(raw_path.with_name(raw_path.stem + "_normalized" + raw_path.suffix))
 
-    norm_df = pl.DataFrame(norm_data, schema=["CellId", "GeneId", "NormalizedCount"])
-    normalized_output_csv_path = output_csv_path.replace(".csv", "_normalized.csv")
-
-    print(f"Writing normalized count matrix to {normalized_output_csv_path}...")
-    norm_df.write_csv(normalized_output_csv_path)
+    print(f"Writing normalized count matrix to {normalized_output_path}...")
+    norm_df.write_parquet(normalized_output_path)
 
     print("Done!")
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert .mtx.gz, .tsv.gz files into a count matrix CSV.")
+    parser = argparse.ArgumentParser(description="Convert .mtx.gz, .tsv.gz files into raw and normalized count matrices in Parquet format.")
     parser.add_argument('--matrix', required=True, help="Path to the matrix.mtx.gz file")
     parser.add_argument('--barcodes', required=True, help="Path to the barcodes.tsv.gz file")
     parser.add_argument('--features', required=True, help="Path to the features.tsv.gz file")
-    parser.add_argument('--output', required=True, help="Path to output the raw CSV file")
+    parser.add_argument('--output', required=True, help="Path to output the raw counts Parquet file")
 
     args = parser.parse_args()
     process_input_files(args.matrix, args.barcodes, args.features, args.output)

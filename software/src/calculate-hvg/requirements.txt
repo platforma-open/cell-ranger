@@ -1,4 +1,4 @@
-polars-lts-cpu==1.32.1
+polars-lts-cpu==1.33.1
 anndata==0.10.5
 scanpy==1.10.1
 numpy===2.2.6

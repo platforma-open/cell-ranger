@@ -4,7 +4,7 @@ pfCountsConv := import(":libs.pf-counts-conv")
 pfNormCountsConv := import(":libs.pf-norm-counts-conv")
 pfMetricsConv := import(":libs.pf-metrics-conv")
 
-getTargetOutputs := func(species, blockId, sampleAxisSpec) {
+getTargetOutputs := func(species, blockId, sampleAxisSpec, mem, cpu) {
 	return [
 	{
 		type: "Resource",
@@ -89,17 +89,21 @@ getTargetOutputs := func(species, blockId, sampleAxisSpec) {
 
 	{
 		type: "Xsv",
-		xsvType: "csv",
+		xsvType: "parquet",
 		settings: pfCountsConv.getColumns(blockId, species),
 		name: "rawCounts",
-		path: ["rawCountsCsv"]
+		path: ["rawCountsCsv"],
+		mem: mem,
+		cpu: cpu
 	},
 	{
 		type: "Xsv",
-		xsvType: "csv",
+		xsvType: "parquet",
 		settings: pfNormCountsConv.getColumns(blockId, species),
 		name: "normCounts",
-		path: ["normCountsCsv"]
+		path: ["normCountsCsv"],
+		mem: mem,
+		cpu: cpu
 	},
 	{
 		type: "Xsv",

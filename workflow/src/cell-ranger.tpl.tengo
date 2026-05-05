@@ -131,13 +131,13 @@ self.body(func(inputs) {
 		arg("--matrix").arg("matrix.mtx.gz").
 		arg("--barcodes").arg("barcodes.tsv.gz").
 		arg("--features").arg("features.tsv.gz").
-		arg("--output").arg("rawCounts.csv").
-		saveFile("rawCounts.csv").
-		saveFile("rawCounts_normalized.csv").
+		arg("--output").arg("rawCounts.parquet").
+		saveFile("rawCounts.parquet").
+		saveFile("rawCounts_normalized.parquet").
 		run()
 
-	rawCounts := countMatrixCsv.getFile("rawCounts.csv")
-	normCounts := countMatrixCsv.getFile("rawCounts_normalized.csv")
+	rawCounts := countMatrixCsv.getFile("rawCounts.parquet")
+	normCounts := countMatrixCsv.getFile("rawCounts_normalized.parquet")
 
 	// Set default memory and CPU for imports
     defaultConvMem := "16GiB" // @TODO: set based on the size of the input
@@ -162,24 +162,24 @@ self.body(func(inputs) {
 		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:filter-cells")).
 		mem(mem).
 		cpu(cpu).
-		addFile("rawCounts.csv", rawCounts).
-		addFile("rawCounts_normalized.csv", normCounts).
+		addFile("rawCounts.parquet", rawCounts).
+		addFile("rawCounts_normalized.parquet", normCounts).
 		addFile("cell_metrics.csv", cellMetricsCsv.getFile("cell_metrics.csv")).
-		arg("--raw_counts").arg("rawCounts.csv").
-		arg("--normalized_counts").arg("rawCounts_normalized.csv").
+		arg("--raw_counts").arg("rawCounts.parquet").
+		arg("--normalized_counts").arg("rawCounts_normalized.parquet").
 		arg("--metrics").arg("cell_metrics.csv").
-		arg("--output_raw").arg("filtered_rawCounts.csv").
-		arg("--output_normalized").arg("filtered_rawCounts_normalized.csv").
-		saveFile("filtered_rawCounts.csv").
-		saveFile("filtered_rawCounts_normalized.csv").
+		arg("--output_raw").arg("filtered_rawCounts.parquet").
+		arg("--output_normalized").arg("filtered_rawCounts_normalized.parquet").
+		saveFile("filtered_rawCounts.parquet").
+		saveFile("filtered_rawCounts_normalized.parquet").
 		run()
 
 	return {
 		cellRangerLog: cellRangerLog,
 		cellRangerReport: cellRangerReport,
 		summaryContent: cellRanger.getFileContent("sample/outs/metrics_summary.csv"),
-		rawCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts.csv"),
-		normCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.csv"),
+		rawCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts.parquet"),
+		normCountsCsv: filteredCellsCountsCsv.getFile("filtered_rawCounts_normalized.parquet"),
 		cellMetricsCsv: cellMetricsCsv.getFile("cell_metrics.csv")
 	}
 })

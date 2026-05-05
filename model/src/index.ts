@@ -124,7 +124,7 @@ export const model = BlockModel.create()
       : undefined;
   })
 
-  .output('cellMetricsPf', (wf) => {
+  .outputWithStatus('cellMetricsPf', (wf) => {
     const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
     if (pCols === undefined) return undefined;
 
