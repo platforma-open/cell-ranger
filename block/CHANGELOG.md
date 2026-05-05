@@ -1,5 +1,17 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.7.2
+
+### Patch Changes
+
+- eff8210: Emit raw and normalized count matrices as Parquet instead of CSV. Set
+  explicit `mem: "16GiB"` / `cpu: 2` on the `rawCounts` and `normCounts`
+  Xsv outputs so the auto-import ptabler container has enough headroom
+  for large scRNA-seq matrices. Mitigates ptabler "exit code 50002"
+  failures during the CSV→Parquet conversion of `normCounts`.
+- Updated dependencies [eff8210]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.20.1
+
 ## 1.7.1
 
 ### Patch Changes
