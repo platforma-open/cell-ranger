@@ -74,7 +74,7 @@ self.body(func(inputs) {
 
 	// Use ptabler directly on pFrame data to extract unique Ensembl IDs
 	// Pass the pFrame using p.full() and access the gene axis by name
-	ptWf := pt.workflow().mem("4GiB").cpu(1)
+	ptWf := pt.workflow().mem("16GiB").cpu(1)
 	axesDf := ptWf.frame(pt.p.full(rawCountsPfBuilt))
 	groupedDf := axesDf.select(pt.axis("pl7.app/rna-seq/geneId").alias("Ensembl Id")).groupBy("Ensembl Id").agg(pt.col("Ensembl Id").count().alias("_count"))
 	uniqueGeneIdsDf := groupedDf.select("Ensembl Id")
