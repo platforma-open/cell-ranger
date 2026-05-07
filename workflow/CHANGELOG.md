@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.cell-ranger.workflow
 
+## 1.20.2
+
+### Patch Changes
+
+- cd9a66d: Bump the unique-Ensembl-Ids pt workflow from 4 GiB to 16 GiB. On large
+  datasets the polars-pf reader yielded batches up to ~17.5M rows before the
+  groupBy host process OOM'd at the previous 4 GiB ceiling. 16 GiB clears the
+  peak with headroom for polars' streaming-engine bookkeeping.
+
 ## 1.20.1
 
 ### Patch Changes
