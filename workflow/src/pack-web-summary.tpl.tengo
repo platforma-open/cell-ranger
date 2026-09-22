@@ -1,0 +1,26 @@
+self := import("@platforma-sdk/workflow-tengo:tpl")
+exec := import("@platforma-sdk/workflow-tengo:exec")
+assets := import("@platforma-sdk/workflow-tengo:assets")
+pConstants := import("@platforma-sdk/workflow-tengo:pframes.constants")
+
+self.defineOutputs("webSummaryArchive")
+
+self.body(func(inputs) {
+	webSummary := inputs[pConstants.VALUE_FIELD_NAME]
+
+	packJob := exec.builder().
+		software(assets.importSoftware("@platforma-open/milaboratories.cellranger.software:pack-web-summary")).
+		mem("1GiB").
+		cpu(1).
+		addFile("web_summary.html", webSummary).
+		arg("--input").arg("web_summary.html").
+		arg("--output").arg("web_summary.zip").
+		arg("--entry-name").arg("web_summary.html").
+		saveFile("web_summary.zip").
+		printErrStreamToStdout().
+		run()
+
+	return {
+		webSummaryArchive: packJob.getFile("web_summary.zip")
+	}
+})

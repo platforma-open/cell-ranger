@@ -14,6 +14,7 @@ exportNormCountsConv := import(":libs.export-norm-counts")
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 hvgTpl := assets.importTemplate(":calculate-hvg")
 mapGenesTpl := assets.importTemplate(":map-genes")
+packWebSummaryTpl := assets.importTemplate(":pack-web-summary")
 
 self.awaitState("params", "ResourceReady")
 self.awaitState("inputSpec", "ResourceReady")
@@ -64,6 +65,32 @@ self.body(func(inputs) {
 	)
 
 	cellRangerResults.addAllOutputsToBuilder(intermediateResultsBuilder)
+
+	// The web summary is driven by inline scripts. The desktop app serves block UI
+	// documents under a CSP that forbids those, and an iframe srcdoc inherits it, so
+	// the summary has to be loaded from a plblob+folder:// URL instead. The model
+	// gets that URL from extractArchiveAndGetURL, which only accepts an archive.
+	// Packing runs here, not in cell-ranger.tpl.tengo: that template is hash-pinned
+	// so the alignment stays deduplicated across block versions.
+	webSummaryResults := pframes.processColumn(
+		{
+			spec: cellRangerResults.outputSpec("cellRangerReport"),
+			data: cellRangerResults.outputData("cellRangerReport")
+		},
+		packWebSummaryTpl,
+		[{
+			type: "Resource",
+			spec: {
+				kind: "PColumn",
+				name: "milaboratories.cell-ranger/report-archive",
+				domain: {
+					"pl7.app/blockId": blockId
+				},
+				valueType: "File"
+			},
+			name: "webSummaryArchive"
+		}]
+	)
 
 	cellMetricsPf := cellRangerResults.xsvOutputFrame("cellMetrics")
 
@@ -133,7 +160,7 @@ self.body(func(inputs) {
 		cellMetricsPf: cellMetricsPf,
 		rawCountsPf: rawCountsPfBuilt,
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
-		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
+		cellRangerReportArchive: webSummaryResults.outputData("webSummaryArchive"),
 		summaryContent: cellRangerResults.outputData("summaryContent"),
 
 		_intermediateResults: intermediateResultsBuilder.build()

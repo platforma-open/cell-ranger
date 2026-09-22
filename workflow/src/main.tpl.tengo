@@ -32,7 +32,7 @@ wf.body(func(args) {
 	return {
 		outputs: {
 			cellRangerProgress: processRun.output("cellRangerProgress"),
-			cellRangerReport: pframes.exportColumnData(processRun.output("cellRangerReport")),
+			cellRangerReportArchive: pframes.exportColumnData(processRun.output("cellRangerReportArchive")),
 			rawCountsPf: pframes.exportFrame(processRun.output("rawCountsPf")),
 			cellMetricsPf: pframes.exportFrame(processRun.output("cellMetricsPf")),
 			summaryContent: processRun.output("summaryContent"),
