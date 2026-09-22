@@ -17,10 +17,9 @@ const tabOptions = [
   { value: 'html', text: 'Cell Ranger Web Summary' },
 ];
 
-// URL of the unpacked web summary archive for the selected sample. The summary is
-// loaded from this URL rather than inlined via srcdoc: it is driven by inline
-// scripts, which the CSP on the block UI document forbids and an srcdoc iframe
-// inherits.
+// URL of the unpacked web summary archive for the selected sample.
+// Do not use srcdoc. The summary uses inline scripts. An srcdoc iframe inherits
+// the CSP of this document, and that CSP forbids inline scripts.
 const reportUrl = computed(() => {
   const id = sampleId.value;
   if (id === undefined) {

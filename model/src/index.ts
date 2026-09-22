@@ -167,7 +167,7 @@ export const model = BlockModel.create()
 
   /**
    * Per-sample `plblob+folder://` URL of the unpacked web summary archive.
-   * The summary itself lives at `<url>/web_summary.html`.
+   * The summary is at `<url>/web_summary.html`.
    */
   .output('webSummary', (wf) => {
     return parseResourceMap(

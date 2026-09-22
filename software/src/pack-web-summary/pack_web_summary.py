@@ -10,11 +10,9 @@ def pack(input_path, output_path, entry_name):
     Args:
         input_path (str): Path to the file to pack.
         output_path (str): Path of the zip archive to write.
-        entry_name (str): Name the file gets inside the archive.
+        entry_name (str): Name of the file inside the archive.
     """
     size = os.path.getsize(input_path)
-    # Cell Ranger's web summary is already a compressed-poorly single HTML blob;
-    # ZIP_DEFLATED still roughly halves it at negligible cost.
     with zipfile.ZipFile(output_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.write(input_path, arcname=entry_name)
     print(f"Packed {input_path} ({size} bytes) into {output_path} as {entry_name}")
