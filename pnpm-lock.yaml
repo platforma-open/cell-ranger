@@ -37,8 +37,8 @@ catalogs:
       specifier: ^1.71.0
       version: 1.71.0
     '@platforma-sdk/package-builder':
-      specifier: ^3.12.0
-      version: 3.12.0
+      specifier: 3.16.0
+      version: 3.16.0
     '@platforma-sdk/tengo-builder':
       specifier: 4.1.1
       version: 4.1.1
@@ -155,7 +155,7 @@ importers:
         version: 1.8.1
       '@platforma-sdk/package-builder':
         specifier: 'catalog:'
-        version: 3.12.0
+        version: 3.16.0
 
   test:
     dependencies:
@@ -1728,8 +1728,8 @@ packages:
   '@platforma-sdk/package-builder-lib@1.4.0':
     resolution: {integrity: sha512-ORcuPJ5SM1RiQAOUVM7alWDbOWQ/gUTgLDToP/yAs2uHXhKNvXphgDQTamCX6cseMZ0uKdWzTudJAQAJM1Kvwg==}
 
-  '@platforma-sdk/package-builder@3.12.0':
-    resolution: {integrity: sha512-bId52YqV5iLDAn9D9C3xaLD1bKyymGpHe2CDEZTqV+1yWCBh1RM6iH96JIXudVJdcmJaqwJWDw6X4WzStE6SCg==}
+  '@platforma-sdk/package-builder@3.16.0':
+    resolution: {integrity: sha512-5/iOlRTVK2y9LRixPHKizyyFQtpRR/6ge37bFmzoNmnJDgUOOIPEmypP5a5wwpkC5KyCFdcY7n7jb71Hg3azvg==}
     hasBin: true
 
   '@platforma-sdk/tengo-builder@4.1.1':
@@ -3643,9 +3643,6 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  '@types/archiver@6.0.3':
-    resolution: {integrity: sha512-a6wUll6k3zX6qs5KlxIggs1P1JcYJaTCx2gnlr+f0S1yd2DoaEwoIK10HmBaLnZwWneBz+JBm0dwcZu0zECBcQ==}
-
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -3687,9 +3684,6 @@ packages:
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
-
-  '@types/readdir-glob@1.1.5':
-    resolution: {integrity: sha512-raiuEPUYqXu+nvtY2Pe8s8FEmZ3x5yAH4VkLdihcPdalvsHltomrRC9BzuStrJ9yk06470hS0Crw0f1pXqD+Hg==}
 
   '@types/semver@7.7.0':
     resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
@@ -6364,9 +6358,6 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
-
 snapshots:
 
   '@ag-grid-community/core@32.3.3':
@@ -8556,19 +8547,11 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@platforma-sdk/package-builder@3.12.0':
+  '@platforma-sdk/package-builder@3.16.0':
     dependencies:
-      '@aws-sdk/client-s3': 3.859.0
-      '@aws-sdk/lib-storage': 3.859.0(@aws-sdk/client-s3@3.859.0)
-      '@milaboratories/resolve-helper': 1.1.3
-      '@oclif/core': 4.2.4
-      '@types/archiver': 6.0.3
-      '@types/node': 24.5.2
-      archiver: 7.0.1
-      undici: 7.16.0
+      '@platforma-sdk/package-builder-lib': 1.4.0
+      commander: 15.0.0
       winston: 3.17.0
-      yaml: 2.8.1
-      zod: 4.1.12
     transitivePeerDependencies:
       - aws-crt
 
@@ -11256,10 +11239,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@types/archiver@6.0.3':
-    dependencies:
-      '@types/readdir-glob': 1.1.5
-
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -11296,10 +11275,6 @@ snapshots:
   '@types/node@24.5.2':
     dependencies:
       undici-types: 7.12.0
-
-  '@types/readdir-glob@1.1.5':
-    dependencies:
-      '@types/node': 24.5.2
 
   '@types/semver@7.7.0': {}
 
@@ -14041,5 +14016,3 @@ snapshots:
   zod@3.23.8: {}
 
   zod@3.25.76: {}
-
-  zod@4.1.12: {}
