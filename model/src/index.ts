@@ -6,6 +6,7 @@ import {
   isPColumnSpec,
   parseResourceMap,
   type PlRef,
+  type TreeNodeAccessor,
 } from "@platforma-sdk/model";
 
 import { type GraphMakerState } from "@milaboratories/graph-maker";
@@ -44,7 +45,7 @@ export type BlockArgs = {
   // __mnzDate: string;
 };
 
-export const model = BlockModel.create()
+export const platforma = BlockModel.create()
 
   .withArgs<BlockArgs>({
     species: "homo-sapiens",
@@ -92,7 +93,7 @@ export const model = BlockModel.create()
     const inputSpec = ctx.resultPool.getSpecByRef(inputRef); // @TODO use resultPool.getPColumnSpecByRef after updating SDK
     if (inputSpec === undefined || !isPColumnSpec(inputSpec)) return undefined;
 
-    const labels = ctx.findLabels(inputSpec.axesSpec[0]);
+    const labels = ctx.resultPool.findLabels(inputSpec.axesSpec[0]);
     if (!labels) return undefined;
 
     return labels;
@@ -129,7 +130,7 @@ export const model = BlockModel.create()
     const upstream = wf.resultPool
       .getData()
       .entries.map((v) => v.obj)
-      .filter(isPColumn)
+      .filter(isPColumn<TreeNodeAccessor>)
       .filter((col) => col.spec.name === "pl7.app/label");
 
     return wf.createPFrame([...pCols, ...upstream]);
@@ -137,17 +138,17 @@ export const model = BlockModel.create()
 
   // Pcolumns for plot defaults
   .output("cellMetricsPfDefaults", (wf) => {
-    let pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
-    if (pCols === undefined) return undefined;
+    const outputCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
+    if (outputCols === undefined) return undefined;
 
     // Add sample labels
     const upstream = wf.resultPool
       .getData()
       .entries.map((v) => v.obj)
-      .filter(isPColumn)
+      .filter(isPColumn<TreeNodeAccessor>)
       .filter((col) => col.spec.name === "pl7.app/label");
 
-    pCols = [...pCols, ...upstream];
+    const pCols = [...outputCols, ...upstream];
     return pCols.map(
       (c) =>
         ({
@@ -202,4 +203,4 @@ export const model = BlockModel.create()
 
   .done(2);
 
-export type BlockOutputs = InferOutputsType<typeof model>;
+export type BlockOutputs = InferOutputsType<typeof platforma>;
