@@ -1,7 +1,8 @@
-import type { ColDefProgress } from '@platforma-sdk/ui-vue';
-import type { ProgressLogWithInfo } from '@platforma-sdk/model';
+import type { ColDefProgress } from "@platforma-sdk/ui-vue";
+import type { ProgressLogWithInfo } from "@platforma-sdk/model";
 
-const logLineRegex = /^(?<date>\d{4}-\d{2}-\d{2})\s+(?<time>\d{2}:\d{2}:\d{2})\s+\[(?<tag>[^\]]+)\]\s+\((?<status>[^)]+)\)\s+(?<identifier>.*)$/;
+const logLineRegex =
+  /^(?<date>\d{4}-\d{2}-\d{2})\s+(?<time>\d{2}:\d{2}:\d{2})\s+\[(?<tag>[^\]]+)\]\s+\((?<status>[^)]+)\)\s+(?<identifier>.*)$/;
 
 type Group = {
   date: string;
@@ -17,10 +18,10 @@ function match(raw: string) {
 
 export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): ColDefProgress => {
   const res: ColDefProgress = {
-    status: 'not_started',
+    status: "not_started",
     percent: undefined,
-    text: '', // this text is in the left part of cell (main text)
-    suffix: '',
+    text: "", // this text is in the left part of cell (main text)
+    suffix: "",
   };
 
   if (!progressLine) {
@@ -28,12 +29,12 @@ export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): Co
   }
 
   if (!progressLine.live) {
-    res.status = 'done';
-    res.text = 'Complete';
+    res.status = "done";
+    res.text = "Complete";
     return res;
   }
 
-  res.status = 'running'; // Shows "infinite" progress if percent is not known
+  res.status = "running"; // Shows "infinite" progress if percent is not known
 
   const raw = progressLine.progressLine?.trim();
 
@@ -49,7 +50,7 @@ export const parseProgress = (progressLine: ProgressLogWithInfo | undefined): Co
     return res;
   }
 
-  res.text = groups.time + ' ' + groups.status + ' ' + groups.identifier;
+  res.text = groups.time + " " + groups.status + " " + groups.identifier;
   res.text = `[${groups.time}] (${groups.status}) ${groups.identifier}`;
 
   // Could we simply show "infinite" progress if the percentage is unknown?

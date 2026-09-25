@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { PlRef } from '@platforma-sdk/model';
-import { plRefsEqual } from '@platforma-sdk/model';
+import type { PlRef } from "@platforma-sdk/model";
+import { plRefsEqual } from "@platforma-sdk/model";
 import {
   PlAccordionSection,
   PlDropdown,
   PlDropdownRef,
   PlNumberField,
-} from '@platforma-sdk/ui-vue';
-import { useApp } from '../app';
-import { speciesOptions } from '../species';
+} from "@platforma-sdk/ui-vue";
+import { useApp } from "../app";
+import { speciesOptions } from "../species";
 
 const app = useApp();
 
@@ -32,11 +32,7 @@ function setInput(inputRef?: PlRef) {
     clearable
     @update:model-value="setInput"
   />
-  <PlDropdown
-    v-model="app.model.args.species"
-    :options="speciesOptions"
-    label="Select species"
-  />
+  <PlDropdown v-model="app.model.args.species" :options="speciesOptions" label="Select species" />
   <PlAccordionSection label="Advanced Settings">
     <PlNumberField
       v-model="app.model.args.mem"
@@ -46,9 +42,7 @@ function setInput(inputRef?: PlRef) {
       :max-value="1012"
       placeholder="64"
     >
-      <template #tooltip>
-        Sets the amount of memory to use for the clustering.
-      </template>
+      <template #tooltip> Sets the amount of memory to use for the clustering. </template>
     </PlNumberField>
 
     <PlNumberField
@@ -59,9 +53,7 @@ function setInput(inputRef?: PlRef) {
       :max-value="128"
       placeholder="16"
     >
-      <template #tooltip>
-        Sets the number of CPU cores to use for the clustering.
-      </template>
+      <template #tooltip> Sets the number of CPU cores to use for the clustering. </template>
     </PlNumberField>
   </PlAccordionSection>
 </template>
