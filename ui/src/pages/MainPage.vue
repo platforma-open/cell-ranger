@@ -11,20 +11,26 @@ import {
   PlSlideModal,
   createAgGridColDef,
   makeRowNumberColDef,
-} from '@platforma-sdk/ui-vue';
-import { AgGridVue } from 'ag-grid-vue3';
+} from "@platforma-sdk/ui-vue";
+import { AgGridVue } from "ag-grid-vue3";
 
-import type { ProgressLogWithInfo } from '@platforma-sdk/model';
-import { autoSizeRowNumberColumn } from '@platforma-sdk/ui-vue';
-import { whenever } from '@vueuse/core';
-import type { ColDef, GridApi, GridOptions, GridReadyEvent, ValueGetterParams } from 'ag-grid-enterprise';
-import { computed, reactive, shallowRef, watch } from 'vue';
-import { useApp } from '../app';
-import { parseProgress } from '../parseProgress';
-import { getMappingChartSettings } from './charts/alignmentChartSettings';
-import ReportPanel from './Report.vue';
-import { resultMap } from './results';
-import SettingsPanel from './SettingsPanel.vue';
+import type { ProgressLogWithInfo } from "@platforma-sdk/model";
+import { autoSizeRowNumberColumn } from "@platforma-sdk/ui-vue";
+import { whenever } from "@vueuse/core";
+import type {
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  ValueGetterParams,
+} from "ag-grid-enterprise";
+import { computed, reactive, shallowRef, watch } from "vue";
+import { useApp } from "../app";
+import { parseProgress } from "../parseProgress";
+import { getMappingChartSettings } from "./charts/alignmentChartSettings";
+import ReportPanel from "./Report.vue";
+import { resultMap } from "./results";
+import SettingsPanel from "./SettingsPanel.vue";
 
 const app = useApp();
 
@@ -43,10 +49,8 @@ const data = reactive<{
 watch(
   () => app.model.outputs.isRunning,
   (newVal, oldVal) => {
-    if (oldVal === false && newVal === true)
-      data.settingsOpen = false;
-    if (oldVal === true && newVal === false)
-      data.settingsOpen = true;
+    if (oldVal === false && newVal === true) data.settingsOpen = false;
+    if (oldVal === true && newVal === false) data.settingsOpen = true;
   },
 );
 
@@ -68,8 +72,7 @@ type Row = {
 
 /** Rows for ag-table */
 const results = computed<Row[] | undefined>(() => {
-  if (resultMap.value === undefined)
-    return undefined;
+  if (resultMap.value === undefined) return undefined;
   const rows = [];
   for (const id in resultMap.value) {
     rows.push({
@@ -99,10 +102,10 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
   const cols: ColDef<Row>[] = [
     makeRowNumberColDef(),
     createAgGridColDef<Row, string>({
-      colId: 'label',
-      field: 'sampleLabel',
-      headerName: 'Sample',
-      pinned: 'left',
+      colId: "label",
+      field: "sampleLabel",
+      headerName: "Sample",
+      pinned: "left",
       lockPinned: true,
       sortable: true,
       cellRenderer: PlAgTextAndButtonCell,
@@ -111,26 +114,26 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
       },
     }),
     createAgGridColDef<Row, ProgressLogWithInfo | undefined>({
-      colId: 'cellRanger',
-      field: 'cellRanger',
-      headerName: 'Cell Ranger Progress',
+      colId: "cellRanger",
+      field: "cellRanger",
+      headerName: "Cell Ranger Progress",
       flex: 1,
       minWidth: 200,
       cellStyle: {
-        '--ag-cell-horizontal-padding': '0px',
-        '--ag-cell-vertical-padding': '0px',
+        "--ag-cell-horizontal-padding": "0px",
+        "--ag-cell-vertical-padding": "0px",
       },
       progress(cellRangerProgressLine) {
         return parseProgress(cellRangerProgressLine);
       },
     }),
     createAgGridColDef<Row, string>({
-      colId: 'alignmentStats',
-      headerName: 'Alignments',
+      colId: "alignmentStats",
+      headerName: "Alignments",
       flex: 1,
       minWidth: 200,
       cellStyle: {
-        '--ag-cell-horizontal-padding': '12px',
+        "--ag-cell-horizontal-padding": "12px",
       },
       cellRendererSelector: (cellData) => {
         const value = getMappingChartSettings(cellData.data?.summary);
@@ -144,15 +147,15 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
 
   // Add only specified summary CSV columns in the required order
   const desiredSummaryHeaders: string[] = [
-    'Estimated Number of Cells',
-    'Mean Reads per Cell',
-    'Median Genes per Cell',
-    'Sequencing Saturation',
-    'Valid Barcodes',
-    'Fraction Reads in Cells',
-    'Q30 Bases in Barcode',
-    'Q30 Bases in RNA Read',
-    'Q30 Bases in UMI',
+    "Estimated Number of Cells",
+    "Mean Reads per Cell",
+    "Median Genes per Cell",
+    "Sequencing Saturation",
+    "Valid Barcodes",
+    "Fraction Reads in Cells",
+    "Q30 Bases in Barcode",
+    "Q30 Bases in RNA Read",
+    "Q30 Bases in UMI",
   ];
 
   for (const header of desiredSummaryHeaders) {
@@ -162,7 +165,7 @@ const columnDefs = computed<ColDef<Row>[]>(() => {
         headerName: header,
         minWidth: 100,
         maxWidth: 200,
-        valueGetter: (p: ValueGetterParams<Row, string>) => p.data?.summary?.[header] ?? '',
+        valueGetter: (p: ValueGetterParams<Row, string>) => p.data?.summary?.[header] ?? "",
       }),
     );
   }
@@ -184,9 +187,7 @@ const gridOptions: GridOptions<Row> = {
 
 <template>
   <PlBlockPage>
-    <template #title>
-      Cell Ranger
-    </template>
+    <template #title> Cell Ranger </template>
     <template #append>
       <PlBtnGhost @click.stop="() => (data.settingsOpen = true)">
         Settings
@@ -216,9 +217,7 @@ const gridOptions: GridOptions<Row> = {
     :shadow="true"
     :close-on-outside-click="!app.model.outputs.isRunning"
   >
-    <template #title>
-      Settings
-    </template>
+    <template #title> Settings </template>
     <SettingsPanel />
   </PlSlideModal>
 
@@ -230,15 +229,13 @@ const gridOptions: GridOptions<Row> = {
     <template #title>
       Results for
       {{
-        (data.selectedSample ? app.model.outputs.labels?.[data.selectedSample] : undefined) ?? '...'
+        (data.selectedSample ? app.model.outputs.labels?.[data.selectedSample] : undefined) ?? "..."
       }}
     </template>
     <ReportPanel v-model="data.selectedSample" />
   </PlSlideModal>
 
   <PlSlideModal v-model="data.mnzOpen">
-    <template #title>
-      Subscription Status
-    </template>
+    <template #title> Subscription Status </template>
   </PlSlideModal>
 </template>

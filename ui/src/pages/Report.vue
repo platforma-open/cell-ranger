@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { PlBtnGroup, PlChartStackedBar, PlLogView } from '@platforma-sdk/ui-vue';
-import { computed, reactive } from 'vue';
-import { useApp } from '../app';
-import { getMappingChartSettings } from './charts/alignmentChartSettings';
-import { resultMap } from './results';
+import { PlBtnGroup, PlChartStackedBar, PlLogView } from "@platforma-sdk/ui-vue";
+import { computed, reactive } from "vue";
+import { useApp } from "../app";
+import { getMappingChartSettings } from "./charts/alignmentChartSettings";
+import { resultMap } from "./results";
 
 const app = useApp();
 const sampleId = defineModel<string | undefined>();
 
-type TabId = 'visual' | 'log' | 'html';
-const data = reactive<{ currentTab: TabId }>({ currentTab: 'visual' });
+type TabId = "visual" | "log" | "html";
+const data = reactive<{ currentTab: TabId }>({ currentTab: "visual" });
 
 const tabOptions = [
-  { value: 'visual', text: 'Visual Report' },
-  { value: 'log', text: 'Log' },
-  { value: 'html', text: 'Cell Ranger Web Summary' },
+  { value: "visual", text: "Visual Report" },
+  { value: "log", text: "Log" },
+  { value: "html", text: "Cell Ranger Web Summary" },
 ];
 
 // URL of the unpacked web summary archive for the selected sample.
@@ -23,7 +23,7 @@ const tabOptions = [
 const reportUrl = computed(() => {
   const id = sampleId.value;
   if (id === undefined) {
-    console.warn('SampleId is undefined');
+    console.warn("SampleId is undefined");
     return undefined;
   }
   const url = app.model.outputs.webSummary?.data.find((it) => {

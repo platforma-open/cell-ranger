@@ -10,3 +10,7 @@ vite.config.*.timestamp-*
 software/**/*.sw.json
 software/*.tgz
 .vscode
+software/**/*.tgz
+.DS_Store
+.vscode/sftp.json
+test-dry-run.json

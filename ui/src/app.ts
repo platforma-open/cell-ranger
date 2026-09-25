@@ -1,17 +1,17 @@
-import { model } from '@platforma-open/milaboratories.cell-ranger.model';
-import { defineApp } from '@platforma-sdk/ui-vue';
-import Settings from './pages/MainPage.vue';
-import CellQC from './pages/CellQC.vue';
+import { platforma } from "@platforma-open/milaboratories.cell-ranger.model";
+import { defineApp } from "@platforma-sdk/ui-vue";
+import Settings from "./pages/MainPage.vue";
+import CellQC from "./pages/CellQC.vue";
 
-export const sdkPlugin = defineApp(model, (app) => {
+export const sdkPlugin = defineApp(platforma, (app) => {
   return {
     progress: () => {
       return app.model.outputs.isRunning;
     },
     showErrorsNotification: true,
     routes: {
-      '/': () => Settings,
-      '/CellQC': () => CellQC,
+      "/": () => Settings,
+      "/CellQC": () => CellQC,
     },
   };
 });

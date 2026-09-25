@@ -1,6 +1,4 @@
-import type {
-  PColumnIdAndSpec,
-} from '@platforma-sdk/model';
+import type { PColumnIdAndSpec } from "@platforma-sdk/model";
 import {
   BlockModel,
   type InferOutputsType,
@@ -8,9 +6,10 @@ import {
   isPColumnSpec,
   parseResourceMap,
   type PlRef,
-} from '@platforma-sdk/model';
+  type TreeNodeAccessor,
+} from "@platforma-sdk/model";
 
-import { type GraphMakerState } from '@milaboratories/graph-maker';
+import { type GraphMakerState } from "@milaboratories/graph-maker";
 
 export type UiState = {
   graphState: GraphMakerState;
@@ -46,19 +45,19 @@ export type BlockArgs = {
   // __mnzDate: string;
 };
 
-export const model = BlockModel.create()
+export const platforma = BlockModel.create()
 
   .withArgs<BlockArgs>({
-    species: 'homo-sapiens',
-  //   productKey: 'PRODUCT:TLFQEAHFWNBDVMJNMQODHRAGVTALSENSJASIPNQGHQJHYPHY',
-  //   __mnzDate: new Date().toISOString(),
-  //   __mnzCanRun: false,
+    species: "homo-sapiens",
+    //   productKey: 'PRODUCT:TLFQEAHFWNBDVMJNMQODHRAGVTALSENSJASIPNQGHQJHYPHY',
+    //   __mnzDate: new Date().toISOString(),
+    //   __mnzCanRun: false,
   })
 
   .withUiState<UiState>({
     graphState: {
-      template: 'violin',
-      title: 'Cell QC metrics',
+      template: "violin",
+      title: "Cell QC metrics",
       // layersSettings: {
       //   violin: {
       //     fillColor: '#99E099',
@@ -73,28 +72,28 @@ export const model = BlockModel.create()
   /**
    * Find possible options for the fastq input
    */
-  .output('dataOptions', (ctx) => {
+  .output("dataOptions", (ctx) => {
     return ctx.resultPool.getOptions((v) => {
       if (!isPColumnSpec(v)) return false;
       const domain = v.domain;
       return (
-        v.name === 'pl7.app/sequencing/data'
-        && (v.valueType as string) === 'File'
-        && domain !== undefined
-        && (domain['pl7.app/fileExtension'] === 'fastq'
-          || domain['pl7.app/fileExtension'] === 'fastq.gz')
+        v.name === "pl7.app/sequencing/data" &&
+        (v.valueType as string) === "File" &&
+        domain !== undefined &&
+        (domain["pl7.app/fileExtension"] === "fastq" ||
+          domain["pl7.app/fileExtension"] === "fastq.gz")
       );
     });
   })
 
-  .output('labels', (ctx) => {
+  .output("labels", (ctx) => {
     const inputRef = ctx.args.ref;
     if (inputRef === undefined) return undefined;
 
     const inputSpec = ctx.resultPool.getSpecByRef(inputRef); // @TODO use resultPool.getPColumnSpecByRef after updating SDK
     if (inputSpec === undefined || !isPColumnSpec(inputSpec)) return undefined;
 
-    const labels = ctx.findLabels(inputSpec.axesSpec[0]);
+    const labels = ctx.resultPool.findLabels(inputSpec.axesSpec[0]);
     if (!labels) return undefined;
 
     return labels;
@@ -103,9 +102,9 @@ export const model = BlockModel.create()
   /**
    * Preprocessing progress
    */
-  .output('cellRangerProgress', (wf) => {
+  .output("cellRangerProgress", (wf) => {
     return parseResourceMap(
-      wf.outputs?.resolve('cellRangerProgress'),
+      wf.outputs?.resolve("cellRangerProgress"),
       (acc) => acc.getLogHandle(),
       false,
     );
@@ -114,53 +113,53 @@ export const model = BlockModel.create()
   /**
    * Last line from cell ranger output
    */
-  .output('cellRangerProgressLine', (ctx) => {
+  .output("cellRangerProgressLine", (ctx) => {
     return ctx.outputs !== undefined
       ? parseResourceMap(
-          ctx.outputs?.resolve('cellRangerProgress'),
-          (acc) => acc.getProgressLogWithInfo(''),
+          ctx.outputs?.resolve("cellRangerProgress"),
+          (acc) => acc.getProgressLogWithInfo(""),
           false,
         )
       : undefined;
   })
 
-  .outputWithStatus('cellMetricsPf', (wf) => {
-    const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
+  .outputWithStatus("cellMetricsPf", (wf) => {
+    const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
     if (pCols === undefined) return undefined;
 
     const upstream = wf.resultPool
       .getData()
       .entries.map((v) => v.obj)
-      .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/label');
+      .filter(isPColumn<TreeNodeAccessor>)
+      .filter((col) => col.spec.name === "pl7.app/label");
 
     return wf.createPFrame([...pCols, ...upstream]);
   })
 
   // Pcolumns for plot defaults
-  .output('cellMetricsPfDefaults', (wf) => {
-    let pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
-    if (pCols === undefined) return undefined;
+  .output("cellMetricsPfDefaults", (wf) => {
+    const outputCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
+    if (outputCols === undefined) return undefined;
 
     // Add sample labels
     const upstream = wf.resultPool
       .getData()
       .entries.map((v) => v.obj)
-      .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/label');
+      .filter(isPColumn<TreeNodeAccessor>)
+      .filter((col) => col.spec.name === "pl7.app/label");
 
-    pCols = [...pCols, ...upstream];
+    const pCols = [...outputCols, ...upstream];
     return pCols.map(
       (c) =>
         ({
           columnId: c.id,
           spec: c.spec,
-        } satisfies PColumnIdAndSpec),
+        }) satisfies PColumnIdAndSpec,
     );
   })
 
-  .output('cellMetricsSpec', (wf) => {
-    const pCols = wf.outputs?.resolve('cellMetricsPf')?.getPColumns();
+  .output("cellMetricsSpec", (wf) => {
+    const pCols = wf.outputs?.resolve("cellMetricsPf")?.getPColumns();
     if (pCols === undefined) return undefined;
     return pCols[0].spec;
   })
@@ -169,43 +168,39 @@ export const model = BlockModel.create()
    * Per-sample `plblob+folder://` URL of the unpacked web summary archive.
    * The summary is at `<url>/web_summary.html`.
    */
-  .output('webSummary', (wf) => {
+  .output("webSummary", (wf) => {
     return parseResourceMap(
-      wf.outputs?.resolve('cellRangerReportArchive'),
-      (acc) => acc.extractArchiveAndGetURL('zip'),
+      wf.outputs?.resolve("cellRangerReportArchive"),
+      (acc) => acc.extractArchiveAndGetURL("zip"),
       false,
     );
   })
 
-  .output('summaryContent', (wf) => {
+  .output("summaryContent", (wf) => {
     return parseResourceMap(
-      wf.outputs?.resolve('summaryContent'),
+      wf.outputs?.resolve("summaryContent"),
       (acc) => acc.getDataAsString(),
       false,
     );
   })
 
-// /** Monetization status */
-// .output('__mnzInfo', (wf) => {
-//   return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
-// })
+  // /** Monetization status */
+  // .output('__mnzInfo', (wf) => {
+  //   return wf.prerun?.resolve('mnzInfo')?.getDataAsJson<unknown>();
+  // })
 
   /**
    * Returns true if the block is currently in "running" state
    */
-  .output('isRunning', (ctx) => ctx.outputs?.getIsReadyOrError() === false)
+  .output("isRunning", (ctx) => ctx.outputs?.getIsReadyOrError() === false)
 
   .sections([
-    { type: 'link', href: '/', label: 'Settings' },
-    { type: 'link', href: '/CellQC', label: 'Cell QC' },
+    { type: "link", href: "/", label: "Settings" },
+    { type: "link", href: "/CellQC", label: "Cell QC" },
   ])
 
-  .title((ctx) =>
-    ctx.uiState.title
-      ? `Cell Ranger - ${ctx.uiState.title}`
-      : 'Cell Ranger',
-  )
+  .title((ctx) => (ctx.uiState.title ? `Cell Ranger - ${ctx.uiState.title}` : "Cell Ranger"))
 
   .done(2);
 
-export type BlockOutputs = InferOutputsType<typeof model>;
+export type BlockOutputs = InferOutputsType<typeof platforma>;
