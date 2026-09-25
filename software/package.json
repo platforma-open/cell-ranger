@@ -90,6 +90,24 @@
           ]
         }
       },
+      "pack-web-summary": {
+        "binary": {
+          "artifact": {
+            "type": "python",
+            "registry": "platforma-open",
+            "environment": "@platforma-open/milaboratories.runenv-python-3:3.12.10",
+            "dependencies": {
+              "toolset": "pip",
+              "requirements": "requirements.txt"
+            },
+            "root": "./src/pack-web-summary"
+          },
+          "cmd": [
+            "python",
+            "{pkg}/pack_web_summary.py"
+          ]
+        }
+      },
       "calculate-hvg": {
         "binary": {
           "artifact": {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlBtnGroup, PlChartStackedBar, PlLogView, ReactiveFileContent } from '@platforma-sdk/ui-vue';
+import { PlBtnGroup, PlChartStackedBar, PlLogView } from '@platforma-sdk/ui-vue';
 import { computed, reactive } from 'vue';
 import { useApp } from '../app';
 import { getMappingChartSettings } from './charts/alignmentChartSettings';
@@ -7,8 +7,6 @@ import { resultMap } from './results';
 
 const app = useApp();
 const sampleId = defineModel<string | undefined>();
-
-const reactiveFileContent = ReactiveFileContent.useGlobal();
 
 type TabId = 'visual' | 'log' | 'html';
 const data = reactive<{ currentTab: TabId }>({ currentTab: 'visual' });
@@ -19,26 +17,20 @@ const tabOptions = [
   { value: 'html', text: 'Cell Ranger Web Summary' },
 ];
 
-const report = computed(() => {
+// URL of the unpacked web summary archive for the selected sample.
+// Do not use srcdoc. The summary uses inline scripts. An srcdoc iframe inherits
+// the CSP of this document, and that CSP forbids inline scripts.
+const reportUrl = computed(() => {
   const id = sampleId.value;
   if (id === undefined) {
     console.warn('SampleId is undefined');
     return undefined;
   }
-  return app.model.outputs.webSummary?.data.find((it) => {
+  const url = app.model.outputs.webSummary?.data.find((it) => {
     return it.key.includes(id);
   })?.value;
+  return url === undefined ? undefined : `${url}/web_summary.html`;
 });
-
-const reportHtml = computed(() => {
-  const handle = report.value?.handle;
-  if (handle === undefined) {
-    return;
-  }
-  return reactiveFileContent.getContentString(handle)?.value;// ?.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
-});
-
-// const testHtml = `<!doctype html><p>Hello World!</p>`;
 
 const sampleSummary = computed(() => {
   const id = sampleId.value;
@@ -71,7 +63,7 @@ const logHandle = computed(() => {
   </template>
 
   <template v-if="data.currentTab === 'html'">
-    <iframe v-if="reportHtml" :srcdoc="reportHtml" :class="$style.iframe" />
+    <iframe v-if="reportUrl" :src="reportUrl" :class="$style.iframe" />
     <div v-else>No HTML report available</div>
   </template>
 </template>

@@ -165,10 +165,14 @@ export const model = BlockModel.create()
     return pCols[0].spec;
   })
 
+  /**
+   * Per-sample `plblob+folder://` URL of the unpacked web summary archive.
+   * The summary is at `<url>/web_summary.html`.
+   */
   .output('webSummary', (wf) => {
     return parseResourceMap(
-      wf.outputs?.resolve('cellRangerReport'),
-      (acc) => acc.getFileHandle(),
+      wf.outputs?.resolve('cellRangerReportArchive'),
+      (acc) => acc.extractArchiveAndGetURL('zip'),
       false,
     );
   })

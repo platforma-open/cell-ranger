@@ -14,6 +14,7 @@ exportNormCountsConv := import(":libs.export-norm-counts")
 cellRangerTpl := assets.importTemplate(":cell-ranger")
 hvgTpl := assets.importTemplate(":calculate-hvg")
 mapGenesTpl := assets.importTemplate(":map-genes")
+packWebSummaryTpl := assets.importTemplate(":pack-web-summary")
 
 self.awaitState("params", "ResourceReady")
 self.awaitState("inputSpec", "ResourceReady")
@@ -64,6 +65,32 @@ self.body(func(inputs) {
 	)
 
 	cellRangerResults.addAllOutputsToBuilder(intermediateResultsBuilder)
+
+	// The web summary uses inline scripts. The block UI document has a CSP that
+	// forbids inline scripts. An iframe srcdoc inherits that CSP. The UI must load
+	// the summary from a plblob+folder:// URL. extractArchiveAndGetURL supplies
+	// that URL and accepts only an archive.
+	// Do not move this step into cell-ranger.tpl.tengo. That template has a
+	// hash_override. A change there re-runs the alignment.
+	webSummaryResults := pframes.processColumn(
+		{
+			spec: cellRangerResults.outputSpec("cellRangerReport"),
+			data: cellRangerResults.outputData("cellRangerReport")
+		},
+		packWebSummaryTpl,
+		[{
+			type: "Resource",
+			spec: {
+				kind: "PColumn",
+				name: "milaboratories.cell-ranger/report-archive",
+				domain: {
+					"pl7.app/blockId": blockId
+				},
+				valueType: "File"
+			},
+			name: "webSummaryArchive"
+		}]
+	)
 
 	cellMetricsPf := cellRangerResults.xsvOutputFrame("cellMetrics")
 
@@ -133,7 +160,7 @@ self.body(func(inputs) {
 		cellMetricsPf: cellMetricsPf,
 		rawCountsPf: rawCountsPfBuilt,
 		cellRangerProgress: cellRangerResults.outputData("cellRangerLog"),
-		cellRangerReport: cellRangerResults.outputData("cellRangerReport"),
+		cellRangerReportArchive: webSummaryResults.outputData("webSummaryArchive"),
 		summaryContent: cellRangerResults.outputData("summaryContent"),
 
 		_intermediateResults: intermediateResultsBuilder.build()

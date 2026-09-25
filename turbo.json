@@ -1,23 +1,60 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["tsconfig.json"],
+  "globalDependencies": [
+    "tsconfig.json"
+  ],
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$"],
-      "env": ["PL_PKG_DEV"],
-      "outputs": ["./dist/**", "./block-pack/**", "./pkg-*.tgz"],
-      "dependsOn": ["^build"]
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "env": [
+        "PL_PKG_DEV",
+        "PL_DOCKER_BUILD",
+        "PL_DOCKER_NO_BUILD",
+        "PL_DOCKER_AUTOPUSH",
+        "PL_DOCKER_NO_AUTOPUSH",
+        "PL_DOCKER_REGISTRY",
+        "PL_DOCKER_REGISTRY_PUSH_TO"
+      ],
+      "outputs": [
+        "./dist/**",
+        "./block-pack/**",
+        "./pkg-*.tgz"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
+      "passThroughEnv": [
+        "AWS_*",
+        "PL_AWS_*"
+      ]
     },
     "do-pack": {
-      "dependsOn": ["build"],
-      "outputs": ["package.tgz"]
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "package.tgz"
+      ]
     },
     "test": {
-      "dependsOn": ["build"],
-      "passThroughEnv": ["PL_ADDRESS", "PL_TEST_PASSWORD", "PL_TEST_USER", "PL_TEST_PROXY", "DEBUG"]
+      "dependsOn": [
+        "build"
+      ],
+      "passThroughEnv": [
+        "PL_ADDRESS",
+        "PL_TEST_PASSWORD",
+        "PL_TEST_USER",
+        "PL_TEST_PROXY",
+        "DEBUG"
+      ]
     },
     "mark-stable": {
-      "passThroughEnv": ["PL_REGISTRY", "AWS_*"],
+      "passThroughEnv": [
+        "PL_REGISTRY",
+        "AWS_*"
+      ],
       "cache": false
     }
   }
