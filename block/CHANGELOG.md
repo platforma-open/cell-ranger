@@ -1,5 +1,38 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.8.0
+
+### Minor Changes
+
+- 4137014: Fix the blank Cell Ranger Web Summary tab.
+
+  The summary is driven by inline scripts. It was rendered through an `iframe srcdoc`,
+  which inherits the Content-Security-Policy of the block UI document, and that policy
+  forbids inline scripts — so the panel came up empty.
+
+  The summary is now zipped by a new `pack-web-summary` software entrypoint and loaded
+  from the `plblob+folder://` URL that `extractArchiveAndGetURL` returns, giving it a
+  document of its own with no inherited policy. No CSP is relaxed anywhere.
+
+  Packing runs in `process.tpl.tengo` rather than in the hash-pinned
+  `cell-ranger.tpl.tengo`, so existing projects do not re-run the alignment.
+
+### Patch Changes
+
+- 4137014: Pin `@platforma-sdk/block-tools` to 2.16.1 and `@platforma-sdk/tengo-builder` to 4.1.1,
+  the two packages the `require-latest` CI preflight checks.
+
+  Bump `@platforma-sdk/package-builder` to 3.16.0. 3.12.0 refused to build docker images
+  on an arm64 host, although `docker.build` already pins `--platform linux/amd64` to
+  cross-compile. Without an image the k8s runner fails with "docker image is not
+  specified", so no software change in this block could be tested against a remote
+  backend from a Mac.
+
+- Updated dependencies [4137014]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.21.0
+  - @platforma-open/milaboratories.cell-ranger.model@1.11.0
+  - @platforma-open/milaboratories.cell-ranger.ui@1.10.0
+
 ## 1.7.3
 
 ### Patch Changes
