@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.8.1
+
+### Patch Changes
+
+- d2e052d: Pass `--registry-serve-url` to `block-tools publish`, mandatory since block-tools 2.16.1.
+
 ## 1.8.0
 
 ### Minor Changes
