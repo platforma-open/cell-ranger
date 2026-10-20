@@ -1,5 +1,15 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.8.2
+
+### Patch Changes
+
+- ab9b1fc: Release every package through npm trusted publishing (OIDC) so each package's trusted publisher is used before it expires.
+- Updated dependencies [ab9b1fc]
+  - @platforma-open/milaboratories.cell-ranger.model@1.11.1
+  - @platforma-open/milaboratories.cell-ranger.ui@1.10.1
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.21.1
+
 ## 1.8.1
 
 ### Patch Changes
