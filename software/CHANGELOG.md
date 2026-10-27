@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cellranger.software
 
+## 1.18.2
+
+### Patch Changes
+
+- f864311: Rebuild the Docker images of the Python software on the current python:3.12-slim. The new base image does not trust the compromised eMudhra intermediate CAs. Remove the unused calculate-hvg Dockerfile.
+
 ## 1.18.1
 
 ### Patch Changes

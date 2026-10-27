@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-ranger
 
+## 1.8.3
+
+### Patch Changes
+
+- f864311: Rebuild the Docker images of the Python software on the current python:3.12-slim. The new base image does not trust the compromised eMudhra intermediate CAs. Remove the unused calculate-hvg Dockerfile.
+- Updated dependencies [f864311]
+  - @platforma-open/milaboratories.cell-ranger.workflow@1.21.2
+
 ## 1.8.2
 
 ### Patch Changes
